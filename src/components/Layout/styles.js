@@ -24,7 +24,9 @@ export default makeStyles(theme => ({
   },
   link: {
     '&:not(:first-child)': {
-      paddingLeft: 15
+      paddingLeft: 15,
+      paddingRight: 15
+
     }
   }
 }));

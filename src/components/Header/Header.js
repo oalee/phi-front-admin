@@ -97,6 +97,8 @@ export default function Header(props) {
   var layoutDispatch = useLayoutDispatch();
   var userDispatch = useUserDispatch();
 
+  console.log(`user is ${userDispatch}`)
+
   // local
   var [mailMenu, setMailMenu] = useState(null);
   var [isMailsUnread, setIsMailsUnread] = useState(true);
@@ -289,7 +291,7 @@ export default function Header(props) {
         >
           <div className={classes.profileMenuUser}>
             <Typography variant="h4" weight="medium">
-              John Smith
+              {userDispatch.username}
             </Typography>
             <Typography
               className={classes.profileMenuLink}

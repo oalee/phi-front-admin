@@ -13,7 +13,9 @@ import { useUserState } from "../context/UserContext";
 
 export default function App() {
   // global
-  var { isAuthenticated } = useUserState();
+  var  isAuthenticated  = useUserState();
+
+  console.log(`is authenticated ${isAuthenticated}`)
 
   return (
     <HashRouter>

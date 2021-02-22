@@ -20,14 +20,20 @@ import logo from "./logo.svg";
 import google from "../../images/google.svg";
 
 // context
-import { useUserDispatch, loginUser } from "../../context/UserContext";
+import {  useUserDispatch, loginUser } from "../../context/UserContext";
 
 function Login(props) {
   var classes = useStyles();
 
   // global
-  var userDispatch = useUserDispatch();
+  // var userDispatch = useUserDispatch();
+  const userValue = useUserDispatch()
 
+  // console.log(userValue)
+
+
+
+  var userDispatch = {}
   // local
   var [isLoading, setIsLoading] = useState(false);
   var [error, setError] = useState(null);

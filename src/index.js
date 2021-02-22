@@ -2,7 +2,8 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { ThemeProvider } from "@material-ui/styles";
 import { CssBaseline } from "@material-ui/core";
-
+import { ApolloProvider, useQuery } from "@apollo/client";
+import client from "./api/apollo-client";
 import Themes from "./themes";
 import App from "./components/App";
 import * as serviceWorker from "./serviceWorker";
@@ -10,14 +11,19 @@ import { LayoutProvider } from "./context/LayoutContext";
 import { UserProvider } from "./context/UserContext";
 
 ReactDOM.render(
-  <LayoutProvider>
+  <div dir="auto">
+    <ApolloProvider client={client}>
+    <LayoutProvider>
     <UserProvider>
       <ThemeProvider theme={Themes.default}>
         <CssBaseline />
         <App />
       </ThemeProvider>
     </UserProvider>
-  </LayoutProvider>,
+    </LayoutProvider>
+  </ApolloProvider>
+  </div>
+  ,
   document.getElementById("root"),
 );
 
