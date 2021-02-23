@@ -1,8 +1,14 @@
 {
+  "Dashboard": "داشبورد",
   "Forget Password": "فراموشی رمز عبور",
   "Login": "ورود",
   "Login Title": "خوش آمدید",
   "Login with username and password": "ورود با اطلاعات کاربری",
+  "Notifications": "اعلان",
   "Password": "رمز عبور",
-  "Username": "نام کاربری"
+  "Toolbar Title": "مدیریت",
+  "Typography": "شکول",
+  "UI Elements": "المان ها",
+  "Username": "نام کاربری",
+  "{label}": ""
 }

@@ -12,6 +12,8 @@ import { Inbox as InboxIcon } from "@material-ui/icons";
 import { Link } from "react-router-dom";
 import classnames from "classnames";
 
+import { Trans } from '@lingui/macro';
+
 // styles
 import useStyles from "./styles";
 
@@ -43,7 +45,7 @@ export default function SidebarLink({
           [classes.linkTextHidden]: !isSidebarOpened,
         })}
       >
-        {label}
+        <Trans>{label}</Trans>
       </Typography>
     );
 

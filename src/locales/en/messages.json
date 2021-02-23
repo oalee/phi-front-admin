@@ -1,8 +1,14 @@
 {
+  "Dashboard": "Dashboard",
   "Forget Password": "Forget Password",
   "Login": "Login",
   "Login Title": "Welcome to Phi-App",
   "Login with username and password": "Login with credentials",
+  "Notifications": "Notifications",
   "Password": "Password",
-  "Username": "Username"
+  "Toolbar Title": "Welcome to PHI",
+  "Typography": "Typography",
+  "UI Elements": "UI Elements",
+  "Username": "Username",
+  "{label}": ""
 }
