@@ -45,7 +45,7 @@ export default function SidebarLink({
           [classes.linkTextHidden]: !isSidebarOpened,
         })}
       >
-        <Trans>{label}</Trans>
+        {label}
       </Typography>
     );
 

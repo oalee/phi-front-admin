@@ -19,36 +19,18 @@ import classNames from 'classnames';
 
 import SidebarLink from './components/SidebarLink/SidebarLinkContainer';
 import Dot from './components/Dot';
+import { t } from '@lingui/macro';
 
-const structure = [
-  { id: 0, label: 'Dashboard', link: '/app/dashboard', icon: <HomeIcon /> },
-  { id: 1, label: 'Typography', link: '/app/typography', icon: <TypographyIcon /> },
-  { id: 2, label: 'Tables', link: '/app/tables', icon: <TableIcon /> },
-  { id: 3, label: 'Notifications', link: '/app/notifications', icon: <NotificationsIcon />},
-  {
-    id: 4,
-    label: 'UI Elements',
-    link: '/app/ui',
-    icon: <UIElementsIcon />,
-    children: [
-      { label: 'Icons', link: '/app/ui/icons' },
-      { label: 'Charts', link: '/app/ui/charts' },
-      { label: 'Maps', link: '/app/ui/maps' },
-    ],
-  },
-  { id: 5, type: 'divider' },
-  { id: 6, type: 'title', label: 'HELP' },
-  { id: 7, label: 'Library', link: '', icon: <LibraryIcon /> },
-  { id: 8, label: 'Support', link: '', icon: <SupportIcon /> },
-  { id: 9, label: 'FAQ', link: '', icon: <FAQIcon />},
-  { id: 10, type: 'divider' },
-  { id: 11, type: 'title', label: 'PROJECTS' },
-  { id: 12, label: 'My recent', link: '', icon: <Dot size="small" color="secondary" /> },
-  { id: 13, label: 'Starred', link: '', icon: <Dot size="small" color="primary" /> },
-  { id: 14, label: 'Background', link: '', icon: <Dot size="small" color="secondary" /> },
-];
+import { useAppContext } from "../../context/AppContext";
+
 
 const SidebarView = ({ classes, theme, toggleSidebar, isSidebarOpened, isPermanent, location }) => {
+
+    //global context
+    const appContext = useAppContext()
+
+    const menu = appContext.menu
+
   return (
     <Drawer
       variant={isPermanent ? 'permanent' : 'temporary'}
@@ -72,7 +54,7 @@ const SidebarView = ({ classes, theme, toggleSidebar, isSidebarOpened, isPermane
         </IconButton>
       </div>
       <List className={classes.sidebarList}>
-        {structure.map(link => <SidebarLink key={link.id} location={location} isSidebarOpened={isSidebarOpened} {...link} />)}
+        {menu.map(link => <SidebarLink key={link.id} location={location} isSidebarOpened={isSidebarOpened} {...link} />)}
       </List>
     </Drawer>
   );

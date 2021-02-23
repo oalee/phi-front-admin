@@ -31,6 +31,8 @@ export default makeStyles(theme => ({
     color: theme.palette.text.secondary + "CC",
     transition: theme.transitions.create(["opacity", "color"]),
     fontSize: 16,
+    justifyContent: "center",
+
   },
   linkTextActive: {
     color: theme.palette.text.primary,
