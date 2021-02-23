@@ -28,7 +28,6 @@ export default makeStyles(theme => ({
     color: theme.palette.primary.main,
   },
   linkText: {
-    padding: 0,
     color: theme.palette.text.secondary + "CC",
     transition: theme.transitions.create(["opacity", "color"]),
     fontSize: 16,
@@ -40,17 +39,17 @@ export default makeStyles(theme => ({
     opacity: 0,
   },
   nestedList: {
-    paddingLeft: theme.spacing(2) + 30,
+    paddingStart: theme.spacing(2) + 30,
   },
   sectionTitle: {
-    marginLeft: theme.spacing(4.5),
+    marginInlineStart: theme.spacing(4.5),
     marginTop: theme.spacing(2),
     marginBottom: theme.spacing(2),
   },
   divider: {
     marginTop: theme.spacing(2),
     marginBottom: theme.spacing(4),
-    height: 1,
-    backgroundColor: "#D8D8D880",
+    height: 2,
+    backgroundColor: "#868b8e",
   },
 }));

@@ -9,6 +9,7 @@ import App from "./components/App";
 import * as serviceWorker from "./serviceWorker";
 import { LayoutProvider } from "./context/LayoutContext";
 import { UserProvider } from "./context/UserContext";
+import { AppProvider } from "./context/AppContext";
 
 
 
@@ -17,11 +18,15 @@ ReactDOM.render(
     <ApolloProvider client={client}>
     <LayoutProvider>
     <UserProvider>
+    <AppProvider>
       <ThemeProvider theme={Themes.default}>
         <CssBaseline />
         <App />
       </ThemeProvider>
+      </AppProvider>
+
     </UserProvider>
+
     </LayoutProvider>
   </ApolloProvider>
   </div>

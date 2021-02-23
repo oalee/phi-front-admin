@@ -31,14 +31,16 @@ import {
   toggleSidebar,
 } from "../../context/LayoutContext";
 import { Trans,t } from "@lingui/macro";
+import { useAppContext } from "../../context/AppContext";
 
 function Sidebar({ location }) {
 
+  //global context
+  const appContext = useAppContext()
 
-  const test = t`Notifications`
 
 
-  console.log(`testing ${test}`)
+  console.log(`testing ${appContext.dir}`)
   
   const structure = [
     { id: 0, label: t`Dashboard`, link: "/app/dashboard", icon: <HomeIcon /> },
@@ -51,7 +53,7 @@ function Sidebar({ location }) {
     { id: 2, label: "Tables", link: "/app/tables", icon: <TableIcon /> },
     {
       id: 3,
-      label:test,
+      label: t`Notifications`,
       link: "/app/notifications",
       icon: <NotificationsIcon />,
     },
@@ -114,7 +116,7 @@ function Sidebar({ location }) {
 
   return (
     <Drawer
-      anchor={ "auto"}
+      anchor={ "right"}
       variant={isPermanent ? "permanent" : "temporary"}
       className={classNames(classes.drawer, {
         [classes.drawerOpen]: isSidebarOpened,
