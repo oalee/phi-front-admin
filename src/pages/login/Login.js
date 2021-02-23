@@ -12,7 +12,9 @@ import {
 import { withRouter } from "react-router-dom";
 import classnames from "classnames";
 
-import { Trans, t } from '@lingui/macro';
+import { Trans } from '@lingui/macro';
+
+import { getText }from "../../utils/textUtils"
 
 // styles
 import useStyles from "./styles";
@@ -44,8 +46,8 @@ function Login(props) {
   var [loginValue, setLoginValue] = useState("");
   var [passwordValue, setPasswordValue] = useState("");
 
-  const userNamePlaceHolder = t({ id: "Username"}, "Username")
-  const passwordPlaceHolder = t({ id: "Password"}, "Password")
+  const userNamePlaceHolder = getText("Username")
+  const passwordPlaceHolder = getText("Password")
   // console.log(userNamePlaceHolder)
 
   return (

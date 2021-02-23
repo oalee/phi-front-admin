@@ -20,6 +20,8 @@ export default makeStyles(theme => ({
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
     }),
+    margin: 0,
+    maxWidth: "100%"
   },
   toolbar: {
     paddingLeft: theme.spacing(2),

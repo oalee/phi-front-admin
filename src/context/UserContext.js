@@ -122,6 +122,6 @@ function loginUser(dispatch, login, password, history, setIsLoading, setError) {
 
 function signOut(dispatch, history) {
   localStorage.removeItem("id_token");
-  dispatch({ type: "SIGN_OUT_SUCCESS" });
+  // dispatch({ type: "SIGN_OUT_SUCCESS" });
   history.push("/login");
 }

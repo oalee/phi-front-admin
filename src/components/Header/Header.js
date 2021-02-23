@@ -35,6 +35,7 @@ import {
   toggleSidebar,
 } from "../../context/LayoutContext";
 import { useUserDispatch, signOut } from "../../context/UserContext";
+import { Trans } from "@lingui/macro";
 
 const messages = [
   {
@@ -139,16 +140,16 @@ export default function Header(props) {
           )}
         </IconButton>
         <Typography variant="h6" weight="medium" className={classes.logotype}>
-          React Material Admin
+          <Trans>Toolbar Title</Trans>
         </Typography>
         <div className={classes.grow} />
-        <Button component={Link} href="https://flatlogic.com/templates/react-material-admin-full" variant={"outlined"} color={"secondary"} className={classes.purchaseBtn}>Unlock full version</Button>
+        {/* <Button component={Link} href="https://flatlogic.com/templates/react-material-admin-full" variant={"outlined"} color={"secondary"} className={classes.purchaseBtn}>Unlock full version</Button> */}
         <div
           className={classNames(classes.search, {
             [classes.searchFocused]: isSearchOpen,
           })}
         >
-          <div
+          {/* <div
             className={classNames(classes.searchIcon, {
               [classes.searchIconOpened]: isSearchOpen,
             })}
@@ -162,7 +163,7 @@ export default function Header(props) {
               root: classes.inputRoot,
               input: classes.inputInput,
             }}
-          />
+          /> */}
         </div>
         <IconButton
           color="inherit"
@@ -297,9 +298,8 @@ export default function Header(props) {
               className={classes.profileMenuLink}
               component="a"
               color="primary"
-              href="https://flatlogic.com"
+              // href="https://flatlogic.com"
             >
-              Flalogic.com
             </Typography>
           </div>
           <MenuItem
