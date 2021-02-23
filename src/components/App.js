@@ -14,14 +14,18 @@ import { useUserState } from "../context/UserContext";
 import { i18n } from '@lingui/core' 
 import { I18nProvider } from '@lingui/react'
 import { messages } from '../locales/en/messages.js'
+import { messages as faMessages }  from '../locales/fa/messages.js'
 
 
+i18n.load('en', messages)
+i18n.load('fa', faMessages)
+i18n.activate('fa')
 
 export default function App() {
   // global
   var  isAuthenticated  = useUserState();
-  i18n.load('en', messages)
-  i18n.activate('en')
+
+ 
   console.log(`is authenticated ${isAuthenticated}`)
 
   return (

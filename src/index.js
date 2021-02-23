@@ -10,7 +10,6 @@ import * as serviceWorker from "./serviceWorker";
 import { LayoutProvider } from "./context/LayoutContext";
 import { UserProvider } from "./context/UserContext";
 
-// import ast from "./parser"
 
 
 ReactDOM.render(

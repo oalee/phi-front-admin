@@ -1,1 +1,1 @@
-/*eslint-disable*/module.exports={messages:{"Material Admin":"Material Admin"}};
+/*eslint-disable*/module.exports={messages:{"Forget Password":"Forget Password","Login":"Login","Login Title":"Welcome to Phi-App","Login with username and password":"Login with credentials","Password":"Password","Username":"Username"}};

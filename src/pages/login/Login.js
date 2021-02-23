@@ -12,7 +12,7 @@ import {
 import { withRouter } from "react-router-dom";
 import classnames from "classnames";
 
-import { Trans } from '@lingui/macro';
+import { Trans, t } from '@lingui/macro';
 
 // styles
 import useStyles from "./styles";
@@ -41,14 +41,18 @@ function Login(props) {
   var [error, setError] = useState(null);
   var [activeTabId, setActiveTabId] = useState(0);
   var [nameValue, setNameValue] = useState("");
-  var [loginValue, setLoginValue] = useState("admin@flatlogic.com");
-  var [passwordValue, setPasswordValue] = useState("password");
+  var [loginValue, setLoginValue] = useState("");
+  var [passwordValue, setPasswordValue] = useState("");
+
+  const userNamePlaceHolder = t({ id: "Username"}, "Username")
+  const passwordPlaceHolder = t({ id: "Password"}, "Password")
+  // console.log(userNamePlaceHolder)
 
   return (
     <Grid container className={classes.container}>
       <div className={classes.logotypeContainer}>
         <img src={logo} alt="logo" className={classes.logotypeImage} />
-        <Typography className={classes.logotypeText}><Trans>Material Admin</Trans></Typography>
+        <Typography className={classes.logotypeText}><Trans>Login Title</Trans></Typography>
       </div>
       <div className={classes.formContainer}>
         <div className={classes.form}>
@@ -59,23 +63,23 @@ function Login(props) {
             textColor="primary"
             centered
           >
-            <Tab label="Login" classes={{ root: classes.tab }} />
-            <Tab label="New User" classes={{ root: classes.tab }} />
+            <Tab label= {<Trans>Login</Trans>} classes={{ root: classes.tab }} />
+            {/* <Tab label="New User" classes={{ root: classes.tab }} /> */}
           </Tabs>
           {activeTabId === 0 && (
             <React.Fragment>
-              <Typography variant="h1" className={classes.greeting}>
-                Good Morning, User
+              <Typography variant="h3" className={classes.greeting}>
+                <Trans>Login with username and password</Trans>
               </Typography>
-              <Button size="large" className={classes.googleButton}>
+              {/* <Button size="large" className={classes.googleButton}>
                 <img src={google} alt="google" className={classes.googleIcon} />
                 &nbsp;Sign in with Google
-              </Button>
-              <div className={classes.formDividerContainer}>
+              </Button> */}
+              {/* <div className={classes.formDividerContainer}>
                 <div className={classes.formDivider} />
                 <Typography className={classes.formDividerWord}>or</Typography>
                 <div className={classes.formDivider} />
-              </div>
+              </div> */}
               <Fade in={error}>
                 <Typography color="secondary" className={classes.errorMessage}>
                   Something is wrong with your login or password :(
@@ -92,7 +96,7 @@ function Login(props) {
                 value={loginValue}
                 onChange={e => setLoginValue(e.target.value)}
                 margin="normal"
-                placeholder="Email Adress"
+                placeholder={userNamePlaceHolder}
                 type="email"
                 fullWidth
               />
@@ -107,7 +111,7 @@ function Login(props) {
                 value={passwordValue}
                 onChange={e => setPasswordValue(e.target.value)}
                 margin="normal"
-                placeholder="Password"
+                placeholder={passwordPlaceHolder}
                 type="password"
                 fullWidth
               />
@@ -133,7 +137,7 @@ function Login(props) {
                     color="primary"
                     size="large"
                   >
-                    Login
+                    <Trans>Login</Trans>
                   </Button>
                 )}
                 <Button
@@ -141,7 +145,7 @@ function Login(props) {
                   size="large"
                   className={classes.forgetButton}
                 >
-                  Forget Password
+                <Trans>Forget Password</Trans>
                 </Button>
               </div>
             </React.Fragment>
@@ -252,9 +256,9 @@ function Login(props) {
             </React.Fragment>
           )}
         </div>
-        <Typography color="primary" className={classes.copyright}>
+        {/* <Typography color="primary" className={classes.copyright}>
         © 2014-{new Date().getFullYear()} <a style={{ textDecoration: 'none', color: 'inherit' }} href="https://flatlogic.com" rel="noopener noreferrer" target="_blank">Flatlogic</a>, LLC. All rights reserved.
-        </Typography>
+        </Typography> */}
       </div>
     </Grid>
   );
