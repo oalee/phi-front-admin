@@ -12,6 +12,8 @@ import {
 import { withRouter } from "react-router-dom";
 import classnames from "classnames";
 
+import { Trans } from '@lingui/macro';
+
 // styles
 import useStyles from "./styles";
 
@@ -46,7 +48,7 @@ function Login(props) {
     <Grid container className={classes.container}>
       <div className={classes.logotypeContainer}>
         <img src={logo} alt="logo" className={classes.logotypeImage} />
-        <Typography className={classes.logotypeText}>Material Admin</Typography>
+        <Typography className={classes.logotypeText}><Trans>Material Admin</Trans></Typography>
       </div>
       <div className={classes.formContainer}>
         <div className={classes.form}>

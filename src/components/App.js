@@ -11,13 +11,21 @@ import Login from "../pages/login";
 // context
 import { useUserState } from "../context/UserContext";
 
+import { i18n } from '@lingui/core'
+import { I18nProvider } from '@lingui/react'
+import { messages } from './locales/en/messages.js'
+
+
+
 export default function App() {
   // global
   var  isAuthenticated  = useUserState();
-
+  i18n.load('en', messages)
+  i18n.activate('en')
   console.log(`is authenticated ${isAuthenticated}`)
 
   return (
+    <I18nProvider i18n={i18n}>
     <HashRouter>
       <Switch>
         <Route exact path="/" render={() => <Redirect to="/app/dashboard" />} />
@@ -31,6 +39,7 @@ export default function App() {
         <Route component={Error} />
       </Switch>
     </HashRouter>
+    </I18nProvider>
   );
 
   // #######################################################################
