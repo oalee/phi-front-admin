@@ -11,9 +11,9 @@ import Login from "../pages/login";
 // context
 import { useUserState } from "../context/UserContext";
 
-import { i18n } from '@lingui/core'
+import { i18n } from '@lingui/core' 
 import { I18nProvider } from '@lingui/react'
-import { messages } from './locales/en/messages.js'
+import { messages } from '../locales/en/messages.js'
 
 
 

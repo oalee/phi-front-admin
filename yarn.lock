@@ -364,12 +364,7 @@
     "chalk" "^2.0.0"
     "js-tokens" "^4.0.0"
 
-"@babel/parser@^7.1.0", "@babel/parser@^7.11.5", "@babel/parser@^7.12.13", "@babel/parser@^7.12.17", "@babel/parser@^7.12.3", "@babel/parser@^7.7.0":
-  "integrity" "sha512-r1yKkiUTYMQ8LiEI0UcQx5ETw5dpTLn9wijn9hk6KkTtOK95FndDN10M+8/s6k/Ymlbivw0Av9q4SlgF80PtHg=="
-  "resolved" "https://registry.npmjs.org/@babel/parser/-/parser-7.12.17.tgz"
-  "version" "7.12.17"
-
-"@babel/parser@^7.13.0":
+"@babel/parser@^7.1.0", "@babel/parser@^7.11.5", "@babel/parser@^7.12.13", "@babel/parser@^7.12.17", "@babel/parser@^7.12.3", "@babel/parser@^7.13.0", "@babel/parser@^7.7.0":
   "integrity" "sha512-w80kxEMFhE3wjMOQkfdTvv0CSdRSJZptIlLhU4eU/coNJeWjduspUFz+IRnBbAq6m5XYBFMoT1TNkk9K9yf10g=="
   "resolved" "https://registry.npmjs.org/@babel/parser/-/parser-7.13.0.tgz"
   "version" "7.13.0"
@@ -5894,6 +5889,11 @@
   "integrity" "sha1-FQStJSMVjKpA20onh8sBQRmU6k8="
   "resolved" "https://registry.npmjs.org/fs.realpath/-/fs.realpath-1.0.0.tgz"
   "version" "1.0.0"
+
+"fs@^0.0.1-security":
+  "integrity" "sha1-invTcYa23d84E/I4WLV+yq9eQdQ="
+  "resolved" "https://registry.npmjs.org/fs/-/fs-0.0.1-security.tgz"
+  "version" "0.0.1-security"
 
 "fsevents@^1.2.7":
   "integrity" "sha512-oWb1Z6mkHIskLzEJ/XWX0srkpkTQ7vaopMQkyaEIoq0fmtFVxOthb8cCxeT+p3ynTdkk/RZwbgG4brR5BeWECw=="
