@@ -3,7 +3,8 @@ import {
   Drawer,
   IconButton,
   List,
-  withStyles } from "@material-ui/core";
+  withStyles
+} from "@material-ui/core";
 import {
   Home as HomeIcon,
   NotificationsNone as NotificationsIcon,
@@ -26,13 +27,15 @@ import { useAppContext } from "../../context/AppContext";
 
 const SidebarView = ({ classes, theme, toggleSidebar, isSidebarOpened, isPermanent, location }) => {
 
-    //global context
-    const appContext = useAppContext()
+  //global context
+  const appContext = useAppContext()
+  const anchor = appContext.dir === "rtl" ? "right" : "left"
 
-    const menu = appContext.menu
+  const menu = appContext.menu
 
   return (
     <Drawer
+      anchor={anchor}
       variant={isPermanent ? 'permanent' : 'temporary'}
       className={classNames(classes.drawer, {
         [classes.drawerOpen]: isSidebarOpened,
@@ -60,12 +63,12 @@ const SidebarView = ({ classes, theme, toggleSidebar, isSidebarOpened, isPermane
   );
 }
 
-const drawerWidth = 240;
+const drawerWidth = 280;
 
 const styles = theme => ({
   menuButton: {
-    marginLeft: 12,
-    marginRight: 36,
+    marginInlineStart: 12,
+    marginInlineEnd: 36,
   },
   hide: {
     display: 'none',
@@ -109,7 +112,7 @@ const styles = theme => ({
   },
   mobileBackButton: {
     marginTop: theme.spacing.unit * .5,
-    marginLeft: theme.spacing.unit * 3,
+    marginInlineStart: theme.spacing.unit * 3,
     [theme.breakpoints.only("sm")]: {
       marginTop: theme.spacing.unit * .625,
     },

@@ -1,11 +1,11 @@
 import { makeStyles } from "@material-ui/styles";
 
-const drawerWidth = 240;
+const drawerWidth = 280;
 
 export default makeStyles(theme => ({
   menuButton: {
-    marginLeft: 12,
-    marginRight: 36,
+    marginInlineStart: 12,
+    marginInlineEnd: 36,
   },
   hide: {
     display: "none",
@@ -21,7 +21,7 @@ export default makeStyles(theme => ({
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.enteringScreen,
     }),
-    
+
   },
   drawerClose: {
     transition: theme.transitions.create("width", {
@@ -44,12 +44,13 @@ export default makeStyles(theme => ({
     flexGrow: 1,
     padding: theme.spacing(3),
   },
-  /* sidebarList: {
+  sidebarList: {
     marginTop: theme.spacing(6),
-  }, */
+
+  },
   mobileBackButton: {
     marginTop: theme.spacing(0.5),
-    marginLeft: 18,
+    marginInlineStart: 18,
     [theme.breakpoints.only("sm")]: {
       marginTop: theme.spacing(0.625),
     },
@@ -57,4 +58,34 @@ export default makeStyles(theme => ({
       display: "none",
     },
   },
+  avatarContainer: {
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+    marginBottom: theme.spacing(2)
+  }
+  ,
+  avatar: {
+    width: 150,
+    flex: 0.7,
+    marginBottom: theme.spacing(4),
+    transition: theme.transitions.create("width", {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
+    }),
+  },
+  linkTextHidden: {
+    visibility: "hidden",
+    height: 0
+  },
+  avatarCollapsed: {
+    width: 50,
+    flex: 0.3,
+    transition: theme.transitions.create("width", {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
+    }),
+  },
+
 }));

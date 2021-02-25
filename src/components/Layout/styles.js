@@ -9,11 +9,11 @@ export default makeStyles(theme => ({
   content: {
     flexGrow: 1,
     padding: theme.spacing(3),
-    width: `calc(100vw - 240px)`,
+    width: `calc(100vw - 280px)`,
     minHeight: "100vh",
   },
   contentShift: {
-    width: `calc(100vw - ${240 + theme.spacing(6)}px)`,
+    width: `calc(100vw - ${280 + theme.spacing(6)}px)`,
     transition: theme.transitions.create(["width", "margin"], {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.enteringScreen,
@@ -24,8 +24,8 @@ export default makeStyles(theme => ({
   },
   link: {
     '&:not(:first-child)': {
-      paddingLeft: 15,
-      paddingRight: 15
+      paddingStart: 15,
+      paddingEnd: 15
 
     }
   }

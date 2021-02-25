@@ -14,7 +14,7 @@ import classnames from "classnames";
 
 import { Trans } from '@lingui/macro';
 
-import { getText }from "../../utils/textUtils"
+import { getText } from "../../utils/textUtils"
 
 // styles
 import useStyles from "./styles";
@@ -24,7 +24,7 @@ import logo from "./logo.svg";
 import google from "../../images/google.svg";
 
 // context
-import {  useUserDispatch, loginUser } from "../../context/UserContext";
+import { useUserDispatch, loginUser } from "../../context/UserContext";
 
 function Login(props) {
   var classes = useStyles();
@@ -65,7 +65,7 @@ function Login(props) {
             textColor="primary"
             centered
           >
-            <Tab label= {<Trans>Login</Trans>} classes={{ root: classes.tab }} />
+            <Tab label={<Trans>Login</Trans>} classes={{ root: classes.tab }} />
             {/* <Tab label="New User" classes={{ root: classes.tab }} /> */}
           </Tabs>
           {activeTabId === 0 && (
@@ -121,33 +121,33 @@ function Login(props) {
                 {isLoading ? (
                   <CircularProgress size={26} className={classes.loginLoader} />
                 ) : (
-                  <Button
-                    disabled={
-                      loginValue.length === 0 || passwordValue.length === 0
-                    }
-                    onClick={() =>
-                      loginUser(
-                        userDispatch,
-                        loginValue,
-                        passwordValue,
-                        props.history,
-                        setIsLoading,
-                        setError,
-                      )
-                    }
-                    variant="contained"
-                    color="primary"
-                    size="large"
-                  >
-                    <Trans>Login</Trans>
-                  </Button>
-                )}
+                    <Button
+                      disabled={
+                        loginValue.length === 0 || passwordValue.length === 0
+                      }
+                      onClick={() =>
+                        loginUser(
+                          userDispatch,
+                          loginValue,
+                          passwordValue,
+                          props.history,
+                          setIsLoading,
+                          setError,
+                        )
+                      }
+                      variant="contained"
+                      color="primary"
+                      size="large"
+                    >
+                      <Trans>Login</Trans>
+                    </Button>
+                  )}
                 <Button
                   color="primary"
                   size="large"
                   className={classes.forgetButton}
                 >
-                <Trans>Forget Password</Trans>
+                  <Trans>Forget Password</Trans>
                 </Button>
               </div>
             </React.Fragment>
@@ -214,31 +214,31 @@ function Login(props) {
                 {isLoading ? (
                   <CircularProgress size={26} />
                 ) : (
-                  <Button
-                    onClick={() =>
-                      loginUser(
-                        userDispatch,
-                        loginValue,
-                        passwordValue,
-                        props.history,
-                        setIsLoading,
-                        setError,
-                      )
-                    }
-                    disabled={
-                      loginValue.length === 0 ||
-                      passwordValue.length === 0 ||
-                      nameValue.length === 0
-                    }
-                    size="large"
-                    variant="contained"
-                    color="primary"
-                    fullWidth
-                    className={classes.createAccountButton}
-                  >
-                    Create your account
-                  </Button>
-                )}
+                    <Button
+                      onClick={() =>
+                        loginUser(
+                          userDispatch,
+                          loginValue,
+                          passwordValue,
+                          props.history,
+                          setIsLoading,
+                          setError,
+                        )
+                      }
+                      disabled={
+                        loginValue.length === 0 ||
+                        passwordValue.length === 0 ||
+                        nameValue.length === 0
+                      }
+                      size="large"
+                      variant="contained"
+                      color="primary"
+                      fullWidth
+                      className={classes.createAccountButton}
+                    >
+                      Create your account
+                    </Button>
+                  )}
               </div>
               <div className={classes.formDividerContainer}>
                 <div className={classes.formDivider} />

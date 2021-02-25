@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import {
+  Avatar,
   Collapse,
   Divider,
   List,
@@ -12,7 +13,7 @@ import { Inbox as InboxIcon } from "@material-ui/icons";
 import { Link } from "react-router-dom";
 import classnames from "classnames";
 
-import { Trans } from '@lingui/macro';
+import { Trans } from "@lingui/macro";
 
 // styles
 import useStyles from "./styles";
@@ -49,6 +50,8 @@ export default function SidebarLink({
       </Typography>
     );
 
+
+
   if (type === "divider") return <Divider className={classes.divider} />;
 
   if (!children)
@@ -83,6 +86,7 @@ export default function SidebarLink({
           primary={label}
         />
       </ListItem>
+
     );
 
   return (
@@ -111,6 +115,7 @@ export default function SidebarLink({
           }}
           primary={label}
         />
+
       </ListItem>
       {children && (
         <Collapse
@@ -120,7 +125,7 @@ export default function SidebarLink({
           className={classes.nestedList}
         >
           <List component="div" disablePadding>
-            {children.map(childrenLink => (
+            {children.map((childrenLink) => (
               <SidebarLink
                 key={childrenLink && childrenLink.link}
                 location={location}

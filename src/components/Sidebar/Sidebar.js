@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Drawer, IconButton, List } from "@material-ui/core";
+import { Avatar, Divider, Drawer, IconButton, List, Typography } from "@material-ui/core";
 
 import { useTheme } from "@material-ui/styles";
 import { withRouter } from "react-router-dom";
@@ -11,8 +11,9 @@ import useStyles from "./styles";
 // components
 import SidebarLink from "./components/SidebarLink/SidebarLink";
 
-import {getText} from "../../utils/textUtils"
-import {ArrowBack as ArrowBackIcon,
+import { getText } from "../../utils/textUtils"
+import {
+  ArrowBack as ArrowBackIcon,
 } from "@material-ui/icons";
 // context
 import {
@@ -22,12 +23,16 @@ import {
 } from "../../context/LayoutContext";
 import { useAppContext } from "../../context/AppContext";
 
+import avatarPlaceholder from "../../static/images/avatar_placeholder.svg"
+
 function Sidebar({ location }) {
 
   //global context
   const appContext = useAppContext()
 
   const menu = appContext.menu
+
+  const anchor = appContext.dir === "rtl" ? "right" : "left"
 
   console.log(`testing ${appContext.dir}`)
 
@@ -42,18 +47,18 @@ function Sidebar({ location }) {
   // local
   var [isPermanent, setPermanent] = useState(true);
 
-  useEffect(function() {
+  useEffect(function () {
     window.addEventListener("resize", handleWindowWidthChange);
     handleWindowWidthChange();
     return function cleanup() {
       window.removeEventListener("resize", handleWindowWidthChange);
     };
   });
-  
+
 
   return (
     <Drawer
-      anchor={ "right"}
+      anchor={anchor}
       variant={isPermanent ? "permanent" : "temporary"}
       className={classNames(classes.drawer, {
         [classes.drawerOpen]: isSidebarOpened,
@@ -77,15 +82,54 @@ function Sidebar({ location }) {
           />
         </IconButton>
       </div>
+
+
       <List className={classes.sidebarList}>
-        {menu.map(link => (
-          <SidebarLink
-            key={link.id}
-            location={location}
-            isSidebarOpened={isSidebarOpened}
-            {...link}
-          />
-        ))}
+        <div>
+          <div className={classes.avatarContainer}>
+            <img alt="Remy Sharp" src={avatarPlaceholder} className={classNames(classes.avatar, {
+              [classes.avatar]: isSidebarOpened,
+              [classes.avatarCollapsed]: !isSidebarOpened,
+            })} />
+            {
+              isSidebarOpened && <Typography
+                className={classNames(classes.linkText, {
+                  [classes.linkTextHidden]: !isSidebarOpened,
+                })}
+              >
+                Username
+            </Typography>
+
+            }
+
+            {
+              isSidebarOpened && <Typography
+                className={classNames(classes.linkText, {
+                  [classes.linkTextHidden]: !isSidebarOpened,
+                })}
+              >
+                Type
+            </Typography>
+
+            }
+          </div>
+
+          {menu.map(link => (
+            <div>
+              <SidebarLink
+                key={link.id}
+                location={location}
+                isSidebarOpened={isSidebarOpened}
+                {...link}
+              />
+              {/* <Divider></Divider> */}
+
+            </div>
+
+          ))
+          }
+        </div>
+
       </List>
     </Drawer>
   );

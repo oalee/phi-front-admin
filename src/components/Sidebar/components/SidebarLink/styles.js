@@ -6,6 +6,7 @@ export default makeStyles(theme => ({
     "&:hover, &:focus": {
       backgroundColor: theme.palette.background.light,
     },
+    alignItems: "flex-start"
   },
   linkActive: {
     backgroundColor: theme.palette.background.light,
@@ -17,7 +18,6 @@ export default makeStyles(theme => ({
     },
   },
   linkIcon: {
-    marginRight: theme.spacing(1),
     color: theme.palette.text.secondary + "99",
     transition: theme.transitions.create("color"),
     width: 24,
@@ -28,20 +28,22 @@ export default makeStyles(theme => ({
     color: theme.palette.primary.main,
   },
   linkText: {
-    color: theme.palette.text.secondary + "CC",
+    color: theme.palette.text.primary,//+ "CC",
     transition: theme.transitions.create(["opacity", "color"]),
-    fontSize: 16,
+    fontSize: 18,
     justifyContent: "center",
+    paddingEnd: theme.spacing(10)
 
   },
   linkTextActive: {
     color: theme.palette.text.primary,
+    fontWeight: "bold"
   },
   linkTextHidden: {
     opacity: 0,
   },
   nestedList: {
-    paddingStart: theme.spacing(2) + 30,
+    paddingLeft: theme.spacing(2),
   },
   sectionTitle: {
     marginInlineStart: theme.spacing(4.5),
