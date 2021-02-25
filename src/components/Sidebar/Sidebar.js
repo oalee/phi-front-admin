@@ -24,6 +24,8 @@ import {
 import { useAppContext } from "../../context/AppContext";
 
 import avatarPlaceholder from "../../static/images/avatar_placeholder.svg"
+import { t } from "@lingui/macro";
+import { useUserDispatch } from "../../context/UserContext";
 
 function Sidebar({ location }) {
 
@@ -31,11 +33,24 @@ function Sidebar({ location }) {
   const appContext = useAppContext()
 
 
+  var user = useUserDispatch()
+
+
+
+
+
   const menu = appContext.menu
 
   const anchor = appContext.dir === "rtl" ? "right" : "left"
 
-  console.log(`testing ${appContext.dir}`)
+  console.log(`testing ${appContext.dir} ${appContext.user}`)
+
+  const name = user.username
+  console.log(`name is ${name}`)
+
+  const type = user && user.therapist && user.therapist.name ? t`Therapist` : t`Admin`
+
+
 
 
   var classes = useStyles();
@@ -98,8 +113,8 @@ function Sidebar({ location }) {
                   [classes.linkTextHidden]: !isSidebarOpened,
                 })}
               >
-                Username
-            </Typography>
+                {name}
+              </Typography>
 
             }
 
@@ -109,8 +124,8 @@ function Sidebar({ location }) {
                   [classes.linkTextHidden]: !isSidebarOpened,
                 })}
               >
-                Type
-            </Typography>
+                {type}
+              </Typography>
 
             }
           </div>

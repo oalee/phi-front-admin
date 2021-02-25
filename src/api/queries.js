@@ -14,6 +14,9 @@ const GETME = gql`
       id
       username
       type
+      therapist {
+        name
+      }
     }
   }
 `;

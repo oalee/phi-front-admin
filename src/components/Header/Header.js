@@ -35,7 +35,7 @@ import {
   toggleSidebar,
 } from "../../context/LayoutContext";
 import { useUserDispatch, signOut } from "../../context/UserContext";
-import { Trans } from "@lingui/macro";
+import { t, Trans } from "@lingui/macro";
 
 const messages = [
   {
@@ -96,9 +96,11 @@ export default function Header(props) {
   // global
   var layoutState = useLayoutState();
   var layoutDispatch = useLayoutDispatch();
-  var userDispatch = useUserDispatch();
+  var user = useUserDispatch();
 
-  console.log(`user is ${userDispatch}`)
+  console.log(`user is ${user}`)
+
+  const name = user && user.therapist && user.therapist.name ? user.therapist.name : t`Admin`;
 
   // local
   var [mailMenu, setMailMenu] = useState(null);
@@ -129,18 +131,19 @@ export default function Header(props) {
               }}
             />
           ) : (
-            <MenuIcon
-              classes={{
-                root: classNames(
-                  classes.headerIcon,
-                  classes.headerIconCollapse,
-                ),
-              }}
-            />
-          )}
+              <MenuIcon
+                classes={{
+                  root: classNames(
+                    classes.headerIcon,
+                    classes.headerIconCollapse,
+                  ),
+                }}
+              />
+            )}
         </IconButton>
         <Typography variant="h6" weight="medium" className={classes.logotype}>
-          <Trans>Toolbar Title</Trans>
+          {/* <Trans>Toolbar Title</Trans> */}
+          {name}
         </Typography>
         <div className={classes.grow} />
         {/* <Button component={Link} href="https://flatlogic.com/templates/react-material-admin-full" variant={"outlined"} color={"secondary"} className={classes.purchaseBtn}>Unlock full version</Button> */}
@@ -292,13 +295,13 @@ export default function Header(props) {
         >
           <div className={classes.profileMenuUser}>
             <Typography variant="h4" weight="medium">
-              {userDispatch.username}
+              {user.username}
             </Typography>
             <Typography
               className={classes.profileMenuLink}
               component="a"
               color="primary"
-              // href="https://flatlogic.com"
+            // href="https://flatlogic.com"
             >
             </Typography>
           </div>
@@ -330,7 +333,7 @@ export default function Header(props) {
             <Typography
               className={classes.profileMenuLink}
               color="primary"
-              onClick={() => signOut(userDispatch, props.history)}
+              onClick={() => signOut(user, props.history)}
             >
               Sign Out
             </Typography>

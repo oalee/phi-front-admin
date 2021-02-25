@@ -1,5 +1,6 @@
 {
   "About us": "درباره‌ی ما",
+  "Admin": "مدیریت",
   "Charts": "چارت",
   "Dashboard": "داشبورد",
   "Eductional": "محتوای آموزشی",
@@ -15,9 +16,10 @@
   "Maps": "تست",
   "Notifications": "تست",
   "Password": "رمز عبور",
-  "Patients": "بیماران",
+  "Patients": "درمان شوندگان",
   "Privacy Policy": "حریم خصوصی",
   "Tables": "تست",
+  "Therapist": "درمانگر",
   "Toolbar Title": "مدیریت",
   "Typography": "تست",
   "UI Elements": "المان ها",
