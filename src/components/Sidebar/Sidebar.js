@@ -30,6 +30,7 @@ function Sidebar({ location }) {
   //global context
   const appContext = useAppContext()
 
+
   const menu = appContext.menu
 
   const anchor = appContext.dir === "rtl" ? "right" : "left"
