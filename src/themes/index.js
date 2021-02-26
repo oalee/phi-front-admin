@@ -27,7 +27,7 @@ const overrides = {
 };
 
 const themes = {
-  default: createMuiTheme({ ...defaultTheme, ...overrides }),
+  default: createMuiTheme({ direction: 'rtl', ...defaultTheme, ...overrides }),
 };
 
 export default themes;

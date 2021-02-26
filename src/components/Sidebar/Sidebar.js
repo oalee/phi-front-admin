@@ -74,7 +74,6 @@ function Sidebar({ location }) {
 
   return (
     <Drawer
-      anchor={anchor}
       variant={isPermanent ? "permanent" : "temporary"}
       className={classNames(classes.drawer, {
         [classes.drawerOpen]: isSidebarOpened,

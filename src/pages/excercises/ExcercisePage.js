@@ -50,6 +50,15 @@ export default function ExcersicePage(props) {
                         fontSize: "large"
                     }}
                     startIcon={<AddCircleOutlineOutlinedIcon />}
+                    onClick={() => {
+                        console.log(`clicked, ${props.history}`)
+
+                        props.history.push('/app/addExcercise')
+                    }
+
+                    }
+
+
                 >
 
                     <Trans>Add an Excercise</Trans>

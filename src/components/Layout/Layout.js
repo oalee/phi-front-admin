@@ -35,6 +35,7 @@ import Charts from "../../pages/charts";
 // context
 import { useLayoutState } from "../../context/LayoutContext";
 import ExcersicePage from "../../pages/excercises/ExcercisePage";
+import AddEditExcercise from "../../pages/addEditExcercise/AddEditExcercisePage";
 
 function Layout(props) {
   var classes = useStyles();
@@ -63,6 +64,7 @@ function Layout(props) {
               path="/app/ui"
               render={() => <Redirect to="/app/ui/icons" />}
             />
+            <Route path="/app/addExcercise" component={AddEditExcercise} />
             <Route path="/app/ui/maps" component={Maps} />
             <Route path="/app/ui/icons" component={Icons} />
             <Route path="/app/ui/charts" component={Charts} />

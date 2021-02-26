@@ -10,25 +10,27 @@ import * as serviceWorker from "./serviceWorker";
 import { LayoutProvider } from "./context/LayoutContext";
 import { UserProvider } from "./context/UserContext";
 import { AppProvider } from "./context/AppContext";
+import RTL from "./themes/RtlProvider";
 
 
 
 ReactDOM.render(
   <div dir="auto">
     <ApolloProvider client={client}>
-    <LayoutProvider>
-    <UserProvider>
-    <AppProvider>
-      <ThemeProvider theme={Themes.default}>
-        <CssBaseline />
-        <App />
-      </ThemeProvider>
-      </AppProvider>
+      <LayoutProvider>
+        <UserProvider>
+          <AppProvider>
+            <RTL>
+              <ThemeProvider theme={Themes.default}>
+                <CssBaseline />
+                <App />
+              </ThemeProvider>
+            </RTL>
+          </AppProvider>
+        </UserProvider>
 
-    </UserProvider>
-
-    </LayoutProvider>
-  </ApolloProvider>
+      </LayoutProvider>
+    </ApolloProvider>
   </div>
   ,
   document.getElementById("root"),
