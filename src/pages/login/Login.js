@@ -116,6 +116,21 @@ function Login(props) {
                 placeholder={passwordPlaceHolder}
                 type="password"
                 fullWidth
+                onKeyPress={(ev) => {
+                  console.log(`Pressed keyCode ${ev.key}`);
+                  if (ev.key === 'Enter') {
+                    // Do code here
+                    loginUser(
+                      userDispatch,
+                      loginValue,
+                      passwordValue,
+                      props.history,
+                      setIsLoading,
+                      setError,
+                    )
+                    ev.preventDefault();
+                  }
+                }}
               />
               <div className={classes.formButtons}>
                 {isLoading ? (

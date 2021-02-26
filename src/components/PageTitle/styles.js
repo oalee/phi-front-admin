@@ -10,6 +10,8 @@ export default makeStyles(theme => ({
   typo: {
     color: theme.palette.text.primary,
     textTransform: "none",
+    fontWeight: "bold",
+    fontSize: "150%"
 
   },
   button: {

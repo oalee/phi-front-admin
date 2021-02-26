@@ -25,7 +25,7 @@ export default function ExcersicePage(props) {
     var classes = useStyles();
     var theme = useTheme();
 
-    const [value, setValue] = React.useState(2);
+    const [value, setValue] = React.useState(1);
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
@@ -46,6 +46,8 @@ export default function ExcersicePage(props) {
                         justifyContent: "space-between",
                         alignItems: "center",
                         textTransform: "none",
+                        fontWeight: "bold",
+                        fontSize: "large"
                     }}
                     startIcon={<AddCircleOutlineOutlinedIcon />}
                 >
@@ -84,13 +86,19 @@ export default function ExcersicePage(props) {
                 </div>
 
                 <div className={classes.pageContainer}>
+                    {value === 0 && <Fragment>
+                        <Typography>
+                            <Trans>Nothing here yet, and an excercise</Trans>
+                        </Typography>
+                    </Fragment>
+                    }
 
-                    <Typography>
-                        Nothing here yet, and an excercise
-                    </Typography>
-
-
-
+                    {value === 1 && <Fragment>
+                        <Typography>
+                            <Trans>Nothing here yet, and an excercise</Trans>
+                        </Typography>
+                    </Fragment>
+                    }
                 </div>
 
 

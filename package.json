@@ -30,7 +30,8 @@
     "react-syntax-highlighter": "^15.4.3",
     "react-toastify": "^7.0.3",
     "recharts": "^2.0.4",
-    "tinycolor2": "^1.4.2"
+    "tinycolor2": "^1.4.2",
+    "vazir-font": "^27.2.2"
   },
   "scripts": {
     "start": "react-scripts start",
