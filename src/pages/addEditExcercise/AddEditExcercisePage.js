@@ -24,6 +24,9 @@ import { Trans } from "@lingui/macro";
 import { Fragment } from "react";
 import { t } from '@lingui/macro';
 import PageTitle from "../../components/PageTitle/PageTitle";
+import ReactDropzone from "react-dropzone";
+import ImageDropZone from "./components/ImageDropZone/ImageDropZone"
+
 
 export default function AddEditExcercise(props) {
     var classes = useStyles();
@@ -43,6 +46,13 @@ export default function AddEditExcercise(props) {
             [name]: event.target.value,
         });
     };
+
+    const handleImageDrop = (files) => {
+
+        files.forEach(file => {
+            console.log(`on drop ${file}`)
+        });
+    }
 
 
     return (
@@ -72,15 +82,26 @@ export default function AddEditExcercise(props) {
 
                 <div className={classes.titleContainer} >
 
-                    <TextField style={{
-                        direction: "rtl"
+                    <TextField id="outlined-basic" label={t`Title`} multiline variant="outlined"
 
-                    }} id="outlined-basic" label={t`Title`} multiline variant="outlined" />
+                        // inputProps={{ style: { fontSize: 20 } }} // font size of input text
+                        InputLabelProps={{ style: { fontWeight: "bold" } }} // font size of input label
+                    />
                 </div>
 
                 <TextField className={classes.shortDescription} multiline rows={2} rowsMax={4} id="outlined-basic" label={t`Short Description`} variant="outlined" />
 
                 <TextField className={classes.longDescription} multiline rows={5} rowsMax={20} id="outlined-basic" label={t`Long Description`} variant="outlined" />
+
+
+                <Typography style={{ marginTop: 20 }} >
+                    <Trans>Pictures</Trans>
+                </Typography>
+
+                <div className={classes.imageDropBoxContainer}>
+
+                    <ImageDropZone className={classes.dropzone} ></ImageDropZone>
+                </div>
 
             </div>
 

@@ -11,6 +11,8 @@ import { LayoutProvider } from "./context/LayoutContext";
 import { UserProvider } from "./context/UserContext";
 import { AppProvider } from "./context/AppContext";
 import RTL from "./themes/RtlProvider";
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
 
 
 
@@ -23,7 +25,9 @@ ReactDOM.render(
             <RTL>
               <ThemeProvider theme={Themes.default}>
                 <CssBaseline />
+
                 <App />
+
               </ThemeProvider>
             </RTL>
           </AppProvider>

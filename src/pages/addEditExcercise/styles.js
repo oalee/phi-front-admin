@@ -21,6 +21,7 @@ export default makeStyles(theme => ({
     titleContainer: {
         display: "flex",
         marginTop: theme.spacing(5),
+
         // width: 400
 
 
@@ -31,7 +32,13 @@ export default makeStyles(theme => ({
         width: "50%"
 
     },
+    imageDropBoxContainer: {
+        marginTop: theme.spacing(5),
 
+        width: "90%",
+        height: 400
+
+    },
     longDescription: {
 
         width: "90%",
@@ -51,5 +58,11 @@ export default makeStyles(theme => ({
         justifyContent: "center",
         marginTop: theme.spacing(10),
 
+    },
+
+    dropzone: {
+
+        minHeight: 300,
+        height: 400
     }
 }))

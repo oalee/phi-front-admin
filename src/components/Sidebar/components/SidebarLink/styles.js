@@ -18,6 +18,7 @@ export default makeStyles(theme => ({
     },
   },
   linkIcon: {
+    marginRight: theme.spacing(2),
     color: theme.palette.text.secondary + "99",
     transition: theme.transitions.create("color"),
     width: 24,
