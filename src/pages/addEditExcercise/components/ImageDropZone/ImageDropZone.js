@@ -27,7 +27,7 @@ export default function ImageDropZone({ props }) {
         axios({
             headers: {
                 "Content-Type": "multipart/form-data",
-                "Access-Control-Allow-Origin": "*"
+                "Authorization": `${localStorage.getItem('token')}`
             },
             method: "POST",
             data: formData,
