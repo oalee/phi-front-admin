@@ -22,15 +22,17 @@ function userReducer(state, action) {
 
 function UserProvider({ children }) {
 
-  const [doLogin, loginQuery ] = useLazyQuery(LOGIN);
-  const  {loading, error, data} = useQuery(GETME, {
-    skip : loginQuery.data === undefined,
-    onCompleted : (res) => {
+  const [doLogin, loginQuery] = useLazyQuery(LOGIN);
+  const token = localStorage.getItem('token');
+
+  const { loading, error, data } = useQuery(GETME, {
+    skip: loginQuery.data === undefined && token === undefined,
+    onCompleted: (res) => {
       console.log(`completed ${res.user}`)
-      // console.log(`child ${children.props}`)
-      mHistory.push('/app/dashboard')
+      // console.log(`child ${children.props.history}`)
+      // history.push('/app/dashboard')
     }
-  }) 
+  })
 
   loginFunction = doLogin;
 
@@ -41,18 +43,18 @@ function UserProvider({ children }) {
   console.log(`${loginQuery} and ${loginQuery.data} and ${data}`)
 
 
-  if(loginQuery.data ){
-      localStorage.setItem('token', loginQuery.data.tokenPayload.token)
+  if (loginQuery.data) {
+    localStorage.setItem('token', loginQuery.data.tokenPayload.token)
 
   }
 
-  console.log(` is it true? ${ data!== undefined}`)
+  console.log(` is it true? ${data !== undefined}`)
 
   // console.log(`data is ${data} and user is ${userData}`)
 
   return (
-    <UserStateContext.Provider value={ data!== undefined}>
-      <UserDispatchContext.Provider value={ data ? data.user : null}>
+    <UserStateContext.Provider value={data !== undefined}>
+      <UserDispatchContext.Provider value={data ? data.user : null}>
         {children}
       </UserDispatchContext.Provider>
     </UserStateContext.Provider>
@@ -92,14 +94,14 @@ function loginUser(dispatch, login, password, history, setIsLoading, setError) {
         loginUsername: login,
         loginPassword: password,
       },
-    }).then( result => {
+    }).then(result => {
       console.log(`got result ${result}`)
     })
-      setError(null)
-      setIsLoading(false)
+    setError(null)
+    setIsLoading(false)
 
   } catch (error) {
-    
+
   }
 
   // if (!!login && !!password) {
