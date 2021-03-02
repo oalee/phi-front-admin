@@ -8,6 +8,7 @@ import { HTML5Backend } from "react-dnd-html5-backend";
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
 import FileView from '../FileView/FileView';
 import { v4 as uuid } from "uuid"
+import { Trans } from '@lingui/macro';
 const axios = require('axios').default;
 
 
@@ -101,7 +102,7 @@ export default function ImageDropZone({ props }) {
         <RootRef rootRef={ref}>
             <Paper {...rootProps} className={classes.container}>
                 <input {...getInputProps()} name="Image" />
-                <p>Drag 'n' drop some files here, or click to select files</p>
+                <p><Trans>Drag 'n' drop some files here, or click to select files</Trans></p>
 
                 {/* <FileView fileName={"test"} /> */}
 
