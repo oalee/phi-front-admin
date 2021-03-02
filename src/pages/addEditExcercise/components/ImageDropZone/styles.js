@@ -7,8 +7,8 @@ export default makeStyles(theme => ({
         borderStyle: "dashed",
         justifyContent: "start",
         alignItems: "center",
-
-        minHeight: 240
+        minHeight: 240,
+        paddingBottom: 20
     },
     cardsContainer: {
         display: "flex",

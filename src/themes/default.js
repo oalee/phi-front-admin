@@ -5,6 +5,7 @@ const secondary = "#FF5C93";
 const warning = "#FFC260";
 const success = "#3CD4A0";
 const info = "#9013FE";
+const deleteColor = "#BE123C"
 
 const lightenRate = 7.5;
 const darkenRate = 15;
@@ -36,6 +37,15 @@ const defaultTheme = {
         .lighten(lightenRate)
         .toHexString(),
       dark: tinycolor(warning)
+        .darken(darkenRate)
+        .toHexString(),
+    },
+    delete: {
+      main: deleteColor,
+      light: tinycolor(deleteColor)
+        .lighten(lightenRate)
+        .toHexString(),
+      dark: tinycolor(deleteColor)
         .darken(darkenRate)
         .toHexString(),
     },

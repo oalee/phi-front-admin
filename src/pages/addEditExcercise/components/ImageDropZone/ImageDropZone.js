@@ -7,7 +7,9 @@ import useStyles from "./styles";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
 import FileView from '../FileView/FileView';
+import { v4 as uuid } from "uuid"
 const axios = require('axios').default;
+
 
 export default function ImageDropZone({ props }) {
 
@@ -18,12 +20,20 @@ export default function ImageDropZone({ props }) {
         uploadProgress: 0
     });
 
+    const [uploadProgress, setUploadProgress] = React.useState({
 
+        progress: 0,
+        id: null,
+    })
+
+
+    console.log("state files is", state)
     function uploadFile(file) {
 
         const formData = new FormData();
         formData.append("name", "image");
         formData.append("image", file);
+        formData.append("id", uuid())
         axios({
             headers: {
                 "Content-Type": "multipart/form-data",
@@ -46,7 +56,16 @@ export default function ImageDropZone({ props }) {
             encType: "multipart/form-data",
         }).then(res => {
 
-            console.log(`res is ${res}`)
+            console.log("upload res is", res.data)
+            state.files.push({ ...res.data, order: state.files.length });
+            // newFiles.map(file => {
+
+            //     if (file.fileName === res.data.fileName)
+            //         return file
+            // })
+
+            setState({ ...state, files: state.files })
+
         }).catch(e => { console.log("error ", e) });
 
         // fetch("http://localhost:5000/upload_image", {
@@ -84,7 +103,23 @@ export default function ImageDropZone({ props }) {
                 <input {...getInputProps()} name="Image" />
                 <p>Drag 'n' drop some files here, or click to select files</p>
 
-                <FileView fileName={"test"} />
+                {/* <FileView fileName={"test"} /> */}
+
+                {state.files.map(file => {
+
+                    console.log(`for each file ${file.url}`)
+                    return (
+                        // <div>    < img src={file.url} style={{ width: 200, height: 200 }} alt={"holder"}></img>
+                        //     <p> {file.fileName}</p>
+                        // </div>
+
+                        <FileView file={file} />
+                    )
+                })}
+
+                {/* < img src={"http://localhost:5000/b04cb420ab9974b2abad1478f986d0854e3771f67932bf270d625cbbb693d5bb/1614560400528-134994402.jpg"} style={{ width: 200, height: 200 }} ></img>
+                < img src={"http://localhost:5000/b04cb420ab9974b2abad1478f986d0854e3771f67932bf270d625cbbb693d5bb/1614560400528-134994402.jpg"} style={{ width: 200, height: 200 }} ></img>
+                < img src={"http://localhost:5000/b04cb420ab9974b2abad1478f986d0854e3771f67932bf270d625cbbb693d5bb/1614560400528-134994402.jpg"} style={{ width: 200, height: 200 }} ></img> */}
 
 
             </Paper>

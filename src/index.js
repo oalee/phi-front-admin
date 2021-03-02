@@ -13,6 +13,7 @@ import { AppProvider } from "./context/AppContext";
 import RTL from "./themes/RtlProvider";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
+import DialogProvider from "./context/DialogProvider";
 
 
 
@@ -24,9 +25,13 @@ ReactDOM.render(
           <AppProvider>
             <RTL>
               <ThemeProvider theme={Themes.default}>
-                <CssBaseline />
 
-                <App />
+                <DialogProvider>
+                  <CssBaseline />
+
+                  <App />
+
+                </DialogProvider>
 
               </ThemeProvider>
             </RTL>
