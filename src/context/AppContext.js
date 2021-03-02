@@ -15,8 +15,20 @@ import Dot from "../components/Sidebar/components/Dot";
 import { t } from "@lingui/macro";
 import { useUserDispatch } from "./UserContext";
 
+import { i18n } from '@lingui/core'
+import { I18nProvider } from '@lingui/react'
+import { messages } from '../locales/en/messages.js'
+import { messages as faMessages } from '../locales/fa/messages.js'
+
+
+
 var AppContext = React.createContext();
 
+
+
+i18n.load('en', messages)
+i18n.load('fa', faMessages)
+i18n.activate('fa')
 
 
 function AppProvider({ children }) {
@@ -68,8 +80,13 @@ function AppProvider({ children }) {
   }
 
   return (
+
     <AppContext.Provider value={context}>
-      {children}
+      <I18nProvider i18n={i18n}>
+
+        {children}
+      </I18nProvider>
+
     </AppContext.Provider>
   );
 }

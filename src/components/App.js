@@ -11,15 +11,6 @@ import Login from "../pages/login";
 // context
 import { useUserState } from "../context/UserContext";
 
-import { i18n } from '@lingui/core'
-import { I18nProvider } from '@lingui/react'
-import { messages } from '../locales/en/messages.js'
-import { messages as faMessages } from '../locales/fa/messages.js'
-
-
-i18n.load('en', messages)
-i18n.load('fa', faMessages)
-i18n.activate('fa')
 
 export default function App() {
   // global
@@ -29,22 +20,20 @@ export default function App() {
   console.log(`is authenticated ${isAuthenticated}`)
 
   return (
-    <I18nProvider i18n={i18n}>
 
-      <HashRouter>
-        <Switch>
-          <Route exact path="/" render={() => <Redirect to="/app/dashboard" />} />
-          <Route
-            exact
-            path="/app"
-            render={() => <Redirect to="/app/dashboard" />}
-          />
-          <PrivateRoute path="/app" component={Layout} />
-          <PublicRoute path="/login" component={Login} />
-          <Route component={Error} />
-        </Switch>
-      </HashRouter>
-    </I18nProvider>
+    <HashRouter>
+      <Switch>
+        <Route exact path="/" render={() => <Redirect to="/app/dashboard" />} />
+        <Route
+          exact
+          path="/app"
+          render={() => <Redirect to="/app/dashboard" />}
+        />
+        <PrivateRoute path="/app" component={Layout} />
+        <PublicRoute path="/login" component={Login} />
+        <Route component={Error} />
+      </Switch>
+    </HashRouter>
   );
 
   // #######################################################################
