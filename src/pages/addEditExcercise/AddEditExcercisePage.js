@@ -36,6 +36,11 @@ export default function AddEditExcercise(props) {
         title: '',
         type: t`Excercise`,
     });
+
+    const [images, setImages] = React.useState([
+
+    ])
+
     const handleChange = (event, newValue) => {
         // setValue(newValue);
         console.log(`handeChange ${newValue}`)

@@ -9,6 +9,7 @@ import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
 import FileView from '../FileView/FileView';
 import { v4 as uuid } from "uuid"
 import { Trans } from '@lingui/macro';
+import DraggableFileList from '../DraggableFileList/DraggableFileList';
 const axios = require('axios').default;
 
 
@@ -110,11 +111,8 @@ export default function ImageDropZone({ props }) {
 
                     console.log(`for each file ${file.url}`)
                     return (
-                        // <div>    < img src={file.url} style={{ width: 200, height: 200 }} alt={"holder"}></img>
-                        //     <p> {file.fileName}</p>
-                        // </div>
 
-                        <FileView file={file} />
+                        <FileView file={file} fileCount={state.files.length} />
                     )
                 })}
 

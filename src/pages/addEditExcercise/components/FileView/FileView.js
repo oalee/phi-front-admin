@@ -7,11 +7,16 @@ import { useTheme } from '@material-ui/styles';
 import DeleteAlertDialog from '../../../../components/Dialogs/DeleteAlertDialog/DeleteAlertDialog';
 import { useDialog } from '../../../../context/DialogProvider';
 import { Trans } from '@lingui/macro';
+
+import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
+import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
+
+
 /**
  * Your Component
  */
 
-export default function FileView({ file, ...props }) {
+export default function FileView({ file, fileCount, ...props }) {
 
     console.log("file is ", file)
 
@@ -57,20 +62,41 @@ export default function FileView({ file, ...props }) {
 
             >
                 <img src={file.url} alt={file.fieldName} />
-                <div style={{ display: "flex", flexGrow: 1, minHeight: 100, maxHeight: 200, flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
 
-                    {/* <Typography  >{file.order}</Typography> */}
-                    <Typography style={{
-                        borderRadius: "50%", width: 30, height: 30, display: "flex", border: "1px black solid", alignItems: "center",
-                        justifyContent: "center",
-                        backgroundColor: theme.palette.primary.light,
-                        color: "white"
-                    }} >{file.order}</Typography>
-
-                    <DeleteForeverIcon style={{ width: 50, height: 50, marginTop: 4, color: theme.palette.delete.light }}
+                <div style={{
+                    display: "flex", flexDirection: "row", justifyContent: "center", "alignItems": "center", flexGrow: 1
+                }}>
+                    <ArrowUpwardIcon style={{
+                        width: 50, height: 50, marginTop: 4, alignSelf: "center", color: theme.palette.primary.main,
+                        visibility: file.order === 0 ? "hidden" : "visible"
+                    }}
 
                         onClick={e => onDeleteClicked(e)}
                     />
+                    <div style={{ display: "flex", minHeight: 100, maxHeight: 200, flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
+
+                        {/* <Typography  >{file.order}</Typography> */}
+                        <Typography style={{
+                            borderRadius: "50%", width: 30, height: 30, display: "flex", border: "1px black solid", alignItems: "center",
+                            justifyContent: "center",
+                            backgroundColor: theme.palette.primary.light,
+                            color: "white"
+                        }} >{file.order}</Typography>
+
+                        <DeleteForeverIcon style={{ width: 50, height: 50, marginTop: 4, color: theme.palette.delete.light }}
+
+                            onClick={e => onDeleteClicked(e)}
+                        />
+                    </div>
+                    <ArrowDownwardIcon style={{
+                        width: 50, height: 50, marginTop: 4, alignSelf: "center", color: theme.palette.primary.main
+                        , visibility: file.order === fileCount - 1 ? "hidden" : "visible"
+
+                    }}
+
+                        onClick={e => onDeleteClicked(e)}
+                    />
+
                 </div>
 
             </Paper >
