@@ -13,12 +13,13 @@ import DraggableFileList from '../DraggableFileList/DraggableFileList';
 const axios = require('axios').default;
 
 
-export default function ImageDropZone({ props }) {
+export default function ImageDropZone(props) {
 
+    const { onImagesChanged, images } = { ...props }
     var classes = useStyles();
 
     const [state, setState] = React.useState({
-        files: [],
+        files: images,
         uploadProgress: 0
     });
 
@@ -60,13 +61,8 @@ export default function ImageDropZone({ props }) {
 
             console.log("upload res is", res.data)
             state.files.push({ ...res.data, order: state.files.length });
-            // newFiles.map(file => {
-
-            //     if (file.fileName === res.data.fileName)
-            //         return file
-            // })
-
             setState({ ...state, files: state.files })
+            onImagesChanged(state.files)
 
         }).catch(e => { console.log("error ", e) });
 

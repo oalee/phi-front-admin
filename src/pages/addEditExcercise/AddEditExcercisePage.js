@@ -52,11 +52,15 @@ export default function AddEditExcercise(props) {
         });
     };
 
-    const handleImageDrop = (files) => {
+    function onImagesChanged(images) {
 
-        files.forEach(file => {
-            console.log(`on drop ${file}`)
-        });
+        // images.push(file)
+        setImages(images)
+        // forceUpdate()
+    }
+
+    function reorderImages(idx, toIdx) {
+
     }
 
 
@@ -105,7 +109,7 @@ export default function AddEditExcercise(props) {
 
                 <div className={classes.imageDropBoxContainer}>
 
-                    <ImageDropZone className={classes.dropzone} ></ImageDropZone>
+                    <ImageDropZone key={images.length} className={classes.dropzone} images={images} onImagesChanged={onImagesChanged}  ></ImageDropZone>
                 </div>
 
             </div>

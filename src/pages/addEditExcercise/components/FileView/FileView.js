@@ -18,7 +18,7 @@ import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
 
 export default function FileView({ file, fileCount, ...props }) {
 
-    console.log("file is ", file)
+    // console.log("file is ", file)
 
     var theme = useTheme();
 
