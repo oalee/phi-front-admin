@@ -2,8 +2,8 @@ import { makeStyles } from "@material-ui/styles";
 
 export default makeStyles(theme => ({
     mainContainer: {
-        height: "100vh",
-        width: "100%",
+        height: "87%",
+        width: "95%",
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
@@ -36,7 +36,7 @@ export default makeStyles(theme => ({
         marginTop: theme.spacing(5),
 
         width: "90%",
-        height: 400
+        // minHeight: 400
 
     },
     longDescription: {

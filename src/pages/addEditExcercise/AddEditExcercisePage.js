@@ -70,7 +70,7 @@ export default function AddEditExcercise(props) {
 
             <div className={classes.mainContainer}>
 
-                <div className={classes.typeContainer} dir="rtl">
+                <div className={classes.typeContainer}>
                     <FormControl variant="outlined" className={classes.formControl}>
                         <InputLabel variant="outlined" htmlFor="outlined-age-native-simple">{t`Type`}</InputLabel>
                         <Select
@@ -103,8 +103,16 @@ export default function AddEditExcercise(props) {
                 <TextField className={classes.longDescription} multiline rows={5} rowsMax={20} id="outlined-basic" label={t`Long Description`} variant="outlined" />
 
 
-                <Typography style={{ marginTop: 20 }} >
+                <Typography style={{ marginTop: 20 }} variant="h2" >
                     <Trans>Pictures</Trans>
+                </Typography>
+
+                <div className={classes.imageDropBoxContainer}>
+
+                    <ImageDropZone key={images.length} className={classes.dropzone} images={images} onImagesChanged={onImagesChanged}  ></ImageDropZone>
+                </div>
+                <Typography style={{ marginTop: theme.spacing(10) }} variant="h2" >
+                    <Trans>Videos</Trans>
                 </Typography>
 
                 <div className={classes.imageDropBoxContainer}>

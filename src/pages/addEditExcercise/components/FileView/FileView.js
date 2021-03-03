@@ -10,11 +10,14 @@ import { Trans } from '@lingui/macro';
 
 import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
+import { forwardRef } from 'react';
 
 
 /**
  * Your Component
  */
+
+
 
 export default function FileView({ file, fileCount, onSwapUp, onSwapDown, onDelete, ...props }) {
 
@@ -51,7 +54,7 @@ export default function FileView({ file, fileCount, onSwapUp, onSwapDown, onDele
 
     return (
         <>
-            <Paper elevation={4} style={
+            <Paper ref={props.ref} elevation={4} style={
 
                 {
                     minWidth: 300, maxWidth: 600, minHeight: 100, maxHeight: 200, border: "solid", borderRadius: 4, borderWidth: 2,
@@ -68,7 +71,8 @@ export default function FileView({ file, fileCount, onSwapUp, onSwapDown, onDele
                 }}>
                     <ArrowUpwardIcon style={{
                         width: 50, height: 50, marginTop: 4, alignSelf: "center", color: theme.palette.primary.main,
-                        visibility: file.order === 0 ? "hidden" : "visible"
+                        visibility: file.order === 0 ? "hidden" : "visible",
+
                     }}
 
                         onClick={e => onSwapUp(file)}

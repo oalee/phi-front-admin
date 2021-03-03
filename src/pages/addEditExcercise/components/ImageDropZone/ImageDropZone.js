@@ -1,5 +1,5 @@
 import { Paper, RootRef } from '@material-ui/core';
-import React, { useCallback } from 'react';
+import React, { forwardRef, useCallback } from 'react';
 import { DndProvider } from 'react-dnd';
 import { useDropzone } from 'react-dropzone';
 import UploadCard from '../UploadCard/UploadCard';
@@ -10,6 +10,7 @@ import FileView from '../FileView/FileView';
 import { v4 as uuid } from "uuid"
 import { Trans } from '@lingui/macro';
 import DraggableFileList from '../DraggableFileList/DraggableFileList';
+import FlipMove from 'react-flip-move';
 const axios = require('axios').default;
 
 
@@ -131,7 +132,7 @@ export default function ImageDropZone(props) {
         })
 
     }, [])
-    const { getRootProps, getInputProps } = useDropzone({ onDrop })
+    const { getRootProps, getInputProps } = useDropzone({ onDrop, accept: 'image/*' })
     const { ref, ...rootProps } = getRootProps()
     return (
         <RootRef rootRef={ref}>
