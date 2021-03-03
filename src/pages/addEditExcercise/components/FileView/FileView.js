@@ -11,6 +11,7 @@ import { Trans } from '@lingui/macro';
 import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
 import { forwardRef } from 'react';
+import VideoPlayer from '../VideoPlayer/VideoPlayer';
 
 
 /**
@@ -19,7 +20,7 @@ import { forwardRef } from 'react';
 
 
 
-export default function FileView({ file, fileCount, onSwapUp, onSwapDown, onDelete, ...props }) {
+export default function FileView({ file, type, fileCount, onSwapUp, onSwapDown, onDelete, ...props }) {
 
     // console.log("file is ", file)
 
@@ -50,7 +51,15 @@ export default function FileView({ file, fileCount, onSwapUp, onSwapDown, onDele
         onOpenDialog()
 
     }
-
+    const videoJsOptions = {
+        autoplay: false,
+        controls: true,
+        sources: [{
+            src: file.url,
+            type: file.type
+        }],
+        responsive: true
+    }
 
     return (
         <>
@@ -64,7 +73,16 @@ export default function FileView({ file, fileCount, onSwapUp, onSwapDown, onDele
                 onClick={e => e.stopPropagation()}
 
             >
-                <img src={file.url} alt={file.fieldName} />
+                {type === "image" &&
+
+                    <img src={file.url} alt={file.fieldName} />
+
+                }
+                {type === "video" &&
+
+                    <VideoPlayer
+                        {...videoJsOptions}  />
+                }
 
                 <div style={{
                     display: "flex", flexDirection: "row", justifyContent: "center", "alignItems": "center", flexGrow: 1

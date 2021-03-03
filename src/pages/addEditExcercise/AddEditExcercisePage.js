@@ -59,6 +59,10 @@ export default function AddEditExcercise(props) {
         // forceUpdate()
     }
 
+    function onVideosChanged(videos) {
+
+    }
+
     function reorderImages(idx, toIdx) {
 
     }
@@ -109,7 +113,9 @@ export default function AddEditExcercise(props) {
 
                 <div className={classes.imageDropBoxContainer}>
 
-                    <ImageDropZone key={images.length} className={classes.dropzone} images={images} onImagesChanged={onImagesChanged}  ></ImageDropZone>
+                    <ImageDropZone key={images.length} className={classes.dropzone} list={images} onListChanged={onImagesChanged}
+                        type="image"
+                    ></ImageDropZone>
                 </div>
                 <Typography style={{ marginTop: theme.spacing(10) }} variant="h2" >
                     <Trans>Videos</Trans>
@@ -117,7 +123,9 @@ export default function AddEditExcercise(props) {
 
                 <div className={classes.imageDropBoxContainer}>
 
-                    <ImageDropZone key={images.length} className={classes.dropzone} images={images} onImagesChanged={onImagesChanged}  ></ImageDropZone>
+                    <ImageDropZone key={images.length} className={classes.dropzone} list={[]} onListChanged={onVideosChanged}
+                        type="video"
+                    ></ImageDropZone>
                 </div>
 
             </div>

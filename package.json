@@ -72,6 +72,7 @@
     "@lingui/cli": "^3.5.1",
     "@lingui/macro": "^3.5.1",
     "babel-plugin-macros": "^2.8.0",
-    "prettier": "^2.1.1"
+    "prettier": "^2.1.1",
+    "video.js": "^7.11.4"
   }
 }

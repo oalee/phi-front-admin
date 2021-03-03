@@ -16,11 +16,11 @@ const axios = require('axios').default;
 
 export default function ImageDropZone(props) {
 
-    const { onImagesChanged, images } = { ...props }
+    const { onListChanged, list, type } = { ...props }
     var classes = useStyles();
 
     const [state, setState] = React.useState({
-        files: images,
+        files: list,
         uploadProgress: 0
     });
 
@@ -35,8 +35,8 @@ export default function ImageDropZone(props) {
     function uploadFile(file) {
 
         const formData = new FormData();
-        formData.append("name", "image");
-        formData.append("image", file);
+        formData.append("type", type);
+        formData.append("file", file);
         formData.append("id", uuid())
         axios({
             headers: {
@@ -63,7 +63,7 @@ export default function ImageDropZone(props) {
             console.log("upload res is", res.data)
             state.files = [...state.files, { ...res.data, order: state.files.length }];
             setState({ files: state.files, ...state })
-            onImagesChanged(state.files)
+            onListChanged(state.files)
 
         }).catch(e => { console.log("error ", e) });
 
@@ -82,7 +82,7 @@ export default function ImageDropZone(props) {
         state.files[file.order].order--
         state.files.sort((i, j) => i.order - j.order)
         setState({ ...state, files: state.files })
-        onImagesChanged(state.files)
+        onListChanged(state.files)
 
     }
 
@@ -93,7 +93,7 @@ export default function ImageDropZone(props) {
         state.files[file.order].order++
         state.files.sort((i, j) => i.order - j.order)
         setState({ ...state, files: state.files })
-        onImagesChanged(state.files)
+        onListChanged(state.files)
 
     }
 
@@ -109,7 +109,7 @@ export default function ImageDropZone(props) {
         // newList
 
         setState({ ...state, files: newList })
-        onImagesChanged(newList)
+        onListChanged(newList)
 
     }
 
@@ -132,12 +132,12 @@ export default function ImageDropZone(props) {
         })
 
     }, [])
-    const { getRootProps, getInputProps } = useDropzone({ onDrop, accept: 'image/*' })
+    const { getRootProps, getInputProps } = useDropzone({ onDrop, accept: `${type}/*` })
     const { ref, ...rootProps } = getRootProps()
     return (
         <RootRef rootRef={ref}>
             <Paper {...rootProps} className={classes.container}>
-                <input {...getInputProps()} name="Image" />
+                <input {...getInputProps()} name={type} />
                 <p><Trans>Drag 'n' drop some files here, or click to select files</Trans></p>
 
                 {/* <FileView fileName={"test"} /> */}
@@ -147,7 +147,9 @@ export default function ImageDropZone(props) {
                     console.log(`for each file ${file.url}`)
                     return (
 
-                        <FileView key={file.id} file={file} fileCount={state.files.length} onDelete={onDelete} onSwapDown={onSwapDown} onSwapUp={onSwapUp} />
+                        <FileView key={file.id} file={file} fileCount={state.files.length} onDelete={onDelete} onSwapDown={onSwapDown} onSwapUp={onSwapUp}
+                            type={type}
+                        />
                     )
                 })}
 
