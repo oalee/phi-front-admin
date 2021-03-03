@@ -16,7 +16,7 @@ import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
  * Your Component
  */
 
-export default function FileView({ file, fileCount, ...props }) {
+export default function FileView({ file, fileCount, onSwapUp, onSwapDown, onDelete, ...props }) {
 
     // console.log("file is ", file)
 
@@ -30,7 +30,7 @@ export default function FileView({ file, fileCount, ...props }) {
                     <DialogTitle><Trans>Delete image?</Trans></DialogTitle>
                     <DialogContent><Trans>Are you sure? this action will not be saved before submiting</Trans></DialogContent>
                     <DialogActions>
-                        <Button color="primary" onClick={closeDialog}> <Trans>Delete</Trans> </Button>
+                        <Button color="primary" onClick={(e) => { closeDialog(); onDelete(file) }}> <Trans>Delete</Trans> </Button>
                         <Button onClick={closeDialog} color="primary" >
                             <Trans>Dont Delete</Trans>    </Button>
                     </DialogActions>
@@ -71,7 +71,7 @@ export default function FileView({ file, fileCount, ...props }) {
                         visibility: file.order === 0 ? "hidden" : "visible"
                     }}
 
-                        onClick={e => onDeleteClicked(e)}
+                        onClick={e => onSwapUp(file)}
                     />
                     <div style={{ display: "flex", minHeight: 100, maxHeight: 200, flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
 
@@ -94,7 +94,7 @@ export default function FileView({ file, fileCount, ...props }) {
 
                     }}
 
-                        onClick={e => onDeleteClicked(e)}
+                        onClick={e => onSwapDown(file)}
                     />
 
                 </div>

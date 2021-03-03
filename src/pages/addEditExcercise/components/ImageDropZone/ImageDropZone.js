@@ -52,7 +52,7 @@ export default function ImageDropZone(props) {
                 const totalSizeInMB = total / 1000000;
                 const loadedSizeInMB = loaded / 1000000;
                 const uploadPercentage = (loadedSizeInMB / totalSizeInMB) * 100;
-                setState({ uploadProgress: uploadPercentage, ...state })
+                // setState({ uploadProgress: uploadPercentage, ...state })
                 console.log("total size in MB ==> ", totalSizeInMB);
                 console.log("uploaded size in MB ==> ", loadedSizeInMB);
             },
@@ -60,8 +60,8 @@ export default function ImageDropZone(props) {
         }).then(res => {
 
             console.log("upload res is", res.data)
-            state.files.push({ ...res.data, order: state.files.length });
-            setState({ ...state, files: state.files })
+            state.files = [...state.files, { ...res.data, order: state.files.length }];
+            setState({ files: state.files, ...state })
             onImagesChanged(state.files)
 
         }).catch(e => { console.log("error ", e) });
@@ -72,6 +72,44 @@ export default function ImageDropZone(props) {
         // })
         //     .then((res) => console.log(res))
         //     .catch((err) => console.log("Error occured", err));
+    }
+
+    const onSwapUp = (file) => {
+
+
+        state.files[file.order - 1].order++
+        state.files[file.order].order--
+        state.files.sort((i, j) => i.order - j.order)
+        setState({ ...state, files: state.files })
+        onImagesChanged(state.files)
+
+    }
+
+
+    const onSwapDown = (file) => {
+
+        state.files[file.order + 1].order--
+        state.files[file.order].order++
+        state.files.sort((i, j) => i.order - j.order)
+        setState({ ...state, files: state.files })
+        onImagesChanged(state.files)
+
+    }
+
+    const onDelete = (file) => {
+
+        var newList = state.files.filter(item => item.order !== file.order).map((i) => {
+            if (file.order < i.order)
+                i.order--
+            return i
+        })
+        newList.sort((i, j) => i.order - j.order)
+
+        // newList
+
+        setState({ ...state, files: newList })
+        onImagesChanged(newList)
+
     }
 
     const onDrop = useCallback((acceptedFiles) => {
@@ -108,7 +146,7 @@ export default function ImageDropZone(props) {
                     console.log(`for each file ${file.url}`)
                     return (
 
-                        <FileView file={file} fileCount={state.files.length} />
+                        <FileView key={file.id} file={file} fileCount={state.files.length} onDelete={onDelete} onSwapDown={onSwapDown} onSwapUp={onSwapUp} />
                     )
                 })}
 
