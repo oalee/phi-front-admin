@@ -14,15 +14,17 @@ import FlipMove from 'react-flip-move';
 const axios = require('axios').default;
 
 
-export default function DropZone(props) {
+export default function ImageDropZone(props) {
 
-    const { onListChanged, list, type } = { ...props}
+    const { onListChanged, list, type } = { ...props }
     var classes = useStyles();
 
     const [state, setState] = React.useState({
         files: list,
         uploadProgress: 0
     });
+
+    console.log("STATE IZ IN DROP, ", state)
 
     const [uploadProgress, setUploadProgress] = React.useState({
 
@@ -31,7 +33,7 @@ export default function DropZone(props) {
     })
 
 
-    console.log("state files is", state)
+    // console.log("state files is", state)
     function uploadFile(file) {
 
         const formData = new FormData();
@@ -60,10 +62,15 @@ export default function DropZone(props) {
             encType: "multipart/form-data",
         }).then(res => {
 
-            console.log("upload res is", res.data)
-            state.files = [...state.files, { ...res.data, order: state.files.length }];
-            setState({  ...state, files: state.files })
-            onListChanged(state.files)
+
+            console.log("file uploaded")
+
+            onAddAnFile({ ...res.data, order: state.files.length })
+            // console.log("upload res is", res.data)
+            // var nList = [...state.files, ];
+            // onListChanged(nList)
+
+            // setState({ ...state, files: nList })
 
         }).catch(e => { console.log("error ", e) });
 
@@ -73,6 +80,15 @@ export default function DropZone(props) {
         // })
         //     .then((res) => console.log(res))
         //     .catch((err) => console.log("Error occured", err));
+    }
+
+    const onAddAnFile = (file) => {
+        // console.log("on Add an file , ", state)
+        state.files.push(file)
+        setState({ ...state, files: state.files })
+        onListChanged(state.files)
+        // console.log("after Add an file , ", state)
+
     }
 
     const onSwapUp = (file) => {

@@ -60,7 +60,7 @@ export default function AddEditExcercise(props) {
         // setImages(images)
         // forceUpdate()
         console.log("on changed, state is, bef ", state)
-        setState({...state, images : images})
+        setState({ ...state, images: images })
         console.log("images changed, after state is, af ", state)
 
     }
@@ -68,7 +68,7 @@ export default function AddEditExcercise(props) {
     function onVideosChanged(videos) {
         console.log("on changed, state is, bef", state)
 
-        setState({ ...state, videos: videos})
+        setState({ ...state, videos: videos })
         console.log("images changed, after state is, af ", state)
 
     }
@@ -80,9 +80,9 @@ export default function AddEditExcercise(props) {
 
     return (
         <>
-        {
-            console.log("on render page , with state " , state)
-        }
+            {
+                console.log("on render page , with state ", state)
+            }
             <PageTitle title={t`Add an Excercise`} />
 
             <div className={classes.mainContainer}>
