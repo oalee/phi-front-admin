@@ -26,7 +26,11 @@ import { t } from '@lingui/macro';
 import PageTitle from "../../components/PageTitle/PageTitle";
 import ReactDropzone from "react-dropzone";
 import ImageDropZone from "./components/ImageDropZone/ImageDropZone"
-
+import { PageState } from "./Constants"
+import SaveIcon from '@material-ui/icons/Save';
+import RestoreIcon from '@material-ui/icons/Restore';
+import clsx from 'clsx';
+import { Pages } from "@material-ui/icons";
 
 export default function AddEditExcercise(props) {
     var classes = useStyles();
@@ -36,9 +40,15 @@ export default function AddEditExcercise(props) {
         title: '',
         type: t`Excercise`,
         images: [],
-        videos: []
+        videos: [],
+        state: PageState.SENT
     });
 
+
+    const saveButtonClassname = clsx({
+        [classes.buttonSuccess]: state === PageState.SENT,
+        [classes.saveButton]: state === PageState.COMPLETED_NOT_SENT
+    });
     // const [images, setImages] = React.useState([
 
     // ])
@@ -79,71 +89,104 @@ export default function AddEditExcercise(props) {
 
 
     return (
-        <>
+        <div style={{
+            position: "relative"
+        }}>
+
             {
                 console.log("on render page , with state ", state)
             }
-            <PageTitle title={t`Add an Excercise`} />
 
-            <div className={classes.mainContainer}>
+            <div style={{ position: "absolute", display: "flex", justifyContent: "flex-end", width: "90%", flexDirection: "column", alignItems: "end" }}>
 
-                <div className={classes.typeContainer}>
-                    <FormControl variant="outlined" className={classes.formControl}>
-                        <InputLabel variant="outlined" htmlFor="outlined-age-native-simple">{t`Type`}</InputLabel>
-                        <Select
-                            native
-                            value={state.type}
-                            onChange={handleChange}
-                            label="Type"
-                            inputProps={{
-                                name: 'type',
-                                id: 'outlined-age-native-simple',
-                            }}
-                        >
-                            <option value="Excercise">{t`Excercise`}</option>
-                            <option value="Eductional">{t`Eductional`}</option>
-                        </Select>
-                    </FormControl>
-                </div>
+                <Button
+                    variant="contained"
+                    color="primary"
+                    size="large"
+                    disabled={state.state === PageState.NOT_COMPLETED || state.state === PageState.SENDING}
+                    className={classes.buttonSuccess}
+                    startIcon={<SaveIcon />}
+                >
+                    Save
+             </Button>
 
-                <div className={classes.titleContainer} >
-
-                    <TextField id="outlined-basic" label={t`Title`} multiline variant="outlined"
-
-                        // inputProps={{ style: { fontSize: 20 } }} // font size of input text
-                        InputLabelProps={{ style: { fontWeight: "bold" } }} // font size of input label
-                    />
-                </div>
-
-                <TextField className={classes.shortDescription} multiline rows={2} rowsMax={4} id="outlined-basic" label={t`Short Description`} variant="outlined" />
-
-                <TextField className={classes.longDescription} multiline rows={5} rowsMax={20} id="outlined-basic" label={t`Long Description`} variant="outlined" />
-
-
-                <Typography style={{ marginTop: 20 }} variant="h2" >
-                    <Trans>Pictures</Trans>
-                </Typography>
-
-                <div className={classes.imageDropBoxContainer}>
-
-                    <ImageDropZone key={state.images} className={classes.dropzone} list={state.images} onListChanged={onImagesChanged}
-                        type="image"
-                    ></ImageDropZone>
-                </div>
-                <Typography style={{ marginTop: theme.spacing(10) }} variant="h2" >
-                    <Trans>Videos</Trans>
-                </Typography>
-
-                <div className={classes.imageDropBoxContainer}>
-
-                    <ImageDropZone key={state.videos} className={classes.dropzone} list={state.videos} onListChanged={onVideosChanged}
-                        type="video"
-                    ></ImageDropZone>
-                </div>
+                <Button
+                    variant="contained"
+                    color="primary"
+                    size="large"
+                    disabled={false}
+                    className={classes.restoreButton}
+                    startIcon={<RestoreIcon />}
+                >
+                    Restore
+             </Button>
 
             </div>
 
-        </>
+            <div>
+
+
+                <PageTitle title={t`Add an Excercise`} />
+
+                <div className={classes.mainContainer}>
+
+                    <div className={classes.typeContainer}>
+                        <FormControl variant="outlined" className={classes.formControl}>
+                            <InputLabel variant="outlined" htmlFor="outlined-age-native-simple">{t`Type`}</InputLabel>
+                            <Select
+                                native
+                                value={state.type}
+                                onChange={handleChange}
+                                label="Type"
+                                inputProps={{
+                                    name: 'type',
+                                    id: 'outlined-age-native-simple',
+                                }}
+                            >
+                                <option value="Excercise">{t`Excercise`}</option>
+                                <option value="Eductional">{t`Eductional`}</option>
+                            </Select>
+                        </FormControl>
+                    </div>
+
+                    <div className={classes.titleContainer} >
+
+                        <TextField id="outlined-basic" label={t`Title`} multiline variant="outlined"
+
+                            // inputProps={{ style: { fontSize: 20 } }} // font size of input text
+                            InputLabelProps={{ style: { fontWeight: "bold" } }} // font size of input label
+                        />
+                    </div>
+
+                    <TextField className={classes.shortDescription} multiline rows={2} rowsMax={4} id="outlined-basic" label={t`Short Description`} variant="outlined" />
+
+                    <TextField className={classes.longDescription} multiline rows={5} rowsMax={20} id="outlined-basic" label={t`Long Description`} variant="outlined" />
+
+
+                    <Typography style={{ marginTop: 20 }} variant="h2" >
+                        <Trans>Pictures</Trans>
+                    </Typography>
+
+                    <div className={classes.imageDropBoxContainer}>
+
+                        <ImageDropZone key={state.images} className={classes.dropzone} list={state.images} onListChanged={onImagesChanged}
+                            type="image"
+                        ></ImageDropZone>
+                    </div>
+                    <Typography style={{ marginTop: theme.spacing(10) }} variant="h2" >
+                        <Trans>Videos</Trans>
+                    </Typography>
+
+                    <div className={classes.imageDropBoxContainer}>
+
+                        <ImageDropZone key={state.videos} className={classes.dropzone} list={state.videos} onListChanged={onVideosChanged}
+                            type="video"
+                        ></ImageDropZone>
+                    </div>
+
+                </div>
+            </div>
+        </div>
     );
 
 }
