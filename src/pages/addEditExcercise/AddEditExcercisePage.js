@@ -35,31 +35,41 @@ export default function AddEditExcercise(props) {
     const [state, setState] = React.useState({
         title: '',
         type: t`Excercise`,
+        images: [],
+        videos: []
     });
 
-    const [images, setImages] = React.useState([
+    // const [images, setImages] = React.useState([
 
-    ])
+    // ])
 
     const handleChange = (event, newValue) => {
         // setValue(newValue);
         console.log(`handeChange ${newValue}`)
 
         const name = event.target.name;
-        setState({
-            ...state,
-            [name]: event.target.value,
-        });
+        // setState({
+        //     ...state,
+        //     [name]: event.target.value,
+        // });
     };
 
     function onImagesChanged(images) {
 
         // images.push(file)
-        setImages(images)
+        // setImages(images)
         // forceUpdate()
+        console.log("on changed, state is, bef ", state)
+        setState({...state, images : images})
+        console.log("images changed, after state is, af ", state)
+
     }
 
     function onVideosChanged(videos) {
+        console.log("on changed, state is, bef", state)
+
+        setState({ ...state, videos: videos})
+        console.log("images changed, after state is, af ", state)
 
     }
 
@@ -70,6 +80,9 @@ export default function AddEditExcercise(props) {
 
     return (
         <>
+        {
+            console.log("on render page , with state " , state)
+        }
             <PageTitle title={t`Add an Excercise`} />
 
             <div className={classes.mainContainer}>
@@ -113,7 +126,7 @@ export default function AddEditExcercise(props) {
 
                 <div className={classes.imageDropBoxContainer}>
 
-                    <ImageDropZone key={images.length} className={classes.dropzone} list={images} onListChanged={onImagesChanged}
+                    <ImageDropZone key={state.images} className={classes.dropzone} list={state.images} onListChanged={onImagesChanged}
                         type="image"
                     ></ImageDropZone>
                 </div>
@@ -123,7 +136,7 @@ export default function AddEditExcercise(props) {
 
                 <div className={classes.imageDropBoxContainer}>
 
-                    <ImageDropZone key={images.length} className={classes.dropzone} list={[]} onListChanged={onVideosChanged}
+                    <ImageDropZone key={state.videos} className={classes.dropzone} list={state.videos} onListChanged={onVideosChanged}
                         type="video"
                     ></ImageDropZone>
                 </div>

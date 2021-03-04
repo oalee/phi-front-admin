@@ -14,9 +14,9 @@ import FlipMove from 'react-flip-move';
 const axios = require('axios').default;
 
 
-export default function ImageDropZone(props) {
+export default function DropZone(props) {
 
-    const { onListChanged, list, type } = { ...props }
+    const { onListChanged, list, type } = { ...props}
     var classes = useStyles();
 
     const [state, setState] = React.useState({
@@ -62,7 +62,7 @@ export default function ImageDropZone(props) {
 
             console.log("upload res is", res.data)
             state.files = [...state.files, { ...res.data, order: state.files.length }];
-            setState({ files: state.files, ...state })
+            setState({  ...state, files: state.files })
             onListChanged(state.files)
 
         }).catch(e => { console.log("error ", e) });
@@ -134,6 +134,9 @@ export default function ImageDropZone(props) {
     }, [])
     const { getRootProps, getInputProps } = useDropzone({ onDrop, accept: `${type}/*` })
     const { ref, ...rootProps } = getRootProps()
+
+    console.log("DropZone Render, state ", state)
+
     return (
         <RootRef rootRef={ref}>
             <Paper {...rootProps} className={classes.container}>
@@ -144,7 +147,6 @@ export default function ImageDropZone(props) {
 
                 {state.files.map(file => {
 
-                    console.log(`for each file ${file.url}`)
                     return (
 
                         <FileView key={file.id} file={file} fileCount={state.files.length} onDelete={onDelete} onSwapDown={onSwapDown} onSwapUp={onSwapUp}
