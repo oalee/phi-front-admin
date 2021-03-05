@@ -68,7 +68,7 @@ export default makeStyles(theme => ({
     },
 
     button: {
-        margin: theme.spacing(0),
+        margin: theme.spacing(1),
     },
     saveButton: {
         // width: theme.spacing(20),

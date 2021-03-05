@@ -34,6 +34,9 @@ import { Pages } from "@material-ui/icons";
 import StyledButton from "./components/StyledButton/StyledButton";
 import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
 import { Prompt } from "react-router";
+import ArrowBackIcon from '@material-ui/icons/ArrowBack';
+
+
 export default function AddEditExcercise(props) {
     var classes = useStyles();
     var theme = useTheme();
@@ -46,14 +49,6 @@ export default function AddEditExcercise(props) {
         state: PageState.NOT_COMPLETED
     });
 
-
-    const saveButtonClassname = clsx({
-        [classes.buttonSuccess]: state === PageState.SENT,
-        [classes.saveButton]: state === PageState.COMPLETED_NOT_SENT
-    });
-    // const [images, setImages] = React.useState([
-
-    // ])
 
     const handleChange = (event, newValue) => {
         // setValue(newValue);
@@ -68,70 +63,83 @@ export default function AddEditExcercise(props) {
 
     function onImagesChanged(images) {
 
-        // images.push(file)
-        // setImages(images)
-        // forceUpdate()
-        console.log("on changed, state is, bef ", state)
+
+        // console.log("on changed, state is, bef ", state)
         setState({ ...state, images: images })
-        console.log("images changed, after state is, af ", state)
+        // console.log("images changed, after state is, af ", state)
 
     }
 
     function onVideosChanged(videos) {
-        console.log("on changed, state is, bef", state)
+        // console.log("on changed, state is, bef", state)
 
         setState({ ...state, videos: videos })
-        console.log("images changed, after state is, af ", state)
+        // console.log("images changed, after state is, af ", state)
 
+    }
+
+    const stateToSecondButtonProps = () => {
+        var props = {
+            className: classes.button,
+            icon: <RestoreIcon />,
+            label: t`Restore`,
+            disabled: false
+        }
+
+        if (state.state === PageState.SENT)
+            props = { ...props, icon: <ArrowBackIcon />, label: t`Back` }
+
+        return props
     }
 
     const stateToButtonProps = () => {
 
+        var props = {
+            className: classes.button,
+            icon: <SaveIcon />,
+            label: t`Save`,
+            disabled: false
+        }
         switch (state.state) {
             case PageState.NOT_COMPLETED:
-                return {
-                    className: classes.button,
-                    icon: <SaveIcon />,
-                    label: t`Save`,
-                    disabled: true
+                props = {
+                    ...props,
+                    disabled: true,
+                    label: t`Form is incomplete`
                 }
+                break
 
             case PageState.COMPLETED_NOT_SENT:
-                return {
-                    className: classes.button,
-                    icon: <SaveIcon />,
-                    label: t`Save`,
-                    disabled: false
-                }
+                break
 
             case PageState.EDITED:
-                return {
-                    className: classes.button,
-                    icon: <SaveIcon />,
-                    label: t`Save`,
-                    disabled: false
-                }
+                break
 
             case PageState.SENDING:
-                return {
-                    className: classes.button,
+                props = {
+                    ...props,
                     icon: <SaveIcon />,
                     label: t`Sending`,
                     disabled: true,
                     loading: true
                 }
+                break
 
             case PageState.SENT:
-                return {
+                props = {
+                    ...props,
                     className: classes.buttonSuccess,
                     icon: <CheckCircleOutlineIcon />,
                     label: t`Sent`,
                     disabled: false
                 }
 
+                break
             default:
                 break;
         }
+
+        return props
 
     }
 
@@ -166,16 +174,8 @@ export default function AddEditExcercise(props) {
                     Save
              </Button> */}
 
-                <Button
-                    variant="contained"
-                    color="primary"
-                    size="large"
-                    disabled={false}
-                    className={classes.restoreButton}
-                    startIcon={<RestoreIcon />}
-                >
-                    Restore
-             </Button>
+                {(state.state === PageState.EDITED || state.state === PageState.SENT) && <StyledButton props={stateToSecondButtonProps(state.state)} />
+                }
 
             </div>
 

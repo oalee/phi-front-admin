@@ -2,7 +2,9 @@
   "About us": "درباره‌ی ما",
   "Add an Excercise": "افزودن تمرین",
   "Admin": "مدیریت",
+  "Are you sure? information change would be lost.": "آیا اطمینان دارید؟ تغیرات ذخیره نخواهد شد",
   "Are you sure? this action will not be saved before submiting": "ایا اطمینان دارید؟ این عمل بدون ارصال تغییرات اعمال نخواهد شد",
+  "Back": "بازگشت",
   "Charts": "چارت",
   "Dashboard": "داشبورد",
   "Delete": "حذف کن",
@@ -15,6 +17,7 @@
   "Excersices": "تمرین‌ها",
   "FAQ": "سوالات متداول",
   "Forget Password": "فراموشی رمز عبور",
+  "Form is incomplete": "اطلاعات وارد شده کامل نیست",
   "Help": "راهنما",
   "Icons": "تست",
   "Library": "کتابخانه",
@@ -31,6 +34,10 @@
   "Pictures": "تصاویر",
   "Privacy Policy": "حریم خصوصی",
   "Public Excercises": "تمرین‌های عمومی",
+  "Restore": "بازگردانی",
+  "Save": "ذخیره",
+  "Sending": "درحال فرستادن",
+  "Sent": "ارصال شد",
   "Short Description": "توضیح مختصر",
   "Tables": "تست",
   "Therapist": "درمانگر",
@@ -40,5 +47,6 @@
   "Typography": "تست",
   "UI Elements": "المان ها",
   "Username": "نام کاربری",
-  "Users": "کاربران"
+  "Users": "کاربران",
+  "Videos": "فیلم ها"
 }
