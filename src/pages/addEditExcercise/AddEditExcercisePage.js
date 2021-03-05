@@ -31,7 +31,9 @@ import SaveIcon from '@material-ui/icons/Save';
 import RestoreIcon from '@material-ui/icons/Restore';
 import clsx from 'clsx';
 import { Pages } from "@material-ui/icons";
-
+import StyledButton from "./components/StyledButton/StyledButton";
+import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
+import { Prompt } from "react-router";
 export default function AddEditExcercise(props) {
     var classes = useStyles();
     var theme = useTheme();
@@ -41,7 +43,7 @@ export default function AddEditExcercise(props) {
         type: t`Excercise`,
         images: [],
         videos: [],
-        state: PageState.SENT
+        state: PageState.NOT_COMPLETED
     });
 
 
@@ -83,10 +85,55 @@ export default function AddEditExcercise(props) {
 
     }
 
-    function reorderImages(idx, toIdx) {
+    const stateToButtonProps = () => {
+
+        switch (state.state) {
+            case PageState.NOT_COMPLETED:
+                return {
+                    className: classes.button,
+                    icon: <SaveIcon />,
+                    label: t`Save`,
+                    disabled: true
+                }
+
+            case PageState.COMPLETED_NOT_SENT:
+                return {
+                    className: classes.button,
+                    icon: <SaveIcon />,
+                    label: t`Save`,
+                    disabled: false
+                }
+
+            case PageState.EDITED:
+                return {
+                    className: classes.button,
+                    icon: <SaveIcon />,
+                    label: t`Save`,
+                    disabled: false
+                }
+
+            case PageState.SENDING:
+                return {
+                    className: classes.button,
+                    icon: <SaveIcon />,
+                    label: t`Sending`,
+                    disabled: true,
+                    loading: true
+                }
+
+            case PageState.SENT:
+                return {
+                    className: classes.buttonSuccess,
+                    icon: <CheckCircleOutlineIcon />,
+                    label: t`Sent`,
+                    disabled: false
+                }
+
+            default:
+                break;
+        }
 
     }
-
 
     return (
         <div style={{
@@ -94,12 +141,21 @@ export default function AddEditExcercise(props) {
         }}>
 
             {
+                <Prompt
+                    when={PageState.SENT === state.state}
+                    message={location =>
+                        t`Are you sure? information change would be lost.`
+                    }
+                />
+            }
+            {
                 console.log("on render page , with state ", state)
             }
 
             <div style={{ position: "absolute", display: "flex", justifyContent: "flex-end", width: "90%", flexDirection: "column", alignItems: "end" }}>
 
-                <Button
+                <StyledButton props={stateToButtonProps(state.state)} />
+                {/* <Button
                     variant="contained"
                     color="primary"
                     size="large"
@@ -108,7 +164,7 @@ export default function AddEditExcercise(props) {
                     startIcon={<SaveIcon />}
                 >
                     Save
-             </Button>
+             </Button> */}
 
                 <Button
                     variant="contained"
@@ -186,7 +242,7 @@ export default function AddEditExcercise(props) {
 
                 </div>
             </div>
-        </div>
+        </div >
     );
 
 }

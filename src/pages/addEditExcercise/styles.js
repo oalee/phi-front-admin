@@ -67,6 +67,9 @@ export default makeStyles(theme => ({
         height: 400
     },
 
+    button: {
+        margin: theme.spacing(0),
+    },
     saveButton: {
         // width: theme.spacing(20),
         display: "flex",
