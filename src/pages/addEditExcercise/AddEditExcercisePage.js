@@ -11,7 +11,10 @@ import {
     Tab,
     TextField,
     FormControl,
-    InputLabel
+    InputLabel,
+    FormControlLabel,
+    Checkbox,
+    InputAdornment
 } from "@material-ui/core";
 import AddCircleOutlineOutlinedIcon from '@material-ui/icons/AddCircleOutlineOutlined';
 import { useTheme } from "@material-ui/styles";
@@ -43,23 +46,92 @@ export default function AddEditExcercise(props) {
 
     const [state, setState] = React.useState({
         title: '',
-        type: t`Excercise`,
+        type: "Excercise",
         images: [],
         videos: [],
-        state: PageState.NOT_COMPLETED
+        state: PageState.NOT_COMPLETED,
+        parameters: {
+            sets: {
+                enabled: true,
+                value: 1,
+                valueType: "rep"
+            },
+            reps: {
+                enabled: true,
+                value: 1,
+                valueType: "rep"
+            },
+            repPerDay: {
+                enabled: true,
+                value: 1,
+                valueType: "rep"
+            },
+            hold: {
+                enabled: true,
+                value: 1,
+                valueType: "s"
+            },
+            restPerSet: {
+                enabled: true,
+                value: 30,
+                valueType: "s"
+            },
+            totalDuration: {
+                enabled: true,
+                value: 30,
+                valueType: "h"
+            }
+        }
     });
 
-
-    const handleChange = (event, newValue) => {
-        // setValue(newValue);
-        console.log(`handeChange ${newValue}`)
-
+    const handleParameterEnableSwap = (event) => {
         const name = event.target.name;
+        const value = event.target.checked
+        // console.log("handlePar", event.target.checked)
+        // console.log("handlePar", event.target.name)
+
+        setState({
+            ...state, parameters: {
+                ...state.parameters,
+                [name]: {
+                    ...state.parameters[name],
+                    enabled: value
+                }
+            }
+        })
+
+    }
+
+    const handleParameterChange = (event, value) => {
+        const name = event.target.name;
+        console.log("handlePar", value)
+        console.log("handlePar", event.target.name)
+
+        setState({
+            ...state, parameters: {
+                ...state.parameters,
+                [name]: {
+                    ...state.parameters[name],
+                    value: value
+                }
+            }
+        })
+
+    }
+    const handleChange = (event) => {
+        // setValue(newValue);
+        const name = event.target.name;
+        const value = event.target.value
+
+        console.log("handleChange", event.target.value)
+        setState({ ...state, [name]: value })
+
         // setState({
         //     ...state,
         //     [name]: event.target.value,
         // });
     };
+    console.log("in page state is ", state)
 
     function onImagesChanged(images) {
 
@@ -208,15 +280,68 @@ export default function AddEditExcercise(props) {
                     <div className={classes.titleContainer} >
 
                         <TextField id="outlined-basic" label={t`Title`} multiline variant="outlined"
+                            onChange={handleChange}
+                            value={state.title}
+                            name="title"
 
                             // inputProps={{ style: { fontSize: 20 } }} // font size of input text
                             InputLabelProps={{ style: { fontWeight: "bold" } }} // font size of input label
                         />
                     </div>
 
-                    <TextField className={classes.shortDescription} multiline rows={2} rowsMax={4} id="outlined-basic" label={t`Short Description`} variant="outlined" />
+                    <TextField className={classes.shortDescription} multiline rows={2} rowsMax={4} id="outlined-basic"
+                        label={t`Short Description`} variant="outlined"
+                        value={state.shortDescription}
+                        onChange={handleChange}
+                        name="shortDescription"
+                    />
 
-                    <TextField className={classes.longDescription} multiline rows={5} rowsMax={20} id="outlined-basic" label={t`Long Description`} variant="outlined" />
+                    <TextField className={classes.longDescription} multiline rows={5} rowsMax={20} id="outlined-basic"
+                        label={t`Long Description`} variant="outlined"
+                        value={state.longDescription}
+                        onChange={handleChange}
+                        name="longDescription"
+                    />
+
+                    <Typography style={{ marginTop: 20 }} variant="h2" >
+                        <Trans>Parameters</Trans>
+                    </Typography>
+
+                    <div className={classes.parametersContainer}>
+                        <FormControlLabel
+                            control={
+                                <Checkbox
+                                    checked={state.parameters.sets.enabled}
+                                    onChange={handleParameterEnableSwap}
+                                    name="sets"
+                                    color="primary"
+                                />
+                            }
+                            label={t`Number of sets`}
+                        />
+
+                        <TextField
+                            // id="outlined-number"
+                            label="Number"
+                            inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }} name="sets"
+                            // type={"number"}
+                            value={state.parameters.sets.value}
+                            disabled={!state.parameters.sets.enabled}
+                            onChange={
+                                (e) => {
+                                    console.log("hand target value is ", e.target.value)
+
+                                    const value = e.target.value.replace(/\D+/g, '');
+                                    console.log("hand target value is ", value)
+                                    handleParameterChange(e, value)
+                                }
+                            }
+                            variant="outlined"
+                        />
+
+
+                    </div>
+
 
 
                     <Typography style={{ marginTop: 20 }} variant="h2" >

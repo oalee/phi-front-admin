@@ -103,5 +103,13 @@ export default makeStyles(theme => ({
         textTransform: "none",
         // fontWeight: "bold",
         fontSize: "large"
+    },
+    parametersContainer: {
+
+        display: "flex",
+        flexDirection: "row",
+        width: "100%",
+        marginTop: theme.spacing(5),
+        flexWrap: "wrap"
     }
 }))
