@@ -24,7 +24,7 @@ export default function ImageDropZone(props) {
         uploadProgress: 0
     });
 
-    console.log("STATE IZ IN DROP, ", state)
+    // console.log("STATE IZ IN DROP, ", state)
 
     const [uploadProgress, setUploadProgress] = React.useState({
 
@@ -151,7 +151,7 @@ export default function ImageDropZone(props) {
     const { getRootProps, getInputProps } = useDropzone({ onDrop, accept: `${type}/*` })
     const { ref, ...rootProps } = getRootProps()
 
-    console.log("DropZone Render, state ", state)
+    // console.log("DropZone Render, state ", state)
 
     return (
         <RootRef rootRef={ref}>

@@ -38,11 +38,22 @@ import StyledButton from "./components/StyledButton/StyledButton";
 import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
 import { Prompt } from "react-router";
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
+import ParameterView from "./components/ParameterView/ParameterView";
 
 
 export default function AddEditExcercise(props) {
     var classes = useStyles();
     var theme = useTheme();
+
+    const [anchorEl, setAnchorEl] = React.useState(null);
+
+    const handleClick = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
 
     const [state, setState] = React.useState({
         title: '',
@@ -54,7 +65,9 @@ export default function AddEditExcercise(props) {
             sets: {
                 enabled: true,
                 value: 1,
-                valueType: "rep"
+                valueType: "rep",
+                title: t`Number of sets`,
+                name: "sets"
             },
             reps: {
                 enabled: true,
@@ -84,12 +97,20 @@ export default function AddEditExcercise(props) {
         }
     });
 
+    const createOptions = () => {
+        var options = []
+        var i = 0
+        for (; i < 20; i++)
+            options.push({
+                value: i, text: `${i}`
+            }
+            )
+        return options
+    }
+    const options = createOptions()
     const handleParameterEnableSwap = (event) => {
         const name = event.target.name;
         const value = event.target.checked
-        // console.log("handlePar", event.target.checked)
-        // console.log("handlePar", event.target.name)
-
         setState({
             ...state, parameters: {
                 ...state.parameters,
@@ -308,37 +329,11 @@ export default function AddEditExcercise(props) {
                     </Typography>
 
                     <div className={classes.parametersContainer}>
-                        <FormControlLabel
-                            control={
-                                <Checkbox
-                                    checked={state.parameters.sets.enabled}
-                                    onChange={handleParameterEnableSwap}
-                                    name="sets"
-                                    color="primary"
-                                />
-                            }
-                            label={t`Number of sets`}
+
+
+                        <ParameterView parameter={state.parameters.sets} handleParameterChange={handleParameterChange}
+                            handleParameterEnableSwap={handleParameterEnableSwap}
                         />
-
-                        <TextField
-                            // id="outlined-number"
-                            label="Number"
-                            inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }} name="sets"
-                            // type={"number"}
-                            value={state.parameters.sets.value}
-                            disabled={!state.parameters.sets.enabled}
-                            onChange={
-                                (e) => {
-                                    console.log("hand target value is ", e.target.value)
-
-                                    const value = e.target.value.replace(/\D+/g, '');
-                                    console.log("hand target value is ", value)
-                                    handleParameterChange(e, value)
-                                }
-                            }
-                            variant="outlined"
-                        />
-
 
                     </div>
 
