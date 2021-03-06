@@ -72,27 +72,40 @@ export default function AddEditExcercise(props) {
             reps: {
                 enabled: true,
                 value: 1,
-                valueType: "rep"
+                valueType: "rep",
+                title: t`Number of reps`,
+                name: "reps"
             },
             repPerDay: {
                 enabled: true,
                 value: 1,
-                valueType: "rep"
+                valueType: "rep",
+                title: t`Number of reps per day`,
+                name: "repPerDay"
             },
             hold: {
                 enabled: true,
                 value: 1,
-                valueType: "s"
+                secondValue: 0,
+                valueType: "time",
+                title: t`Holding time`,
+                name: "hold"
             },
             restPerSet: {
                 enabled: true,
                 value: 30,
-                valueType: "s"
+                secondValue: 0,
+                valueType: "time",
+                title: t`Rest time between sets`,
+                name: "restPerSet"
             },
             totalDuration: {
                 enabled: true,
                 value: 30,
-                valueType: "h"
+                secondValue: 0,
+                valueType: "time",
+                title: t`Total duration`,
+                name: "totalDuration"
             }
         }
     });
@@ -123,20 +136,33 @@ export default function AddEditExcercise(props) {
 
     }
 
-    const handleParameterChange = (event, value) => {
+    const handleParameterChange = (event, value, isFirstValueAssign = true) => {
         const name = event.target.name;
         console.log("handlePar", value)
         console.log("handlePar", event.target.name)
+        // const isFirstValueAssign = event.target.isFirst
+        console.log("handlePar", isFirstValueAssign)
 
-        setState({
-            ...state, parameters: {
-                ...state.parameters,
-                [name]: {
-                    ...state.parameters[name],
-                    value: value
+        if (isFirstValueAssign)
+            setState({
+                ...state, parameters: {
+                    ...state.parameters,
+                    [name]: {
+                        ...state.parameters[name],
+                        value: value
+                    }
                 }
-            }
-        })
+            })
+        else
+            setState({
+                ...state, parameters: {
+                    ...state.parameters,
+                    [name]: {
+                        ...state.parameters[name],
+                        secondValue: value
+                    }
+                }
+            })
 
     }
     const handleChange = (event) => {
@@ -331,9 +357,17 @@ export default function AddEditExcercise(props) {
                     <div className={classes.parametersContainer}>
 
 
-                        <ParameterView parameter={state.parameters.sets} handleParameterChange={handleParameterChange}
-                            handleParameterEnableSwap={handleParameterEnableSwap}
-                        />
+                        {
+
+                            Object.keys(state.parameters).map(key =>
+                                <ParameterView parameter={state.parameters[key]} handleParameterChange={handleParameterChange}
+                                    handleParameterEnableSwap={handleParameterEnableSwap}
+                                />)
+
+
+                        }
+
+
 
                     </div>
 
