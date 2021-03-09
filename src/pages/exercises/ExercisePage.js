@@ -13,15 +13,15 @@ import {
 import AddCircleOutlineOutlinedIcon from '@material-ui/icons/AddCircleOutlineOutlined';
 import { useTheme } from "@material-ui/styles";
 
-import PageTitle from "../../components/PageTitle";
-import { Typography } from "../../components/Wrappers";
+import PageTitle from "../../components/PageTitle/PageTitle";
+import { Typography } from "../../components/Wrappers/Wrappers";
 
 import useStyles from "./styles";
 import { Trans } from "@lingui/macro";
 import { Fragment } from "react";
 import { t } from '@lingui/macro';
 
-export default function ExcersicePage(props) {
+export default function ExercisePage(props) {
     var classes = useStyles();
     var theme = useTheme();
 
@@ -53,7 +53,7 @@ export default function ExcersicePage(props) {
                     onClick={() => {
                         console.log(`clicked, ${props.history}`)
 
-                        props.history.push('/app/addExcercise')
+                        props.history.push('/app/addExercise')
                     }
 
                     }
@@ -61,7 +61,7 @@ export default function ExcersicePage(props) {
 
                 >
 
-                    <Trans>Add an Excercise</Trans>
+                    <Trans>Add an Exercise</Trans>
 
                 </Button>} />
 

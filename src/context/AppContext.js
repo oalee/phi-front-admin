@@ -43,8 +43,8 @@ function AppProvider({ children }) {
 
   const menu = [
     { id: 0, label: t`Dashboard`, link: '/app/dashboard', icon: <HomeIcon /> },
-    { id: 1, label: t`Eductional`, link: '/app/typography', icon: <TypographyIcon /> },
-    { id: 2, label: t`Excersices`, link: '/app/tables', icon: <TableIcon /> },
+    { id: 1, label: t`Eductional`, link: '/app/exercises', icon: <TypographyIcon /> },
+    { id: 2, label: t`Exercises`, link: '/app/tables', icon: <TableIcon /> },
     { id: 3, label: usersLabel, link: '/app/notifications', icon: <NotificationsIcon /> },
     {
       id: 4,

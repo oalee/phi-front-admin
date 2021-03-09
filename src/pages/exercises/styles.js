@@ -16,7 +16,7 @@ export default makeStyles(theme => ({
 
         display: "flex",
         justifyContent: "center",
-        width: "60%",
+        width: "70%",
         minHeight: 400,
         backgroundColor: purple[400]
 
@@ -25,7 +25,7 @@ export default makeStyles(theme => ({
 
         display: "flex",
         justifyContent: "center",
-        width: "40%",
+        width: "30%",
 
         minHeight: 400,
         backgroundColor: green[400]

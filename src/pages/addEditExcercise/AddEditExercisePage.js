@@ -44,13 +44,13 @@ import { useLazyQuery, useMutation } from "@apollo/client";
 import { AddExcercise } from "../../api/queries";
 import SendIcon from '@material-ui/icons/Send';
 
-export default function AddEditExcercise(props) {
+export default function AddEditExercisePage(props) {
     var classes = useStyles();
     var theme = useTheme();
 
     const [state, setState] = React.useState({
         title: '',
-        type: "Excercise",
+        type: "Exercise",
         pictures: [],
         videos: [],
         state: PageState.NOT_COMPLETED,
@@ -112,7 +112,7 @@ export default function AddEditExcercise(props) {
             dificulty: {
 
                 enabled: true,
-                title: t`Excercise Dificulty`,
+                title: t`Exercise Dificulty`,
                 name: "dificulty"
             },
             shortnessOfBreath: {
@@ -147,10 +147,10 @@ export default function AddEditExcercise(props) {
     }
 
     if (addExcerciseQuery.data != null) {
-        // console.log("data is not null", addExcerciseQuery.data.addExcersice)
-        if (prevExcercise !== addExcerciseQuery.data.addExcersice) {
+        // console.log("data is not null", addExcerciseQuery.data.addexercise)
+        if (prevExcercise !== addExcerciseQuery.data.addexercise) {
             // console.log("sett it")
-            setPrevExcercise(addExcerciseQuery.data.addExcersice)
+            setPrevExcercise(addExcerciseQuery.data.addexercise)
         }
 
 
@@ -344,7 +344,7 @@ export default function AddEditExcercise(props) {
                         console.log("doAddExcercise")
                         doAddExcercise({
                             variables: {
-                                addExcersiceExcerciseInput: state
+                                addexerciseExcerciseInput: state
                             }
                         })
                         setState({ ...state, state: PageState.SENDING })
@@ -424,7 +424,7 @@ export default function AddEditExcercise(props) {
             <div>
 
 
-                <PageTitle title={t`Add an Excercise`} />
+                <PageTitle title={t`Add an Exercise`} />
 
                 <div className={classes.mainContainer}>
 
@@ -441,7 +441,7 @@ export default function AddEditExcercise(props) {
                                     id: 'outlined-age-native-simple',
                                 }}
                             >
-                                <option value="Excercise">{t`Excercise`}</option>
+                                <option value="Exercise">{t`Exercise`}</option>
                                 <option value="Eductional">{t`Eductional`}</option>
                             </Select>
                         </FormControl>
@@ -472,13 +472,13 @@ export default function AddEditExcercise(props) {
                         onChange={handleChange}
                         name="longDescription"
                     />
-                    {state.type === "Excercise" &&
+                    {state.type === "Exercise" &&
                         <Typography style={{ marginTop: 30 }} variant="h2" >
                             <Trans>Parameters</Trans>
                         </Typography>
 
                     }
-                    {state.type === "Excercise" &&
+                    {state.type === "Exercise" &&
 
                         <div className={classes.parametersContainer}>
 

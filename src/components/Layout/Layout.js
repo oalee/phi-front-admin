@@ -34,8 +34,9 @@ import Charts from "../../pages/charts";
 
 // context
 import { useLayoutState } from "../../context/LayoutContext";
-import ExcersicePage from "../../pages/excercises/ExcercisePage";
-import AddEditExcercise from "../../pages/addEditExcercise/AddEditExcercisePage";
+import ExersicePage from "../../pages/exercises/ExercisePage";
+import AddEditExercisePage from "../../pages/addEditExcercise/AddEditExercisePage";
+import ExercisePage from "../../pages/exercises/ExercisePage";
 
 function Layout(props) {
   var classes = useStyles();
@@ -56,7 +57,7 @@ function Layout(props) {
           <div className={classes.fakeToolbar} />
           <Switch>
             <Route path="/app/dashboard" component={Dashboard} />
-            <Route path="/app/typography" component={ExcersicePage} />
+            <Route path="/app/exercises" component={ExercisePage} />
             <Route path="/app/tables" component={Tables} />
             <Route path="/app/notifications" component={Notifications} />
             <Route
@@ -64,7 +65,7 @@ function Layout(props) {
               path="/app/ui"
               render={() => <Redirect to="/app/ui/icons" />}
             />
-            <Route path="/app/addExcercise" component={AddEditExcercise} />
+            <Route path="/app/addExercise" component={AddEditExercisePage} />
             <Route path="/app/ui/maps" component={Maps} />
             <Route path="/app/ui/icons" component={Icons} />
             <Route path="/app/ui/charts" component={Charts} />

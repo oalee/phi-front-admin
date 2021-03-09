@@ -9,8 +9,8 @@ const LOGIN = gql`
 `;
 
 const AddExcercise = gql`
-mutation Mutation($addExcersiceExcerciseInput: ExcerciseInput) {
-  addExcersice(excerciseInput: $addExcersiceExcerciseInput){
+mutation Mutation($addexerciseExcerciseInput: ExcerciseInput) {
+  addexercise(excerciseInput: $addexerciseExcerciseInput){
     createdAt
     updatedAt
     id
