@@ -39,12 +39,14 @@ import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
 import { Prompt } from "react-router";
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import ParameterView from "./components/ParameterView/ParameterView";
+import { isNonEmptyArray } from "@apollo/client/utilities";
 
 
 export default function AddEditExcercise(props) {
     var classes = useStyles();
     var theme = useTheme();
 
+    const { history } = { ...props }
     const [anchorEl, setAnchorEl] = React.useState(null);
 
     const handleClick = (event) => {
@@ -61,6 +63,8 @@ export default function AddEditExcercise(props) {
         images: [],
         videos: [],
         state: PageState.NOT_COMPLETED,
+        shortDescription: '',
+        longDescription: '',
         parameters: {
             sets: {
                 enabled: true,
@@ -107,20 +111,82 @@ export default function AddEditExcercise(props) {
                 title: t`Total duration`,
                 name: "totalDuration"
             }
+        },
+        assesments: {
+            tiredness: {
+                enabled: true,
+                title: t`Tiredness`,
+                name: "tiredness"
+            },
+            dificulty: {
+
+                enabled: true,
+                title: t`Excercise Dificulty`,
+                name: "dificulty"
+            },
+            shortnessOfBreath: {
+
+                enabled: true,
+                title: t`Shortness of Breath`,
+                name: "shortnessOfBreath"
+            },
+            pain: {
+
+                enabled: true,
+                title: t`Pain`,
+                name: "pain"
+            }
         }
     });
 
-    const createOptions = () => {
-        var options = []
-        var i = 0
-        for (; i < 20; i++)
-            options.push({
-                value: i, text: `${i}`
-            }
-            )
-        return options
+    if (state.state === PageState.NOT_COMPLETED) {
+
+        const isComplete = Object.keys(state).reduce((acc, key) => {
+            const val = state[key]
+            const isNonEmptyArray = Array.isArray(val) ? val.length > 0 : true
+            console.log("val is ", val)
+            console.log("is not empty array ", isNonEmptyArray)
+            return val != null && val !== "" && isNonEmptyArray && acc
+
+
+        }, true)
+        console.log("isCOplete?", isComplete)
+
+        if (isComplete)
+            setState({ ...state, state: PageState.COMPLETED_NOT_SENT })
     }
-    const options = createOptions()
+
+    if (state.state === PageState.COMPLETED_NOT_SENT) {
+
+        const isComplete = Object.keys(state).reduce((acc, key) => {
+            const val = state[key]
+            const isNonEmptyArray = Array.isArray(val) ? val.length > 0 : true
+            console.log("val is ", val)
+            console.log("is not empty array ", isNonEmptyArray)
+            return val != null && val !== "" && isNonEmptyArray && acc
+
+
+        }, true)
+
+        if (!isComplete)
+            setState({ ...state, state: PageState.NOT_COMPLETED })
+
+    }
+
+    const handleAssemstersEnableSwap = (event) => {
+        const name = event.target.name;
+        const value = event.target.checked
+        setState({
+            ...state, assesments: {
+                ...state.assesments,
+                [name]: {
+                    ...state.assesments[name],
+                    enabled: value
+                }
+            }
+        })
+    }
+
     const handleParameterEnableSwap = (event) => {
         const name = event.target.name;
         const value = event.target.checked
@@ -183,16 +249,29 @@ export default function AddEditExcercise(props) {
     function onImagesChanged(images) {
 
 
-        // console.log("on changed, state is, bef ", state)
-        setState({ ...state, images: images })
-        // console.log("images changed, after state is, af ", state)
+        console.log("on changed, state is, bef ", state)
+        // setState( (prevState) =>  { ...prevState, images: images })
+        setState(prevState => {
+            return {
+                ...prevState,
+                images: images
+            }
+        });
+
+        console.log("images changed, after state is, af ", state)
 
     }
 
     function onVideosChanged(videos) {
         // console.log("on changed, state is, bef", state)
 
-        setState({ ...state, videos: videos })
+        // setState({ ...state, videos: videos })
+        setState(prevState => {
+            return {
+                ...prevState,
+                videos: videos
+            }
+        });
         // console.log("images changed, after state is, af ", state)
 
     }
@@ -206,7 +285,13 @@ export default function AddEditExcercise(props) {
         }
 
         if (state.state === PageState.SENT)
-            props = { ...props, icon: <ArrowBackIcon />, label: t`Back` }
+            props = {
+                ...props, icon: <ArrowBackIcon />, label: t`Back`,
+                onClick: (e) => {
+
+                    history.goBack()
+                }
+            }
 
         return props
     }
@@ -217,7 +302,8 @@ export default function AddEditExcercise(props) {
             className: classes.button,
             icon: <SaveIcon />,
             label: t`Save`,
-            disabled: false
+            disabled: false,
+            onClick: () => { }
         }
         switch (state.state) {
             case PageState.NOT_COMPLETED:
@@ -250,7 +336,8 @@ export default function AddEditExcercise(props) {
                     className: classes.buttonSuccess,
                     icon: <CheckCircleOutlineIcon />,
                     label: t`Sent`,
-                    disabled: false
+                    disabled: false,
+                    onClick: () => { history.goBack() }
                 }
 
                 break
@@ -269,7 +356,7 @@ export default function AddEditExcercise(props) {
 
             {
                 <Prompt
-                    when={PageState.SENT === state.state}
+                    when={PageState.SENT !== state.state}
                     message={location =>
                         t`Are you sure? information change would be lost.`
                     }
@@ -349,31 +436,64 @@ export default function AddEditExcercise(props) {
                         onChange={handleChange}
                         name="longDescription"
                     />
+                    {state.type === "Excercise" &&
+                        <Typography style={{ marginTop: 30 }} variant="h2" >
+                            <Trans>Parameters</Trans>
+                        </Typography>
+
+                    }
+                    {state.type === "Excercise" &&
+
+                        <div className={classes.parametersContainer}>
+
+
+                            {
+
+                                Object.keys(state.parameters).map(key =>
+                                    <ParameterView parameter={state.parameters[key]} handleParameterChange={handleParameterChange}
+                                        key={state.parameters[key].name}
+                                        handleParameterEnableSwap={handleParameterEnableSwap}
+                                    />)
+
+
+                            }
+
+
+
+                        </div>
+                    }
 
                     <Typography style={{ marginTop: 20 }} variant="h2" >
-                        <Trans>Parameters</Trans>
+                        <Trans>Assesments</Trans>
                     </Typography>
-
                     <div className={classes.parametersContainer}>
 
-
                         {
+                            Object.values(state.assesments).map(value =>
 
-                            Object.keys(state.parameters).map(key =>
-                                <ParameterView parameter={state.parameters[key]} handleParameterChange={handleParameterChange}
-                                    handleParameterEnableSwap={handleParameterEnableSwap}
-                                />)
+                                <FormControlLabel
+                                    key={value.name}
+                                    control={
+                                        <Checkbox
+                                            checked={value.enabled}
+                                            onChange={handleAssemstersEnableSwap}
+                                            name={value.name}
+                                            color="primary"
+                                        />
+                                    }
+                                    label={value.title}
+                                />
 
+                            )
 
                         }
-
-
 
                     </div>
 
 
 
-                    <Typography style={{ marginTop: 20 }} variant="h2" >
+
+                    <Typography style={{ marginTop: 25 }} variant="h2" >
                         <Trans>Pictures</Trans>
                     </Typography>
 

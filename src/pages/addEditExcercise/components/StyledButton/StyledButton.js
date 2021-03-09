@@ -6,7 +6,7 @@ export default function StyledButton(props) {
     var classes = useStyles();
 
 
-    var { className, icon, disabled, label, loading } = { ...props.props }
+    var { className, icon, disabled, label, loading, onClick } = { ...props.props }
 
     if (loading === undefined)
         loading = false
@@ -24,6 +24,7 @@ export default function StyledButton(props) {
                 disabled={disabled}
                 className={className}
                 startIcon={icon}
+                onClick={onClick}
             >
                 {label}
             </Button>
