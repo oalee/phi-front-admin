@@ -344,7 +344,7 @@ export default function AddEditExercisePage(props) {
                         console.log("doAddExcercise")
                         doAddExcercise({
                             variables: {
-                                addexerciseExcerciseInput: state
+                                addExerciseInput: state
                             }
                         })
                         setState({ ...state, state: PageState.SENDING })
