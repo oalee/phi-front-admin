@@ -81,6 +81,8 @@ export default makeStyles(theme => ({
         fontSize: "large"
     },
     buttonSuccess: {
+        margin: theme.spacing(1),
+
         backgroundColor: green[500],
         '&:hover': {
             backgroundColor: green[700],

@@ -8,6 +8,99 @@ const LOGIN = gql`
   }
 `;
 
+const AddExcercise = gql`
+mutation Mutation($addExcersiceExcerciseInput: ExcerciseInput) {
+  addExcersice(excerciseInput: $addExcersiceExcerciseInput){
+    createdAt
+    updatedAt
+    id
+    longDescription
+    pictures {
+      url
+      width
+      height
+      placeHolder
+      type
+      order
+    }
+    shortDescription
+    title
+    parameters {
+      sets {
+        enabled
+        name
+        value
+        secondValue
+        valueType
+      }
+      reps {
+        enabled
+        name
+        value
+        secondValue
+        valueType
+      }
+      repPerDay {
+        enabled
+        name
+        value
+        secondValue
+        valueType
+      }
+      hold {
+        enabled
+        name
+        value
+        secondValue
+        valueType
+      }
+      restPerSet {
+        enabled
+        name
+        value
+        secondValue
+        valueType
+      }
+      totalDUration {
+        enabled
+        name
+        value
+        secondValue
+        valueType
+      }
+    }
+    videos {
+      url
+      width
+      height
+      placeHolder
+      type
+      order
+    }
+    assesments {
+      tiredness {
+        enabled
+        name
+      }
+      dificulty {
+        enabled
+        name
+      }
+      shortnessOfBreath {
+        enabled
+        name
+      }
+      pain {
+        enabled
+        name
+      }
+    }
+    
+  }
+}
+`
+
+
 const GETME = gql`
   query Query{
     user {
@@ -32,4 +125,4 @@ const GETUSERS = gql`
   }
 `;
 
-export { LOGIN, GETUSERS, GETME };
+export { LOGIN, GETUSERS, GETME, AddExcercise };

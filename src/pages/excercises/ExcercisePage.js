@@ -67,50 +67,9 @@ export default function ExcersicePage(props) {
 
             <div className={classes.container}>
 
-                <div className={classes.tabContainer}>
-                    <Paper square elevation={2} className={classes.tab} >
-                        <Tabs
-                            value={value}
-                            indicatorColor="primary"
-                            textColor="primary"
-                            onChange={handleChange}
-                            aria-label="disabled tabs example"
-                        >
+                <div className={classes.filtersContainer}> </div>
 
-                            <Tab label={t`Public Excercises`} style={
-                                {
-                                    textTransform: "none",
-                                    fontSize: 22
-                                }
-                            } />
-
-                            <Tab label={t`My Excercises`} style={
-                                {
-                                    textTransform: "none",
-                                    fontSize: 22
-                                }
-                            } />
-                        </Tabs>
-                    </Paper>
-                </div>
-
-                <div className={classes.pageContainer}>
-                    {value === 0 && <Fragment>
-                        <Typography>
-                            <Trans>Nothing here yet, and an excercise</Trans>
-                        </Typography>
-                    </Fragment>
-                    }
-
-                    {value === 1 && <Fragment>
-                        <Typography>
-                            <Trans>Nothing here yet, and an excercise</Trans>
-                        </Typography>
-                    </Fragment>
-                    }
-                </div>
-
-
+                <div className={classes.excerciseContainer}></div>
 
 
 

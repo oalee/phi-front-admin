@@ -1,19 +1,34 @@
+import { green, purple } from "@material-ui/core/colors";
 import { makeStyles } from "@material-ui/styles";
 
 export default makeStyles(theme => ({
     container: {
-        height: "100vh",
+        height: "100%",
+        width: "100%",
         // width: "100vw",
         display: "flex",
-        flexDirection: "column",
+        flexDirection: "row",
 
         top: 0,
         left: 0,
     },
-    tabContainer: {
-        display: "flex",
-        justifyContent: "center"
+    excerciseContainer: {
 
+        display: "flex",
+        justifyContent: "center",
+        width: "60%",
+        minHeight: 400,
+        backgroundColor: purple[400]
+
+    },
+    filtersContainer: {
+
+        display: "flex",
+        justifyContent: "center",
+        width: "40%",
+
+        minHeight: 400,
+        backgroundColor: green[400]
 
     },
     tab: {

@@ -40,27 +40,18 @@ import { Prompt } from "react-router";
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import ParameterView from "./components/ParameterView/ParameterView";
 import { isNonEmptyArray } from "@apollo/client/utilities";
-
+import { useLazyQuery, useMutation } from "@apollo/client";
+import { AddExcercise } from "../../api/queries";
+import SendIcon from '@material-ui/icons/Send';
 
 export default function AddEditExcercise(props) {
     var classes = useStyles();
     var theme = useTheme();
 
-    const { history } = { ...props }
-    const [anchorEl, setAnchorEl] = React.useState(null);
-
-    const handleClick = (event) => {
-        setAnchorEl(event.currentTarget);
-    };
-
-    const handleClose = () => {
-        setAnchorEl(null);
-    };
-
     const [state, setState] = React.useState({
         title: '',
         type: "Excercise",
-        images: [],
+        pictures: [],
         videos: [],
         state: PageState.NOT_COMPLETED,
         shortDescription: '',
@@ -139,34 +130,66 @@ export default function AddEditExcercise(props) {
         }
     });
 
+    const [doAddExcercise, addExcerciseQuery] = useMutation(AddExcercise);
+    const [prevExcercise, setPrevExcercise] = useState(null)
+
+
+    const { history } = { ...props }
+
+    // console.log("the res is ", addExcerciseQuery)
+
+    if (prevExcercise != null) {
+        console.log("prev is", prevExcercise)
+
+        if (state.title !== prevExcercise.title && state.state !== PageState.EDITED) {
+            setState({ ...state, state: PageState.EDITED })
+        }
+    }
+
+    if (addExcerciseQuery.data != null) {
+        // console.log("data is not null", addExcerciseQuery.data.addExcersice)
+        if (prevExcercise !== addExcerciseQuery.data.addExcersice) {
+            // console.log("sett it")
+            setPrevExcercise(addExcerciseQuery.data.addExcersice)
+        }
+
+
+        if (state.state === PageState.SENDING) {
+            setState({ ...state, state: PageState.SENT })
+        }
+    }
+
+
+    const [anchorEl, setAnchorEl] = React.useState(null);
+
+    const handleClick = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
+    const isComplete = Object.keys(state).reduce((acc, key) => {
+        const val = state[key]
+        const isNonEmptyArray = Array.isArray(val) ? val.length > 0 : true
+        console.log("val is ", val)
+        console.log("is not empty array ", isNonEmptyArray)
+        return val != null && val !== "" && isNonEmptyArray && acc
+
+
+    }, true)
+
+
     if (state.state === PageState.NOT_COMPLETED) {
 
-        const isComplete = Object.keys(state).reduce((acc, key) => {
-            const val = state[key]
-            const isNonEmptyArray = Array.isArray(val) ? val.length > 0 : true
-            console.log("val is ", val)
-            console.log("is not empty array ", isNonEmptyArray)
-            return val != null && val !== "" && isNonEmptyArray && acc
 
-
-        }, true)
-        console.log("isCOplete?", isComplete)
+        // console.log("isCOplete?", isComplete)
 
         if (isComplete)
             setState({ ...state, state: PageState.COMPLETED_NOT_SENT })
     }
 
     if (state.state === PageState.COMPLETED_NOT_SENT) {
-
-        const isComplete = Object.keys(state).reduce((acc, key) => {
-            const val = state[key]
-            const isNonEmptyArray = Array.isArray(val) ? val.length > 0 : true
-            console.log("val is ", val)
-            console.log("is not empty array ", isNonEmptyArray)
-            return val != null && val !== "" && isNonEmptyArray && acc
-
-
-        }, true)
 
         if (!isComplete)
             setState({ ...state, state: PageState.NOT_COMPLETED })
@@ -254,7 +277,7 @@ export default function AddEditExcercise(props) {
         setState(prevState => {
             return {
                 ...prevState,
-                images: images
+                pictures: images
             }
         });
 
@@ -299,11 +322,11 @@ export default function AddEditExcercise(props) {
     const stateToButtonProps = () => {
 
         var props = {
-            className: classes.button,
-            icon: <SaveIcon />,
-            label: t`Save`,
+            className: classes.buttonSuccess,
+            icon: <SendIcon />,
+            label: (state.state === PageState.COMPLETED_NOT_SENT) ? t`Submit` : t`Sumbit Edit`,
             disabled: false,
-            onClick: () => { }
+            onClick: () => { console.log("clicked") }
         }
         switch (state.state) {
             case PageState.NOT_COMPLETED:
@@ -315,6 +338,19 @@ export default function AddEditExcercise(props) {
                 break
 
             case PageState.COMPLETED_NOT_SENT:
+                props = {
+                    ...props,
+                    onClick: (e) => {
+                        console.log("doAddExcercise")
+                        doAddExcercise({
+                            variables: {
+                                addExcersiceExcerciseInput: state
+                            }
+                        })
+                        setState({ ...state, state: PageState.SENDING })
+                    }
+
+                }
                 break
 
             case PageState.EDITED:
@@ -499,7 +535,7 @@ export default function AddEditExcercise(props) {
 
                     <div className={classes.imageDropBoxContainer}>
 
-                        <ImageDropZone key={state.images} className={classes.dropzone} list={state.images} onListChanged={onImagesChanged}
+                        <ImageDropZone key={state.images} className={classes.dropzone} list={state.pictures} onListChanged={onImagesChanged}
                             type="image"
                         ></ImageDropZone>
                     </div>
