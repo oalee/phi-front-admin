@@ -1,5 +1,5 @@
 import React from "react";
-import { HashRouter, Route, Switch, Redirect } from "react-router-dom";
+import { HashRouter, Route, Switch, Redirect, BrowserRouter } from "react-router-dom";
 
 // components
 import Layout from "./Layout";
@@ -21,7 +21,7 @@ export default function App() {
 
   return (
 
-    <HashRouter>
+    <BrowserRouter>
       <Switch>
         <Route exact path="/" render={() => <Redirect to="/app/dashboard" />} />
         <Route
@@ -33,7 +33,7 @@ export default function App() {
         <PublicRoute path="/login" component={Login} />
         <Route component={Error} />
       </Switch>
-    </HashRouter>
+    </BrowserRouter>
   );
 
   // #######################################################################
@@ -46,15 +46,15 @@ export default function App() {
           isAuthenticated ? (
             React.createElement(component, props)
           ) : (
-              <Redirect
-                to={{
-                  pathname: "/login",
-                  state: {
-                    from: props.location,
-                  },
-                }}
-              />
-            )
+            <Redirect
+              to={{
+                pathname: "/login",
+                state: {
+                  from: props.location,
+                },
+              }}
+            />
+          )
         }
       />
     );
@@ -72,8 +72,8 @@ export default function App() {
               }}
             />
           ) : (
-              React.createElement(component, props)
-            )
+            React.createElement(component, props)
+          )
         }
       />
     );

@@ -36,7 +36,7 @@ import clsx from 'clsx';
 import { Pages } from "@material-ui/icons";
 import StyledButton from "./components/StyledButton/StyledButton";
 import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
-import { Prompt } from "react-router";
+import { Prompt, useLocation } from "react-router";
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import ParameterView from "./components/ParameterView/ParameterView";
 import { isNonEmptyArray } from "@apollo/client/utilities";
@@ -132,9 +132,35 @@ export default function AddEditExercisePage(props) {
 
     const [doAddExcercise, addExcerciseQuery] = useMutation(AddExcercise);
     const [prevExcercise, setPrevExcercise] = useState(null)
+    // const location = useLocation()
 
+    const { history, location } = { ...props }
 
-    const { history } = { ...props }
+    console.log("location is", location)
+    if (location.state && location.state.exercise != null && state.state === PageState.NOT_COMPLETED) {
+        const mergedParams = {}
+        const exercise = location.state.exercise
+        console.log(exercise.parameters)
+        Object.keys(state.parameters).forEach(key => {
+            console.log("key is", key)
+            console.log("value is", state.parameters[key])
+            mergedParams[key] = { ...state.parameters[key], ...exercise.parameters[key] }
+
+        })
+        console.log("mergedParames", mergedParams)
+
+        const mergedAssesments = {}
+        Object.keys(state.assesments).forEach(key => {
+            console.log("key is", key)
+            console.log("value is", state.assesments[key])
+            mergedAssesments[key] = { ...state.assesments[key], ...exercise.assesments[key] }
+
+        })
+        console.log("mergedAssesments", mergedAssesments)
+
+        setState({ ...exercise, parameters: mergedParams, assesments: mergedAssesments, state: PageState.SENT, type: "Exercise" })
+        setPrevExcercise({ ...exercise, parameters: mergedParams, assesments: mergedAssesments })
+    }
 
     // console.log("the res is ", addExcerciseQuery)
 
@@ -238,7 +264,7 @@ export default function AddEditExercisePage(props) {
                     ...state.parameters,
                     [name]: {
                         ...state.parameters[name],
-                        value: value
+                        value: value.toInt()
                     }
                 }
             })
@@ -248,7 +274,7 @@ export default function AddEditExercisePage(props) {
                     ...state.parameters,
                     [name]: {
                         ...state.parameters[name],
-                        secondValue: value
+                        secondValue: value.toInt()
                     }
                 }
             })
@@ -312,7 +338,7 @@ export default function AddEditExercisePage(props) {
                 ...props, icon: <ArrowBackIcon />, label: t`Back`,
                 onClick: (e) => {
 
-                    history.goBack()
+                    history.replace('/app/exercises', { addedExercise: state })
                 }
             }
 

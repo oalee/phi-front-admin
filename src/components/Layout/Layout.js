@@ -37,6 +37,7 @@ import { useLayoutState } from "../../context/LayoutContext";
 import ExersicePage from "../../pages/exercises/ExercisePage";
 import AddEditExercisePage from "../../pages/addEditExcercise/AddEditExercisePage";
 import ExercisePage from "../../pages/exercises/ExercisePage";
+import { APIProvider } from "../../context/APIContext";
 
 function Layout(props) {
   var classes = useStyles();
@@ -45,32 +46,36 @@ function Layout(props) {
   var layoutState = useLayoutState();
 
   return (
-    <div className={classes.root}>
-      <>
-        <Header history={props.history} />
-        <Sidebar />
-        <div
-          className={classnames(classes.content, {
-            [classes.contentShift]: layoutState.isSidebarOpened,
-          })}
-        >
-          <div className={classes.fakeToolbar} />
-          <Switch>
-            <Route path="/app/dashboard" component={Dashboard} />
-            <Route path="/app/exercises" component={ExercisePage} />
-            <Route path="/app/tables" component={Tables} />
-            <Route path="/app/notifications" component={Notifications} />
-            <Route
-              exact
-              path="/app/ui"
-              render={() => <Redirect to="/app/ui/icons" />}
-            />
-            <Route path="/app/addExercise" component={AddEditExercisePage} />
-            <Route path="/app/ui/maps" component={Maps} />
-            <Route path="/app/ui/icons" component={Icons} />
-            <Route path="/app/ui/charts" component={Charts} />
-          </Switch>
-          {/* <Box
+    <APIProvider>
+
+      <div className={classes.root}>
+        <>
+          <Header history={props.history} />
+          <Sidebar />
+          <div
+            className={classnames(classes.content, {
+              [classes.contentShift]: layoutState.isSidebarOpened,
+            })}
+          >
+            <div className={classes.fakeToolbar} />
+            <Switch>
+              <Route path="/app/dashboard" component={Dashboard} />
+              <Route path="/app/exercises" component={ExercisePage} />
+              <Route path="/app/tables" component={Tables} />
+              <Route path="/app/notifications" component={Notifications} />
+              <Route
+                exact
+                path="/app/ui"
+                render={() => <Redirect to="/app/ui/icons" />}
+              />
+              <Route path="/app/addExercise" component={AddEditExercisePage} />
+              <Route path="/app/editExercise" component={AddEditExercisePage} />
+
+              <Route path="/app/ui/maps" component={Maps} />
+              <Route path="/app/ui/icons" component={Icons} />
+              <Route path="/app/ui/charts" component={Charts} />
+            </Switch>
+            {/* <Box
             mt={5}
             width={"100%"}
             display={"flex"}
@@ -146,9 +151,11 @@ function Layout(props) {
               </Link>
             </div>
           </Box> */}
-        </div>
-      </>
-    </div>
+          </div>
+        </>
+      </div>
+    </APIProvider>
+
   );
 }
 

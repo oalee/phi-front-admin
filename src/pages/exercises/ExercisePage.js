@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
     Grid,
     LinearProgress,
@@ -20,16 +20,50 @@ import useStyles from "./styles";
 import { Trans } from "@lingui/macro";
 import { Fragment } from "react";
 import { t } from '@lingui/macro';
+import { useLazyQuery } from "@apollo/client";
+import { GetAllExercises } from "../../api/queries";
+import ExerciseView from "./components/ExerciseView"
+import { useLocation } from "react-router";
+import { useAPIContext } from "../../context/APIContext";
 
 export default function ExercisePage(props) {
     var classes = useStyles();
     var theme = useTheme();
 
     const [value, setValue] = React.useState(1);
+    const location = useLocation()
+
+    // const [getAllExercises, getAllExercisesState] = useLazyQuery(GetAllExercises)
+
+    const apiContext = useAPIContext()
+
+    console.log(apiContext)
+    // if (apiContext.state.exercises.data === undefined && apiContext.state.loading === false)
+    //     apiContext.state.getAllExercises()
+    var excercises = apiContext.state.exercises
+    // console.log("exercises are ", getAllExercisesState)
+    // if (getAllExercisesState.data != null) {
+    //     console.log("data is ", getAllExercisesState.data.allExercises)
+    //     excercises = [...getAllExercisesState.data.allExercises]
+
+    // }
+
+    console.log("location in exercise page is ", location)
+
+    // if (excercises && location.state && location.state.addedExercise) {
+    //     excercises.push(location.state.addedExercise)
+    // }
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };
+
+    // useEffect(() => {
+    //     if (!getAllExercisesState.loading)
+    //         getAllExercises()
+    // }, [])
+
+
 
 
     return (
@@ -69,8 +103,26 @@ export default function ExercisePage(props) {
 
                 <div className={classes.filtersContainer}> </div>
 
-                <div className={classes.excerciseContainer}></div>
+                {
+                    (excercises != null) &&
 
+                    <div className={classes.excerciseContainer}>
+
+
+                        {
+
+                            excercises.map((exercise) =>
+                                <ExerciseView exercise={exercise} onClick={() => {
+                                    console.log("clicked")
+                                    props.history.push('/app/editExercise', {
+                                        exercise: exercise
+                                    })
+                                }} />
+                            )
+                        }
+
+                    </div>
+                }
 
 
             </div>

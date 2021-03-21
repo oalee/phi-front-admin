@@ -3,7 +3,7 @@ import { makeStyles } from "@material-ui/styles";
 
 export default makeStyles(theme => ({
     container: {
-        height: "100%",
+        // height: "100%",
         width: "100%",
         // width: "100vw",
         display: "flex",
@@ -15,10 +15,15 @@ export default makeStyles(theme => ({
     excerciseContainer: {
 
         display: "flex",
-        justifyContent: "center",
+        flexWrap: "wrap",
+        justifyContent: "start",
+        alignItems: "start",
+        flexDirection: "row",
+
         width: "70%",
         minHeight: 400,
-        backgroundColor: purple[400]
+        backgroundColor: purple[400],
+
 
     },
     filtersContainer: {
