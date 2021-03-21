@@ -1,5 +1,5 @@
 import { Paper, RootRef } from '@material-ui/core';
-import React, { forwardRef, useCallback } from 'react';
+import React, { forwardRef, useCallback, useEffect } from 'react';
 import { DndProvider } from 'react-dnd';
 import { useDropzone } from 'react-dropzone';
 import UploadCard from '../UploadCard/UploadCard';
@@ -20,9 +20,11 @@ export default function ImageDropZone(props) {
     var classes = useStyles();
 
     const [state, setState] = React.useState({
-        files: list,
+        files: [...list],
         uploadProgress: 0
     });
+
+    useEffect(() => { setState({ files: [...list], uploadProgress: 0 }) }, [list]);
 
     // console.log("STATE IZ IN DROP, ", state)
 

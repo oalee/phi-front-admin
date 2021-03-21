@@ -166,10 +166,32 @@ export default function AddEditExercisePage(props) {
 
     if (prevExcercise != null) {
         console.log("prev is", prevExcercise)
+        var edited = Object.keys(prevExcercise).reduce((acc, key) => {
+            const val = state[key]
+            const prevVal = prevExcercise[key]
+            console.log(val)
+            console.log(prevVal)
+            console.log(prevVal !== val)
+            return prevVal !== val || acc
 
-        if (state.title !== prevExcercise.title && state.state !== PageState.EDITED) {
+            const isNonEmptyArray = Array.isArray(val) ? val.length > 0 : true
+            console.log("val is ", val)
+            console.log("is not empty array ", isNonEmptyArray)
+            return val != null && val !== "" && isNonEmptyArray && acc
+
+
+        }, false)
+
+        console.log("it is edited")
+        console.log(edited)
+
+        if (state.state !== PageState.EDITED && edited) {
             setState({ ...state, state: PageState.EDITED })
         }
+        if (state.state === PageState.EDITED && !edited) {
+            setState({ ...state, state: PageState.SENT })
+        }
+
     }
 
     if (addExcerciseQuery.data != null) {
@@ -330,7 +352,10 @@ export default function AddEditExercisePage(props) {
             className: classes.button,
             icon: <RestoreIcon />,
             label: t`Restore`,
-            disabled: false
+            disabled: false,
+            onClick: (e) => {
+                setState({ ...state, ...prevExcercise })
+            }
         }
 
         if (state.state === PageState.SENT)
