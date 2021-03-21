@@ -41,7 +41,7 @@ import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import ParameterView from "./components/ParameterView/ParameterView";
 import { isNonEmptyArray } from "@apollo/client/utilities";
 import { useLazyQuery, useMutation } from "@apollo/client";
-import { AddExcercise } from "../../api/queries";
+import { AddExcercise, UpdateExercise } from "../../api/queries";
 import SendIcon from '@material-ui/icons/Send';
 
 export default function AddEditExercisePage(props) {
@@ -131,6 +131,8 @@ export default function AddEditExercisePage(props) {
     });
 
     const [doAddExcercise, addExcerciseQuery] = useMutation(AddExcercise);
+    const [updateExercise, updateExerciseRes] = useMutation(UpdateExercise)
+
     const [prevExcercise, setPrevExcercise] = useState(null)
     // const location = useLocation()
 
@@ -174,10 +176,10 @@ export default function AddEditExercisePage(props) {
             console.log(prevVal !== val)
             return prevVal !== val || acc
 
-            const isNonEmptyArray = Array.isArray(val) ? val.length > 0 : true
-            console.log("val is ", val)
-            console.log("is not empty array ", isNonEmptyArray)
-            return val != null && val !== "" && isNonEmptyArray && acc
+            // const isNonEmptyArray = Array.isArray(val) ? val.length > 0 : true
+            // console.log("val is ", val)
+            // console.log("is not empty array ", isNonEmptyArray)
+            // return val != null && val !== "" && isNonEmptyArray && acc
 
 
         }, false)
@@ -199,6 +201,22 @@ export default function AddEditExercisePage(props) {
         if (prevExcercise !== addExcerciseQuery.data.addexercise) {
             // console.log("sett it")
             setPrevExcercise(addExcerciseQuery.data.addexercise)
+        }
+
+
+        if (state.state === PageState.SENDING) {
+            setState({ ...state, state: PageState.SENT })
+        }
+    }
+
+    if (updateExerciseRes.data) {
+
+        if (state.state === PageState.SENDING) {
+            setState({ ...state, state: PageState.SENT })
+        }
+        if (prevExcercise !== updateExerciseRes.data.updateExercise) {
+            // console.log("sett it")
+            setPrevExcercise(updateExerciseRes.data.updateExercise)
         }
 
 
@@ -347,6 +365,18 @@ export default function AddEditExercisePage(props) {
 
     }
 
+    function getUpdateDiff() {
+
+        var diff = { id: state.id }
+        Object.keys(prevExcercise).forEach((key) => {
+            if (prevExcercise[key] !== state[key]) {
+                diff[key] = state[key]
+            }
+        })
+
+        return diff
+    }
+
     const stateToSecondButtonProps = () => {
         var props = {
             className: classes.button,
@@ -377,7 +407,10 @@ export default function AddEditExercisePage(props) {
             icon: <SendIcon />,
             label: (state.state === PageState.COMPLETED_NOT_SENT) ? t`Submit` : t`Sumbit Edit`,
             disabled: false,
-            onClick: () => { console.log("clicked") }
+            onClick: () => {
+                console.log("clicked, send update")
+
+            }
         }
         switch (state.state) {
             case PageState.NOT_COMPLETED:
@@ -405,6 +438,18 @@ export default function AddEditExercisePage(props) {
                 break
 
             case PageState.EDITED:
+                props = {
+                    ...props,
+                    onClick: () => {
+                        updateExercise({
+                            variables: {
+                                updateInput: getUpdateDiff()
+                            }
+                        })
+                        setState({ ...state, state: PageState.SENDING })
+
+                    }
+                }
                 break
 
             case PageState.SENDING:
