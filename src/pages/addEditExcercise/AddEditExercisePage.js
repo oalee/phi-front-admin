@@ -158,7 +158,7 @@ export default function AddEditExercisePage(props) {
         })
         console.log("mergedAssesments", mergedAssesments)
 
-        setState({ ...exercise, parameters: mergedParams, assesments: mergedAssesments, state: PageState.SENT, type: "Exercise" })
+        setState({ ...exercise, parameters: mergedParams, assesments: mergedAssesments, state: PageState.SENT })
         setPrevExcercise({ ...exercise, parameters: mergedParams, assesments: mergedAssesments })
     }
 
@@ -493,7 +493,7 @@ export default function AddEditExercisePage(props) {
                                 }}
                             >
                                 <option value="Exercise">{t`Exercise`}</option>
-                                <option value="Eductional">{t`Eductional`}</option>
+                                <option value="Educational">{t`Eductional`}</option>
                             </Select>
                         </FormControl>
                     </div>
@@ -549,34 +549,38 @@ export default function AddEditExercisePage(props) {
 
                         </div>
                     }
+                    {state.type === "Exercise" &&
 
-                    <Typography style={{ marginTop: 20 }} variant="h2" >
-                        <Trans>Assesments</Trans>
-                    </Typography>
-                    <div className={classes.parametersContainer}>
+                        <Typography style={{ marginTop: 20 }} variant="h2" >
+                            <Trans>Assesments</Trans>
+                        </Typography>
+                    }
+                    {state.type === "Exercise" &&
 
-                        {
-                            Object.values(state.assesments).map(value =>
+                        <div className={classes.parametersContainer}>
 
-                                <FormControlLabel
-                                    key={value.name}
-                                    control={
-                                        <Checkbox
-                                            checked={value.enabled}
-                                            onChange={handleAssemstersEnableSwap}
-                                            name={value.name}
-                                            color="primary"
-                                        />
-                                    }
-                                    label={value.title}
-                                />
+                            {
+                                Object.values(state.assesments).map(value =>
 
-                            )
+                                    <FormControlLabel
+                                        key={value.name}
+                                        control={
+                                            <Checkbox
+                                                checked={value.enabled}
+                                                onChange={handleAssemstersEnableSwap}
+                                                name={value.name}
+                                                color="primary"
+                                            />
+                                        }
+                                        label={value.title}
+                                    />
 
-                        }
+                                )
 
-                    </div>
+                            }
 
+                        </div>
+                    }
 
 
 

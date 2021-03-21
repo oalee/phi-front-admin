@@ -15,6 +15,7 @@ query Query {
     updatedAt
     id
     longDescription
+    type
     pictures {
       url
       width
@@ -104,6 +105,7 @@ query Query {
 const AddExcercise = gql`
 mutation Mutation($addExerciseInput: ExerciseInput) {
   addExercise(exerciseInput: $addExerciseInput){
+    type
     createdAt
     updatedAt
     id
