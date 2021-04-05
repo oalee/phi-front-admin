@@ -31,6 +31,9 @@ function objectEquals(x, y) {
 
 function isExerciseEdited(state, prevExcercise) {
 
+    if (prevExcercise === null || prevExcercise === undefined)
+        return true
+
     var updateDiff = getUpdateDiff(prevExcercise, state)
     var temp = { id: state.id }
     if (objectEquals(temp, updateDiff)) {

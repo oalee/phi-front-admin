@@ -31,6 +31,8 @@ export default function ExercisePage(props) {
     var theme = useTheme();
 
     const [value, setValue] = React.useState(1);
+
+    const [excercises, setExercises] = React.useState()
     const location = useLocation()
 
     // const [getAllExercises, getAllExercisesState] = useLazyQuery(GetAllExercises)
@@ -40,7 +42,7 @@ export default function ExercisePage(props) {
     console.log(apiContext)
     // if (apiContext.state.exercises.data === undefined && apiContext.state.loading === false)
     //     apiContext.state.getAllExercises()
-    var excercises = apiContext.state.exercises
+    // var excercises = apiContext.state.exercises
     // console.log("exercises are ", getAllExercisesState)
     // if (getAllExercisesState.data != null) {
     //     console.log("data is ", getAllExercisesState.data.allExercises)
@@ -58,10 +60,10 @@ export default function ExercisePage(props) {
         setValue(newValue);
     };
 
-    // useEffect(() => {
-    //     if (!getAllExercisesState.loading)
-    //         getAllExercises()
-    // }, [])
+    useEffect(() => {
+        setExercises(apiContext.state.exercises)
+
+    }, [apiContext.state.exercises])
 
 
 

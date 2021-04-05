@@ -14,6 +14,24 @@ function countReducer(state, action) {
 
         }
 
+        case 'added': {
+            console.log("added one is ", action.exercise)
+            return { ...state, exercises: [...state.exercises, action.exercise] }
+        }
+
+        case 'updated': {
+
+            return {
+                ...state, exercises: state.exercises.map(item => {
+
+                    if (item.id === action.exercise.id)
+                        return action.exercise
+                    return item
+
+                })
+            }
+        }
+
         default: {
 
             throw new Error(`Unhandled action type: ${action.type}`)
@@ -35,7 +53,7 @@ function APIProvider({ children }) {
     if (exercises.data === undefined && exercises.loading === false)
         getAllExercises()
 
-    if (exercises.data != null && state.exercises !== exercises.data.allExercises) {
+    if (exercises.data != null && state.exercises.length === 0) {
         console.log('dispatch')
         dispatch({ type: 'received', exercises: exercises.data.allExercises })
     }

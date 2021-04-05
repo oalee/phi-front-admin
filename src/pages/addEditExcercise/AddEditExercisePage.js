@@ -44,33 +44,8 @@ import { useLazyQuery, useMutation } from "@apollo/client";
 import { AddExcercise, UpdateExercise } from "../../api/queries";
 import SendIcon from '@material-ui/icons/Send';
 import { getUpdateDiff, isExerciseEdited } from "./utils";
+import { useAPIContext } from "../../context/APIContext";
 
-
-function objectEquals(x, y) {
-    // 'use strict';
-
-    if (x === null || x === undefined || y === null || y === undefined) { return x === y; }
-    // after this just checking type of one would be enough
-    if (x.constructor !== y.constructor) { return false; }
-    // if they are functions, they should exactly refer to same one (because of closures)
-    if (x instanceof Function) { return x === y; }
-    // if they are regexps, they should exactly refer to same one (it is hard to better equality check on current ES)
-    if (x instanceof RegExp) { return x === y; }
-    if (x === y || x.valueOf() === y.valueOf()) { return true; }
-    if (Array.isArray(x) && x.length !== y.length) { return false; }
-
-    // if they are dates, they must had equal valueOf
-    if (x instanceof Date) { return false; }
-
-    // if they are strictly equal, they both need to be object at least
-    if (!(x instanceof Object)) { return false; }
-    if (!(y instanceof Object)) { return false; }
-
-    // recursive object equality check
-    var p = Object.keys(x);
-    return Object.keys(y).every(function (i) { return p.indexOf(i) !== -1; }) &&
-        p.every(function (i) { return objectEquals(x[i], y[i]); });
-}
 
 
 export default function AddEditExercisePage(props) {
@@ -159,6 +134,8 @@ export default function AddEditExercisePage(props) {
         }
     });
 
+    const apiContext = useAPIContext()
+
     const [doAddExcercise, addExcerciseQuery] = useMutation(AddExcercise);
     const [updateExercise, updateExerciseRes] = useMutation(UpdateExercise)
 
@@ -212,13 +189,15 @@ export default function AddEditExercisePage(props) {
     }
 
     if (addExcerciseQuery.data != null) {
-        // console.log("data is not null", addExcerciseQuery.data.addexercise)
+        console.log("data is not null", addExcerciseQuery.data.addExercise)
 
+        // console.log("a")
 
-
-        if (prevExcercise !== addExcerciseQuery.data.addexercise) {
-            // console.log("sett it")
-            setPrevExcercise(addExcerciseQuery.data.addexercise)
+        if (addExcerciseQuery.data.addExercise !== prevExcercise) {
+            // console.log("an exercise is added", addExcerciseQuery.data.addExercise)
+            apiContext.dispatch({ type: 'added', exercise: addExcerciseQuery.data.addExercise })
+            console.log('after dispatch is ', apiContext.state)
+            setPrevExcercise(addExcerciseQuery.data.addExercise)
 
         }
 
@@ -236,6 +215,8 @@ export default function AddEditExercisePage(props) {
         ) {
             console.log("sett it")
             setPrevExcercise(updateExerciseRes.data.updateExercise)
+            apiContext.dispatch({ type: 'updated', exercise: updateExerciseRes.data.updateExercise })
+
             // if (state.state === PageState.SENDING)
 
             setState({ ...state, state: PageState.SENT })
