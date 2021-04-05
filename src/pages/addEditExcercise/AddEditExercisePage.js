@@ -43,6 +43,35 @@ import { isNonEmptyArray } from "@apollo/client/utilities";
 import { useLazyQuery, useMutation } from "@apollo/client";
 import { AddExcercise, UpdateExercise } from "../../api/queries";
 import SendIcon from '@material-ui/icons/Send';
+import { getUpdateDiff, isExerciseEdited } from "./utils";
+
+
+function objectEquals(x, y) {
+    // 'use strict';
+
+    if (x === null || x === undefined || y === null || y === undefined) { return x === y; }
+    // after this just checking type of one would be enough
+    if (x.constructor !== y.constructor) { return false; }
+    // if they are functions, they should exactly refer to same one (because of closures)
+    if (x instanceof Function) { return x === y; }
+    // if they are regexps, they should exactly refer to same one (it is hard to better equality check on current ES)
+    if (x instanceof RegExp) { return x === y; }
+    if (x === y || x.valueOf() === y.valueOf()) { return true; }
+    if (Array.isArray(x) && x.length !== y.length) { return false; }
+
+    // if they are dates, they must had equal valueOf
+    if (x instanceof Date) { return false; }
+
+    // if they are strictly equal, they both need to be object at least
+    if (!(x instanceof Object)) { return false; }
+    if (!(y instanceof Object)) { return false; }
+
+    // recursive object equality check
+    var p = Object.keys(x);
+    return Object.keys(y).every(function (i) { return p.indexOf(i) !== -1; }) &&
+        p.every(function (i) { return objectEquals(x[i], y[i]); });
+}
+
 
 export default function AddEditExercisePage(props) {
     var classes = useStyles();
@@ -144,17 +173,17 @@ export default function AddEditExercisePage(props) {
         const exercise = location.state.exercise
         console.log(exercise.parameters)
         Object.keys(state.parameters).forEach(key => {
-            console.log("key is", key)
-            console.log("value is", state.parameters[key])
+            // console.log("key is", key)
+            // console.log("value is", state.parameters[key])
             mergedParams[key] = { ...state.parameters[key], ...exercise.parameters[key] }
 
         })
-        console.log("mergedParames", mergedParams)
+        // console.log("mergedParames", mergedParams)
 
         const mergedAssesments = {}
         Object.keys(state.assesments).forEach(key => {
-            console.log("key is", key)
-            console.log("value is", state.assesments[key])
+            // console.log("key is", key)
+            // console.log("value is", state.assesments[key])
             mergedAssesments[key] = { ...state.assesments[key], ...exercise.assesments[key] }
 
         })
@@ -168,24 +197,10 @@ export default function AddEditExercisePage(props) {
 
     if (prevExcercise != null) {
         console.log("prev is", prevExcercise)
-        var edited = Object.keys(prevExcercise).reduce((acc, key) => {
-            const val = state[key]
-            const prevVal = prevExcercise[key]
-            console.log(val)
-            console.log(prevVal)
-            console.log(prevVal !== val)
-            return prevVal !== val || acc
+        var edited = isExerciseEdited(state, prevExcercise)
 
-            // const isNonEmptyArray = Array.isArray(val) ? val.length > 0 : true
-            // console.log("val is ", val)
-            // console.log("is not empty array ", isNonEmptyArray)
-            // return val != null && val !== "" && isNonEmptyArray && acc
-
-
-        }, false)
-
-        console.log("it is edited")
-        console.log(edited)
+        console.log("it is edited", edited)
+        // console.log(edited)
 
         if (state.state !== PageState.EDITED && edited) {
             setState({ ...state, state: PageState.EDITED })
@@ -198,9 +213,13 @@ export default function AddEditExercisePage(props) {
 
     if (addExcerciseQuery.data != null) {
         // console.log("data is not null", addExcerciseQuery.data.addexercise)
+
+
+
         if (prevExcercise !== addExcerciseQuery.data.addexercise) {
             // console.log("sett it")
             setPrevExcercise(addExcerciseQuery.data.addexercise)
+
         }
 
 
@@ -211,18 +230,24 @@ export default function AddEditExercisePage(props) {
 
     if (updateExerciseRes.data) {
 
-        if (state.state === PageState.SENDING) {
-            setState({ ...state, state: PageState.SENT })
-        }
-        if (prevExcercise !== updateExerciseRes.data.updateExercise) {
-            // console.log("sett it")
+
+        console.log("got update res ", updateExerciseRes.data.updateExercise)
+        if (isExerciseEdited(updateExerciseRes.data.updateExercise, prevExcercise)
+        ) {
+            console.log("sett it")
             setPrevExcercise(updateExerciseRes.data.updateExercise)
-        }
+            // if (state.state === PageState.SENDING)
 
-
-        if (state.state === PageState.SENDING) {
             setState({ ...state, state: PageState.SENT })
+
+
         }
+
+        // if (state.state === PageState.SENDING) {
+        //     setState({ ...state, state: PageState.SENT })
+        //     console.log("sent state")
+        // }
+
     }
 
 
@@ -238,8 +263,8 @@ export default function AddEditExercisePage(props) {
     const isComplete = Object.keys(state).reduce((acc, key) => {
         const val = state[key]
         const isNonEmptyArray = Array.isArray(val) ? val.length > 0 : true
-        console.log("val is ", val)
-        console.log("is not empty array ", isNonEmptyArray)
+        // console.log("val is ", val)
+        // console.log("is not empty array ", isNonEmptyArray)
         return val != null && val !== "" && isNonEmptyArray && acc
 
 
@@ -304,7 +329,7 @@ export default function AddEditExercisePage(props) {
                     ...state.parameters,
                     [name]: {
                         ...state.parameters[name],
-                        value: value.toInt()
+                        value: parseInt(value)
                     }
                 }
             })
@@ -314,7 +339,7 @@ export default function AddEditExercisePage(props) {
                     ...state.parameters,
                     [name]: {
                         ...state.parameters[name],
-                        secondValue: value.toInt()
+                        secondValue: parseInt(value)
                     }
                 }
             })
@@ -365,17 +390,7 @@ export default function AddEditExercisePage(props) {
 
     }
 
-    function getUpdateDiff() {
 
-        var diff = { id: state.id }
-        Object.keys(prevExcercise).forEach((key) => {
-            if (prevExcercise[key] !== state[key]) {
-                diff[key] = state[key]
-            }
-        })
-
-        return diff
-    }
 
     const stateToSecondButtonProps = () => {
         var props = {
@@ -443,7 +458,7 @@ export default function AddEditExercisePage(props) {
                     onClick: () => {
                         updateExercise({
                             variables: {
-                                updateInput: getUpdateDiff()
+                                updateInput: getUpdateDiff(prevExcercise, state)
                             }
                         })
                         setState({ ...state, state: PageState.SENDING })

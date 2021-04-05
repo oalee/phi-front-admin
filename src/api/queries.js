@@ -23,6 +23,7 @@ query Query {
       placeHolder
       type
       order
+      id
     }
     shortDescription
     title
@@ -77,6 +78,7 @@ query Query {
       placeHolder
       type
       order
+      id
     }
     assesments {
       tiredness {
@@ -116,6 +118,7 @@ mutation Mutation($updateInput: UpdateInput) {
       placeHolder
       type
       order
+      id
     }
     shortDescription
     title
@@ -170,6 +173,7 @@ mutation Mutation($updateInput: UpdateInput) {
       placeHolder
       type
       order
+      id
     }
     assesments {
       tiredness {
@@ -209,6 +213,7 @@ mutation Mutation($addExerciseInput: ExerciseInput) {
       placeHolder
       type
       order
+      id
     }
     shortDescription
     title
@@ -263,6 +268,7 @@ mutation Mutation($addExerciseInput: ExerciseInput) {
       placeHolder
       type
       order
+      id
     }
     assesments {
       tiredness {
