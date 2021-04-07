@@ -8,7 +8,9 @@ import {
     Button,
     Paper,
     Tabs,
-    Tab
+    Tab,
+    Card,
+    TextField
 } from "@material-ui/core";
 import AddCircleOutlineOutlinedIcon from '@material-ui/icons/AddCircleOutlineOutlined';
 import { useTheme } from "@material-ui/styles";
@@ -67,6 +69,15 @@ export default function ExercisePage(props) {
 
 
 
+    const filterFunction = (e) => {
+        var query = e.target.value
+        console.log('query is', query)
+        if (query === "") {
+            setExercises(apiContext.state.exercises)
+        } else {
+            setExercises(apiContext.state.exercises.filter(exercise => exercise.title.includes(query)))
+        }
+    }
 
     return (
         <>
@@ -103,12 +114,29 @@ export default function ExercisePage(props) {
 
             <div className={classes.container}>
 
-                <div className={classes.filtersContainer}> </div>
+                <div className={classes.filtersContainer}>
+
+                    {/* <Typography variant="h2" style={{ margin: 20 }}>
+                        <Trans>Filters</Trans>
+                    </Typography> */}
+
+                    <TextField id="outlined-basic" label={t`Search`} variant="outlined"
+                        style={{ marginTop: 20 }}
+                        onChange={filterFunction}
+                    />
+                </div>
 
                 {
                     (excercises != null) &&
 
-                    <div className={classes.excerciseContainer}>
+                    <Card className={classes.excerciseContainer} >
+
+                        {
+                            (excercises.length === 0) &&
+                            <Typography variant="h2" style={{ margin: 20 }}>
+                                <Trans>Nothing found with the filter, change the filter</Trans>
+                            </Typography>
+                        }
 
 
                         {
@@ -123,7 +151,7 @@ export default function ExercisePage(props) {
                             )
                         }
 
-                    </div>
+                    </Card>
                 }
 
 

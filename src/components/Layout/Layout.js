@@ -38,6 +38,7 @@ import ExersicePage from "../../pages/exercises/ExercisePage";
 import AddEditExercisePage from "../../pages/addEditExcercise/AddEditExercisePage";
 import ExercisePage from "../../pages/exercises/ExercisePage";
 import { APIProvider } from "../../context/APIContext";
+import PatientsPage from "../../pages/patientsPage/PatientsPage";
 
 function Layout(props) {
   var classes = useStyles();
@@ -69,6 +70,8 @@ function Layout(props) {
                 render={() => <Redirect to="/app/ui/icons" />}
               />
               <Route path="/app/addExercise" component={AddEditExercisePage} />
+              <Route path="/app/patients" component={PatientsPage} />
+
               <Route path="/app/editExercise" component={AddEditExercisePage} />
 
               <Route path="/app/ui/maps" component={Maps} />

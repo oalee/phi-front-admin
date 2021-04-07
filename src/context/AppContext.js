@@ -39,13 +39,13 @@ function AppProvider({ children }) {
 
 
   const usersLabel = user && user.type === "Admin" ? t`Users` : t`Patients`
-
+  const usersLink = user && user.type === "Admin" ? '/app/notifications' : '/app/patients'
 
   const menu = [
     { id: 0, label: t`Dashboard`, link: '/app/dashboard', icon: <HomeIcon /> },
     { id: 1, label: t`Eductional`, link: '/app/exercises', icon: <TypographyIcon /> },
     { id: 2, label: t`Exercises`, link: '/app/tables', icon: <TableIcon /> },
-    { id: 3, label: usersLabel, link: '/app/notifications', icon: <NotificationsIcon /> },
+    { id: 3, label: usersLabel, link: usersLink, icon: <NotificationsIcon /> },
     {
       id: 4,
       label: t`UI Elements`,

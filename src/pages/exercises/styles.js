@@ -22,7 +22,7 @@ export default makeStyles(theme => ({
 
         width: "70%",
         minHeight: 400,
-        backgroundColor: purple[400],
+        // backgroundColor: purple[400],
 
 
     },
@@ -33,7 +33,7 @@ export default makeStyles(theme => ({
         width: "30%",
 
         minHeight: 400,
-        backgroundColor: green[400]
+        // backgroundColor: green[400]
 
     },
     tab: {
