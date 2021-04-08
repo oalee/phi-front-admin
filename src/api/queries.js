@@ -318,4 +318,38 @@ const GETUSERS = gql`
   }
 `;
 
-export { LOGIN, GETUSERS, GETME, AddExcercise, GetAllExercises, UpdateExercise };
+const CreatePatient = gql`
+mutation Mutation($userInput: UserInput) {
+  addUser(userInput: $userInput) {
+    id
+    patient {
+      id
+      name
+      age
+      weight
+    }
+    username
+  }
+}
+
+`
+
+
+const GetMyPatients = gql`
+query Query {
+  myPatients {
+    username
+    id
+    patient {
+      id
+      name
+      age
+      weight
+    }
+  }
+}
+
+
+`
+
+export { LOGIN, GETUSERS, GETME, AddExcercise, GetAllExercises, UpdateExercise, CreatePatient, GetMyPatients };
