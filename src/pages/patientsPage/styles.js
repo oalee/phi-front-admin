@@ -12,7 +12,7 @@ export default makeStyles(theme => ({
         top: 0,
         left: 0,
     },
-    excerciseContainer: {
+    patientsContainer: {
 
         display: "flex",
         flexWrap: "wrap",
@@ -20,7 +20,7 @@ export default makeStyles(theme => ({
         alignItems: "start",
         flexDirection: "row",
 
-        width: "70%",
+        width: "100%",
         minHeight: 400,
         // backgroundColor: purple[400],
 

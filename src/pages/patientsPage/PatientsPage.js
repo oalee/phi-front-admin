@@ -31,27 +31,49 @@ import { useLazyQuery, useMutation, useQuery } from "@apollo/client";
 import { CreatePatient, GetAllExercises, GetMyPatients } from "../../api/queries";
 import { useLocation } from "react-router";
 import { useAPIContext } from "../../context/APIContext";
+import PatientCardView from "./components/PatientCardView";
 
 export default function PatientsPage(props) {
     var classes = useStyles();
     var theme = useTheme();
-    var userInput = { Type: "Patient", patient: {} }
+    var userInput = { type: "Patient", patient: {} }
     const [value, setValue] = React.useState(1);
 
     const [createUser, createUserRes] = useMutation(CreatePatient)
+
     const myPatientsRes = useQuery(GetMyPatients)
+
+    const [myPatients, setMyPatients] = React.useState([])
+
+    const [openDialog, setOpenDialog] = React.useState(false);
 
     const location = useLocation()
 
+    if (myPatientsRes.data && myPatients.length === 0) {
+
+        setMyPatients(myPatientsRes?.data.myPatients)
+    }
+    console.log("my patients", myPatients)
+
+    if (createUserRes.data?.addUser) {
+
+        var allreadyAdded = myPatients.some(patient => patient.id === createUserRes.data?.addUser.id)
+        console.log('alreadyAdded?', allreadyAdded)
+        if (!allreadyAdded) {
+
+            setMyPatients([...myPatients, createUserRes.data?.addUser])
+
+            setOpenDialog(false)
+        }
+
+    }
     // const [getAllExercises, getAllExercisesState] = useLazyQuery(GetAllExercises)
 
     // const apiContext = useAPIContext()
 
 
-    console.log("my patients", myPatientsRes)
 
 
-    const [openDialog, setOpenDialog] = React.useState(false);
 
     const handleClickOpen = () => {
         setOpenDialog(true);
@@ -61,19 +83,30 @@ export default function PatientsPage(props) {
         setOpenDialog(false);
     };
 
+    const handeAddPatientClick = () => {
+        sendCreatePatientReq()
+    }
     const handleUserInput = (e) => {
         const param = e.target.id
         const value = e.target.value
         userInput[param] = value
 
-        console.log(userInput)
+        // console.log(userInput)
     }
 
     const handlePatientInfo = (e) => {
         const param = e.target.id
         const value = e.target.value
-
         userInput.patient[param] = value
+
+        if (param === "age" || param === "weight")
+            try {
+                userInput.patient[param] = parseInt(value)
+
+            } catch (error) {
+                userInput.patient[param] = value
+
+            }
         console.log(userInput)
 
     }
@@ -86,6 +119,7 @@ export default function PatientsPage(props) {
             }
         })
     }
+
 
     // const filterFunction = (e) => {
     //     var query = e.target.value
@@ -138,10 +172,10 @@ export default function PatientsPage(props) {
                 {
                     (myPatientsRes?.data) &&
 
-                    <Card className={classes.excerciseContainer} >
+                    <Card className={classes.patientsContainer} >
 
                         {
-                            (myPatientsRes?.data.myPatients.length === 0) &&
+                            (myPatients.length === 0) &&
                             <Typography variant="h2" style={{ margin: 20 }}>
                                 <Trans>Nothing found with the filter, change the filter</Trans>
                             </Typography>
@@ -150,15 +184,15 @@ export default function PatientsPage(props) {
 
                         {
 
-                            myPatientsRes?.data.myPatients.map((patient) =>
+                            myPatients.map((patient) =>
 
-                                <Typography> {patient.username} </Typography>
-                                // <ExerciseView exercise={exercise} onClick={() => {
-                                //     console.log("clicked")
-                                //     props.history.push('/app/editExercise', {
-                                //         exercise: exercise
-                                //     })
-                                // }} />
+                                // <Typography> {patient.username} </Typography>
+                                <PatientCardView patient={patient} onClick={() => {
+                                    console.log("clicked")
+                                    // props.history.push('/app/editExercise', {
+                                    //     exercise: exercise
+                                    // })
+                                }} />
                             )
                         }
 
@@ -222,14 +256,18 @@ export default function PatientsPage(props) {
 
                     />
 
-                    {/* <LinearProgress style={{ marginTop: 20 }} /> */}
 
+                    {
+                        createUserRes.loading &&
+
+                        <LinearProgress style={{ marginTop: 20 }} />
+                    }
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose} color="primary">
                         <Trans>Cancel</Trans>
                     </Button>
-                    <Button onClick={handleClose} color="primary">
+                    <Button onClick={handeAddPatientClick} color="primary">
                         <Trans>Add</Trans>
                     </Button>
                 </DialogActions>
