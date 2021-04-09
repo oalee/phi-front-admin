@@ -189,9 +189,9 @@ export default function PatientsPage(props) {
                                 // <Typography> {patient.username} </Typography>
                                 <PatientCardView patient={patient} onClick={() => {
                                     console.log("clicked")
-                                    // props.history.push('/app/editExercise', {
-                                    //     exercise: exercise
-                                    // })
+                                    props.history.push('/app/schedule', {
+                                        patient: patient
+                                    })
                                 }} />
                             )
                         }

@@ -36,13 +36,14 @@ import clsx from 'clsx';
 import { Pages } from "@material-ui/icons";
 import StyledButton from "./components/StyledButton/StyledButton";
 import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
+import SendIcon from '@material-ui/icons/Send';
+
 import { Prompt, useLocation } from "react-router";
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import ParameterView from "./components/ParameterView/ParameterView";
 import { isNonEmptyArray } from "@apollo/client/utilities";
 import { useLazyQuery, useMutation } from "@apollo/client";
 import { AddExcercise, UpdateExercise } from "../../api/queries";
-import SendIcon from '@material-ui/icons/Send';
 import { getUpdateDiff, isExerciseEdited } from "./utils";
 import { useAPIContext } from "../../context/APIContext";
 
@@ -497,19 +498,9 @@ export default function AddEditExercisePage(props) {
             <div style={{ position: "absolute", display: "flex", justifyContent: "flex-end", width: "90%", flexDirection: "column", alignItems: "end" }}>
 
                 <StyledButton props={stateToButtonProps(state.state)} />
-                {/* <Button
-                    variant="contained"
-                    color="primary"
-                    size="large"
-                    disabled={state.state === PageState.NOT_COMPLETED || state.state === PageState.SENDING}
-                    className={classes.buttonSuccess}
-                    startIcon={<SaveIcon />}
-                >
-                    Save
-             </Button> */}
 
-                {(state.state === PageState.EDITED || state.state === PageState.SENT) && <StyledButton props={stateToSecondButtonProps(state.state)} />
-                }
+
+                {(state.state === PageState.EDITED || state.state === PageState.SENT) && <StyledButton props={stateToSecondButtonProps(state.state)} />}
 
             </div>
 
