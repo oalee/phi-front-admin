@@ -42,6 +42,13 @@ import SendIcon from '@material-ui/icons/Send';
 import SaveIcon from '@material-ui/icons/Save';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import Select from 'react-select'
+import { Calendar, DatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
+// import JalaliUtils from "@date-io/jalaali";
+import moment from "moment";
+import jMoment from "moment-jalaali";
+import JalaliUtils from "@date-io/jalaali";
+
+jMoment.loadPersian({ dialect: "persian-modern", usePersianDigits: true });
 
 export default function SchedulePage(props) {
 
@@ -50,14 +57,16 @@ export default function SchedulePage(props) {
     const { history, location } = { ...props }
 
     console.log(location)
-
+    const [selectedDate, handleDateChange] = useState(moment());
 
     var theme = useTheme();
     var patient = { ...location.state.patient.patient, username: location.state.patient.username }
 
     const [value, setValue] = React.useState(1);
     const [state, setState] = React.useState({ state: PageState.NOT_COMPLETED })
+    const apiContext = useAPIContext()
 
+    const exercises = apiContext.state.exercises
     // const [createUser, createUserRes] = useMutation(CreatePatient)
 
     // const myPatientsRes = useQuery(GetMyPatients)
@@ -205,6 +214,10 @@ export default function SchedulePage(props) {
         { value: 'silver', label: 'Silver', color: '#666666' },
     ];
 
+    const exerciseOptions = exercises.map(exercise => { return { value: exercise.title, label: exercise.title } })
+
+
+
     const selectStyle = {
         control: base => ({
             ...base,
@@ -216,6 +229,8 @@ export default function SchedulePage(props) {
             fontSize: 25
         })
     };
+
+
 
     // const filterFunction = (e) => {
     //     var query = e.target.value
@@ -318,13 +333,13 @@ export default function SchedulePage(props) {
                             </IconButton> */}
 
                         </div>
-                        <div style={{ marginTop: 20, padding: 10 }}>
+                        <div style={{ marginTop: 20, padding: 25 }}>
 
                             <Select
                                 defaultValue={[colourOptions[2], colourOptions[3]]}
                                 isMulti
                                 name="colors"
-                                options={colourOptions}
+                                options={exerciseOptions}
                                 className="basic-multi-select"
                                 classNamePrefix="select"
                                 styles={selectStyle}
@@ -335,15 +350,29 @@ export default function SchedulePage(props) {
 
 
                         </div>
-                        <Typography style={{ marginTop: theme.spacing(10) }} variant="h2" >
+                        <Typography style={{ marginTop: theme.spacing(1) }} variant="h2" >
                             <Trans>Schedule</Trans>
                         </Typography>
-
-                        <div className={classes.imageDropBoxContainer}>
-
+                        {/* */}
+                        <div style={{ display: "flex" }}>
+                            <MuiPickersUtilsProvider utils={JalaliUtils} locale="fa"   >
+                                <DatePicker
+                                    okLabel="تأیید"
+                                    cancelLabel="لغو"
+                                    labelFunc={date => (date ? date.format("jYYYY/jMM/jDD") : "")}
+                                    value={selectedDate}
+                                    onChange={handleDateChange}
+                                />
+                                <DatePicker
+                                    variant="static"
+                                    labelFunc={date => (date ? date.format("jYYYY/jMM/jDD") : "")}
+                                    value={selectedDate}
+                                    onChange={handleDateChange}
+                                />
+                                {/* <Calendar date={selectedDate} /> */}
+                            </MuiPickersUtilsProvider>
 
                         </div>
-
                     </div>
                 </div>
             </div >
