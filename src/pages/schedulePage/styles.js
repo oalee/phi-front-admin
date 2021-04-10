@@ -17,7 +17,7 @@ export default makeStyles(theme => ({
         display: "flex",
         flexDirection: "row",
         width: "100%",
-        marginTop: theme.spacing(5),
+        // marginTop: theme.spacing(1),
         flexWrap: "wrap"
     },
     patientsContainer: {

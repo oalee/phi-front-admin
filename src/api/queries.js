@@ -34,6 +34,8 @@ query Query {
         value
         secondValue
         valueType
+        title
+
       }
       reps {
         enabled
@@ -41,6 +43,7 @@ query Query {
         value
         secondValue
         valueType
+        title
       }
       repPerDay {
         enabled
@@ -48,6 +51,7 @@ query Query {
         value
         secondValue
         valueType
+        title
       }
       hold {
         enabled
@@ -55,6 +59,7 @@ query Query {
         value
         secondValue
         valueType
+        title
       }
       restPerSet {
         enabled
@@ -62,6 +67,7 @@ query Query {
         value
         secondValue
         valueType
+        title
       }
       totalDuration {
         enabled
@@ -69,6 +75,7 @@ query Query {
         value
         secondValue
         valueType
+        title
       }
     }
     videos {
@@ -84,18 +91,22 @@ query Query {
       tiredness {
         enabled
         name
+        title
       }
       dificulty {
         enabled
         name
+        title
       }
       shortnessOfBreath {
         enabled
         name
+        title
       }
       pain {
         enabled
         name
+        title
       }
     }
   }
@@ -129,6 +140,7 @@ mutation Mutation($updateInput: UpdateInput) {
         value
         secondValue
         valueType
+        title
       }
       reps {
         enabled
@@ -136,6 +148,7 @@ mutation Mutation($updateInput: UpdateInput) {
         value
         secondValue
         valueType
+        title
       }
       repPerDay {
         enabled
@@ -143,6 +156,7 @@ mutation Mutation($updateInput: UpdateInput) {
         value
         secondValue
         valueType
+        title
       }
       hold {
         enabled
@@ -150,6 +164,7 @@ mutation Mutation($updateInput: UpdateInput) {
         value
         secondValue
         valueType
+        title
       }
       restPerSet {
         enabled
@@ -157,6 +172,7 @@ mutation Mutation($updateInput: UpdateInput) {
         value
         secondValue
         valueType
+        title
       }
       totalDuration {
         enabled
@@ -164,6 +180,7 @@ mutation Mutation($updateInput: UpdateInput) {
         value
         secondValue
         valueType
+        title
       }
     }
     videos {
@@ -179,18 +196,22 @@ mutation Mutation($updateInput: UpdateInput) {
       tiredness {
         enabled
         name
+        title
       }
       dificulty {
         enabled
         name
+        title
       }
       shortnessOfBreath {
         enabled
         name
+        title
       }
       pain {
         enabled
         name
+        title
       }
     }
     
@@ -224,6 +245,7 @@ mutation Mutation($addExerciseInput: ExerciseInput) {
         value
         secondValue
         valueType
+        title
       }
       reps {
         enabled
@@ -231,6 +253,7 @@ mutation Mutation($addExerciseInput: ExerciseInput) {
         value
         secondValue
         valueType
+        title
       }
       repPerDay {
         enabled
@@ -238,6 +261,7 @@ mutation Mutation($addExerciseInput: ExerciseInput) {
         value
         secondValue
         valueType
+        title
       }
       hold {
         enabled
@@ -245,6 +269,7 @@ mutation Mutation($addExerciseInput: ExerciseInput) {
         value
         secondValue
         valueType
+        title
       }
       restPerSet {
         enabled
@@ -252,6 +277,7 @@ mutation Mutation($addExerciseInput: ExerciseInput) {
         value
         secondValue
         valueType
+        title
       }
       totalDuration {
         enabled
@@ -259,6 +285,7 @@ mutation Mutation($addExerciseInput: ExerciseInput) {
         value
         secondValue
         valueType
+        title
       }
     }
     videos {
@@ -274,18 +301,22 @@ mutation Mutation($addExerciseInput: ExerciseInput) {
       tiredness {
         enabled
         name
+        title
       }
       dificulty {
         enabled
         name
+        title
       }
       shortnessOfBreath {
         enabled
         name
+        title
       }
       pain {
         enabled
         name
+        title
       }
     }
     
