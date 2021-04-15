@@ -83,12 +83,11 @@ export default function SchedulePage(props) {
     let today = jMoment()
     const todayText = today.format("dddd jD jMMMM jYYYY ")
 
-    const [startDate, handleStartDateChange] = useState(jMoment());
-    const [endDate, handleEndDateChange] = useState(jMoment().add(1, "d"));
-    const [selectedDate, handleDateChange] = useState(jMoment());
+    // const [startDate, handleStartDateChange] = useState(jMoment());
+    // const [endDate, handleEndDateChange] = useState(jMoment().add(1, "d"));
+    // const [selectedDate, handleDateChange] = useState(jMoment());
 
 
-    const selectedDateText = selectedDate.format("dddd jD jMMMM jYYYY ")
 
 
     var theme = useTheme();
@@ -97,7 +96,10 @@ export default function SchedulePage(props) {
     const [state, setState] = React.useState({
         state: PageState.NOT_COMPLETED,
         selectedExercises: [],
-        therapyDays: []
+        therapyDays: [],
+        startDate: jMoment(),
+        endDate: jMoment().add(1, "d"),
+        selectedDate: jMoment()
 
 
     })
@@ -105,7 +107,9 @@ export default function SchedulePage(props) {
 
     const exercises = apiContext.state.exercises
 
-    console.log("end date is ", endDate)
+    console.log("end date is ", state.endDate)
+    const selectedDateText = state.selectedDate.format("dddd jD jMMMM jYYYY ")
+
     // const [createUser, createUserRes] = useMutation(CreatePatient)
 
     // const myPatientsRes = useQuery(GetMyPatients)
@@ -123,8 +127,14 @@ export default function SchedulePage(props) {
 
     // const apiContext = useAPIContext()
 
+    const handleEndDateChange = (date) => {
 
+        setState({ ...state, endDate: date })
+    }
 
+    const handleStartDateChange = (date) => {
+        setState({ ...state, startDate: date })
+    }
 
 
     const handleClickOpen = () => {
@@ -258,14 +268,14 @@ export default function SchedulePage(props) {
             fontSize: 25
         })
     };
-    let startDateClone = startDate.toDate()
-    let endDateClone = endDate.toDate()
+    // let startDateClone = startDate.toDate()
+    // let endDateClone = endDate.toDate()
 
     const onExercisesChanged = (e) => {
         console.log(e)
     }
 
-    const moment = jMoment()
+    // const moment = jMoment()
 
     const getScheduleForDate = (date) => {
 
@@ -283,29 +293,29 @@ export default function SchedulePage(props) {
 
         // let todayClone = today.toDate()
 
-        let dateClone = (date).toDate();
-        let selectedDateClone = (selectedDate).toDate();
-        console.log("date is ", date)
-        console.log("selected date is ", selectedDate)
-        console.log("today is ", today)
-        console.log("startDay is ", startDate)
-        console.log("endDate is ", endDate)
+        // let dateClone = (date).toDate();
+        // let selectedDateClone = (selectedDate).toDate();
+        // console.log("date is ", date)
+        // console.log("selected date is ", selectedDate)
+        // console.log("today is ", today)
+        // console.log("startDay is ", startDate)
+        // console.log("endDate is ", endDate)
 
         // const start = startOfWeek(selectedDateClone);
         // const end = endOfWeek(selectedDateClone);
-        const isSameAsStartDate = date.isSame(startDate, "day")
+        const isSameAsStartDate = date.isSame(state.startDate, "day")
 
-        const isSelectedDay = date.isSame(selectedDate, "day")
+        const isSelectedDay = date.isSame(state.selectedDate, "day")
         // const isSelectedDay = date.isSameDate(selectedDate)
-        const isPastGoneDays = date.isBetween(startDate, today, "day") || isSameAsStartDate
+        const isPastGoneDays = date.isBetween(state.startDate, today, "day") || (isSameAsStartDate && !today.isSame(date, "day"))
 
-        const dayIsBetween = date.isBetween(startDate, endDate) || isSelectedDay || isSameAsStartDate
+        const dayIsBetween = date.isBetween(state.startDate, state.endDate) || isSelectedDay || isSameAsStartDate
 
-        console.log("isSelectedDay", isSelectedDay)
-        console.log("isSameAsStartDate", isSameAsStartDate)
+        // console.log("isSelectedDay", isSelectedDay)
+        // console.log("isSameAsStartDate", isSameAsStartDate)
 
-        console.log("isPastGoneDays", isPastGoneDays)
-        console.log("dayIsBetween", dayIsBetween)
+        // console.log("isPastGoneDays", isPastGoneDays)
+        // console.log("dayIsBetween", dayIsBetween)
 
         // const isLastDay = true
         // const isPastGoneDays = isWithinInterval(dateClone, { startDateClone, todayClone })
@@ -325,8 +335,10 @@ export default function SchedulePage(props) {
         return (
             <div className={wrapperClassName} onClick={(e) => {
                 e.stopPropagation()
-                if (dayIsBetween && !isPastGoneDays)
-                    handleDateChange(date)
+                if (dayIsBetween && !isPastGoneDays) {
+
+                    setState({ ...state, selectedDate: date })
+                }
             }} >
                 <IconButton className={dayClassName}>
                     <span style={{
@@ -507,7 +519,7 @@ export default function SchedulePage(props) {
                                         okLabel="تأیید"
                                         cancelLabel="لغو"
                                         labelFunc={date => (date ? date.format("jYYYY/jMM/jDD") : "")}
-                                        value={startDate}
+                                        value={state.startDate}
                                         onChange={handleStartDateChange}
                                         style={{ margin: 12 }}
                                     />
@@ -520,7 +532,7 @@ export default function SchedulePage(props) {
                                         okLabel="تأیید"
                                         cancelLabel="لغو"
                                         labelFunc={date => (date ? date.format("jYYYY/jMM/jDD") : "")}
-                                        value={endDate}
+                                        value={state.endDate}
                                         onChange={handleEndDateChange}
                                         style={{ margin: 12 }}
                                     />
@@ -544,15 +556,12 @@ export default function SchedulePage(props) {
 
                                             variant="static"
                                             labelFunc={date => (date ? date.format("jYYYY/jMM/jDD") : "")}
-                                            value={selectedDate}
-                                            onChange={(e) => {
-                                                console.log("onChange,", e)
-                                                handleDateChange(e)
-                                            }}
+                                            value={state.selectedDate}
+
                                             renderDay={renderWrappedWeekDay}
                                             // fullWidth
                                             minDate={today}
-                                            maxDate={endDate}
+                                            maxDate={state.endDate}
                                         />
                                     </Paper>
 
