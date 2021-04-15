@@ -118,7 +118,7 @@ export default function SchedulePage(props) {
 
 
 
-    const [openDialog, setOpenDialog] = React.useState(false);
+    // const [openDialog, setOpenDialog] = React.useState(false);
 
     // const location = useLocation()
 
@@ -126,6 +126,8 @@ export default function SchedulePage(props) {
     // const [getAllExercises, getAllExercisesState] = useLazyQuery(GetAllExercises)
 
     // const apiContext = useAPIContext()
+    const exerciseOptions = exercises.map(exercise => { return { value: exercise.title, label: exercise.title, exercise: exercise } })
+
 
     const handleEndDateChange = (date) => {
 
@@ -136,14 +138,11 @@ export default function SchedulePage(props) {
         setState({ ...state, startDate: date })
     }
 
+    const onExercisesChanged = (e) => {
 
-    const handleClickOpen = () => {
-        setOpenDialog(true);
-    };
+        setState({ ...state, selectedExercises: e.map(item => item.exercise) })
+    }
 
-    const handleClose = () => {
-        setOpenDialog(false);
-    };
 
     const handeAddPatientClick = () => {
         // sendCreatePatientReq()
@@ -253,7 +252,6 @@ export default function SchedulePage(props) {
 
     }
 
-    const exerciseOptions = exercises.map(exercise => { return { value: exercise.title, label: exercise.title, id: exercise.id } })
 
 
 
@@ -271,9 +269,6 @@ export default function SchedulePage(props) {
     // let startDateClone = startDate.toDate()
     // let endDateClone = endDate.toDate()
 
-    const onExercisesChanged = (e) => {
-        console.log(e)
-    }
 
     // const moment = jMoment()
 
@@ -427,7 +422,7 @@ export default function SchedulePage(props) {
 
                         <div style={{ display: "flex", flexWrap: "wrap" }}>
 
-                            <Paper style={{ width: 300, margin: 20, padding: 20 }}>
+                            <Paper style={{ width: 300, margin: 20, padding: 20 }} elevation={2}>
                                 <Typography style={{ marginTop: 25 }} variant="h5" >
                                     <Trans>Name</Trans> : {patient.name}
                                 </Typography>
@@ -490,7 +485,7 @@ export default function SchedulePage(props) {
                         <div style={{ marginTop: 20, padding: 25 }}>
 
                             <Select
-                                defaultValue={[exerciseOptions[2], exerciseOptions[3]]}
+                                defaultValue={state.selectedExercises.map(exercise => { return { value: exercise.title, label: exercise.title, exercise: exercise } })}
                                 isMulti
                                 name="exercises"
                                 options={exerciseOptions}
@@ -498,6 +493,7 @@ export default function SchedulePage(props) {
                                 classNamePrefix="select"
                                 styles={selectStyle}
                                 onChange={onExercisesChanged}
+                                placeholder={t`Select Exercises`}
                             />
                         </div>
 
@@ -688,72 +684,6 @@ export default function SchedulePage(props) {
                 </div>
             </div >
 
-            <Dialog open={openDialog} onClose={handleClose} aria-labelledby="form-dialog-title">
-                <DialogTitle id="form-dialog-title"><Trans>Add an Patient</Trans></DialogTitle>
-                <DialogContent>
-
-                    <TextField
-                        autoFocus
-                        margin="dense"
-                        id="username"
-                        label={t`Username`}
-                        type="text"
-                        fullWidth
-                        onChange={handleUserInput}
-                    />
-                    <TextField
-                        autoFocus
-                        margin="dense"
-                        id="password"
-                        label={t`Password`}
-                        type="password"
-                        onChange={handleUserInput}
-
-                        fullWidth
-                    />
-                    <TextField
-                        autoFocus
-                        margin="dense"
-                        id="name"
-                        label={t`Name`}
-                        type="text"
-                        fullWidth
-                        onChange={handlePatientInfo}
-
-                    />
-                    <TextField
-                        autoFocus
-                        margin="dense"
-                        id="age"
-                        label={t`Age`}
-                        type="number"
-                        fullWidth
-                        onChange={handlePatientInfo}
-
-                    />
-                    <TextField
-                        autoFocus
-                        margin="dense"
-                        id="weight"
-                        label={t`Weight`}
-                        type="number"
-                        fullWidth
-                        onChange={handlePatientInfo}
-
-                    />
-
-
-
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={handleClose} color="primary">
-                        <Trans>Cancel</Trans>
-                    </Button>
-                    <Button onClick={handeAddPatientClick} color="primary">
-                        <Trans>Add</Trans>
-                    </Button>
-                </DialogActions>
-            </Dialog>
 
         </>
     );
