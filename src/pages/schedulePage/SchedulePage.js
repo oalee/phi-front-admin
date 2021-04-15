@@ -58,7 +58,7 @@ import format from "date-fns/format";
 import isValid from "date-fns/isValid";
 import endOfWeek from "date-fns/endOfWeek";
 import startOfWeek from "date-fns/startOfWeek";
-import { isSameDay, isWithinInterval } from 'date-fns'
+import { isSameDay, isWithinInterval, isBefore, isAfter } from 'date-fns'
 import { createStyles } from "@material-ui/styles";
 // this guy required only on the docs site to work with dynamic date library
 import { withStyles } from "@material-ui/core";
@@ -79,21 +79,40 @@ export default function SchedulePage(props) {
     const { history, location } = { ...props }
 
     console.log(location)
-    const [selectedDate, handleDateChange] = useState(moment());
+
+    let today = jMoment()
+    const todayText = today.format("dddd jD jMMMM jYYYY ")
+
+    const [startDate, handleStartDateChange] = useState(jMoment());
+    const [endDate, handleEndDateChange] = useState(jMoment().add(1, "d"));
+    const [selectedDate, handleDateChange] = useState(jMoment());
+
+
+    const selectedDateText = selectedDate.format("dddd jD jMMMM jYYYY ")
+
 
     var theme = useTheme();
     var patient = { ...location.state.patient.patient, username: location.state.patient.username }
 
-    const [value, setValue] = React.useState(1);
-    const [state, setState] = React.useState({ state: PageState.NOT_COMPLETED })
+    const [state, setState] = React.useState({
+        state: PageState.NOT_COMPLETED,
+        selectedExercises: [],
+        therapyDays: []
+
+
+    })
     const apiContext = useAPIContext()
 
     const exercises = apiContext.state.exercises
+
+    console.log("end date is ", endDate)
     // const [createUser, createUserRes] = useMutation(CreatePatient)
 
     // const myPatientsRes = useQuery(GetMyPatients)
 
     // const [myPatients, setMyPatients] = React.useState([])
+
+
 
     const [openDialog, setOpenDialog] = React.useState(false);
 
@@ -223,20 +242,8 @@ export default function SchedulePage(props) {
         return props
 
     }
-    const colourOptions = [
-        { value: 'ocean', label: 'Ocean', color: '#00B8D9', isFixed: true },
-        { value: 'blue', label: 'Blue', color: '#0052CC', isDisabled: true },
-        { value: 'purple', label: 'Purple', color: '#5243AA' },
-        { value: 'red', label: 'Red', color: '#FF5630', isFixed: true },
-        { value: 'orange', label: 'Orange', color: '#FF8B00' },
-        { value: 'yellow', label: 'Yellow', color: '#FFC400' },
-        { value: 'green', label: 'Green', color: '#36B37E' },
-        { value: 'forest', label: 'Forest', color: '#00875A' },
-        { value: 'slate', label: 'Slate', color: '#253858' },
-        { value: 'silver', label: 'Silver', color: '#666666' },
-    ];
 
-    const exerciseOptions = exercises.map(exercise => { return { value: exercise.title, label: exercise.title } })
+    const exerciseOptions = exercises.map(exercise => { return { value: exercise.title, label: exercise.title, id: exercise.id } })
 
 
 
@@ -251,38 +258,81 @@ export default function SchedulePage(props) {
             fontSize: 25
         })
     };
+    let startDateClone = startDate.toDate()
+    let endDateClone = endDate.toDate()
 
-    const renderWrappedWeekDay = (date, selectedDate, dayInCurrentMonth) => {
+    const onExercisesChanged = (e) => {
+        console.log(e)
+    }
+
+    const moment = jMoment()
+
+    const getScheduleForDate = (date) => {
+
+        let formatedDate = date.format("jYYYY/jMM/jDD")
+        let day = state.therapyDays.find((item) => item.date === formatedDate)
+        if (day)
+            return day
+        return {
+            date: formatedDate,
+            parameters: state.selectedExercises.map(exercise => { return {} })
+        }
+    }
+
+    const renderWrappedWeekDay = (date, _, dayInCurrentMonth, dayComponent) => {
+
+        // let todayClone = today.toDate()
+
         let dateClone = (date).toDate();
         let selectedDateClone = (selectedDate).toDate();
+        console.log("date is ", date)
+        console.log("selected date is ", selectedDate)
+        console.log("today is ", today)
+        console.log("startDay is ", startDate)
+        console.log("endDate is ", endDate)
 
-        console.log("date is ", dateClone)
+        // const start = startOfWeek(selectedDateClone);
+        // const end = endOfWeek(selectedDateClone);
+        const isSameAsStartDate = date.isSame(startDate, "day")
 
-        const start = startOfWeek(selectedDateClone);
-        const end = endOfWeek(selectedDateClone);
+        const isSelectedDay = date.isSame(selectedDate, "day")
+        // const isSelectedDay = date.isSameDate(selectedDate)
+        const isPastGoneDays = date.isBetween(startDate, today, "day") || isSameAsStartDate
 
-        const dayIsBetween = isWithinInterval(dateClone, { start, end });
-        const isFirstDay = true
-        const isSelectedDay = isSameDay(dateClone, selectedDateClone)
-        const isLastDay = true
+        const dayIsBetween = date.isBetween(startDate, endDate) || isSelectedDay || isSameAsStartDate
+
+        console.log("isSelectedDay", isSelectedDay)
+        console.log("isSameAsStartDate", isSameAsStartDate)
+
+        console.log("isPastGoneDays", isPastGoneDays)
+        console.log("dayIsBetween", dayIsBetween)
+
+        // const isLastDay = true
+        // const isPastGoneDays = isWithinInterval(dateClone, { startDateClone, todayClone })
 
         const wrapperClassName = clsx({
             [classes.highlight]: dayIsBetween,
+            [classes.disabledDateHighlight]: isPastGoneDays,
             [classes.selectedDateHighlight]: isSelectedDay,
-            [classes.endHighlight]: isLastDay,
+            // [classes.endHighlight]: isLastDay,
         });
 
         const dayClassName = clsx(classes.day, {
             [classes.nonCurrentMonthDay]: !dayIsBetween,
-            [classes.highlightNonCurrentMonthDay]: !dayInCurrentMonth && dayIsBetween,
+            [classes.highlightedDates]: dayIsBetween,
         });
 
         return (
-            <div className={wrapperClassName}>
+            <div className={wrapperClassName} onClick={(e) => {
+                e.stopPropagation()
+                if (dayIsBetween && !isPastGoneDays)
+                    handleDateChange(date)
+            }} >
                 <IconButton className={dayClassName}>
                     <span style={{
                         fontSize: 18
-                    }}> {date.format("jD")} </span>                </IconButton>
+                    }}> {date.format("jD")} </span>
+                </IconButton>
             </div>
         );
     };
@@ -429,11 +479,12 @@ export default function SchedulePage(props) {
                             <Select
                                 defaultValue={[exerciseOptions[2], exerciseOptions[3]]}
                                 isMulti
-                                name="colors"
+                                name="exercises"
                                 options={exerciseOptions}
                                 className="basic-multi-select"
                                 classNamePrefix="select"
                                 styles={selectStyle}
+                                onChange={onExercisesChanged}
                             />
                         </div>
 
@@ -456,8 +507,8 @@ export default function SchedulePage(props) {
                                         okLabel="تأیید"
                                         cancelLabel="لغو"
                                         labelFunc={date => (date ? date.format("jYYYY/jMM/jDD") : "")}
-                                        value={selectedDate}
-                                        onChange={handleDateChange}
+                                        value={startDate}
+                                        onChange={handleStartDateChange}
                                         style={{ margin: 12 }}
                                     />
 
@@ -469,8 +520,8 @@ export default function SchedulePage(props) {
                                         okLabel="تأیید"
                                         cancelLabel="لغو"
                                         labelFunc={date => (date ? date.format("jYYYY/jMM/jDD") : "")}
-                                        value={selectedDate}
-                                        onChange={handleDateChange}
+                                        value={endDate}
+                                        onChange={handleEndDateChange}
                                         style={{ margin: 12 }}
                                     />
 
@@ -478,7 +529,7 @@ export default function SchedulePage(props) {
 
                                 <div style={{
                                     marginTop: 10, justifyContent: "start"
-
+                                    , marginBottom: 15
                                     // , alignItems: "center"
                                     , display: "flex",
                                     flexWrap: "wrap"
@@ -488,23 +539,57 @@ export default function SchedulePage(props) {
                                         <Trans>Schedule Day</Trans> :
                                     </Typography>
 
-                                    <DatePicker
+                                    <Paper elevation={3} style={{ margin: 5 }}>
+                                        <DatePicker
 
-                                        variant="static"
-                                        labelFunc={date => (date ? date.format("jYYYY/jMM/jDD") : "")}
-                                        value={selectedDate}
-                                        onChange={handleDateChange}
-                                        renderDay={renderWrappedWeekDay}
-                                        fullWidth
-                                    />
+                                            variant="static"
+                                            labelFunc={date => (date ? date.format("jYYYY/jMM/jDD") : "")}
+                                            value={selectedDate}
+                                            onChange={(e) => {
+                                                console.log("onChange,", e)
+                                                handleDateChange(e)
+                                            }}
+                                            renderDay={renderWrappedWeekDay}
+                                            // fullWidth
+                                            minDate={today}
+                                            maxDate={endDate}
+                                        />
+                                    </Paper>
+
+                                    <Typography style={{ margin: 20 }} variant="h5" >
+                                        <Trans>Today</Trans> :
+                                    </Typography>
+
+
+                                    <Typography style={{ marginTop: 20 }} variant="h5" >
+                                        {todayText}
+                                    </Typography>
+
 
                                 </div>
 
                                 {/* <Calendar date={selectedDate} /> */}
                             </MuiPickersUtilsProvider>
+                            <div style={{
+                                marginTop: 10, justifyContent: "start"
+                                , marginBottom: 15
+                                // , alignItems: "center"
+                                , display: "flex",
+                                flexWrap: "wrap"
+                            }}
+                            >
+                                <Typography style={{ margin: 20 }} variant="h5" >
+                                    <Trans>Parameters management for day</Trans> :
+                                    </Typography>
 
-                            <div >
-                                <Accordion>
+
+                                <Typography style={{ marginTop: 20 }} variant="h5" >
+                                    {selectedDateText}
+                                </Typography>
+                            </div>
+
+                            <Paper elevation={3}>
+                                <Accordion elevation={3}>
                                     <AccordionSummary
                                         expandIcon={<ExpandMoreIcon />}
                                         aria-label="Expand"
@@ -586,7 +671,7 @@ export default function SchedulePage(props) {
           </Typography>
                                     </AccordionDetails>
                                 </Accordion>
-                            </div>
+                            </Paper>
 
                         </div>
                     </div>

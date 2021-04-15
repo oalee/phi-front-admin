@@ -1,4 +1,4 @@
-import { green, purple } from "@material-ui/core/colors";
+import { green, grey, purple } from "@material-ui/core/colors";
 import { makeStyles } from "@material-ui/styles";
 
 export default makeStyles(theme => ({
@@ -84,15 +84,29 @@ export default makeStyles(theme => ({
     highlightNonCurrentMonthDay: {
         color: "#676767",
     },
+    highlightedDates: {
+        // background: theme.palette.primary.light,
+        color: theme.palette.common.white,
+        // margin: 2,
+        // borderRadius: "50%"
+
+    },
     highlight: {
         background: theme.palette.primary.light,
         color: theme.palette.common.white,
-        margin: 2,
+        marginBlock: 2,
+        // padding: 2,
         borderRadius: "50%"
 
     },
     selectedDateHighlight: {
         background: theme.palette.primary.main,
+        color: theme.palette.common.white,
+
+        borderRadius: "50%"
+    },
+    disabledDateHighlight: {
+        background: grey[400],
         color: theme.palette.common.white,
 
         borderRadius: "50%"
