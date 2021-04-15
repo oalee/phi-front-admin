@@ -304,12 +304,13 @@ export default function SchedulePage(props) {
         // const start = startOfWeek(selectedDateClone);
         // const end = endOfWeek(selectedDateClone);
         const isSameAsStartDate = date.isSame(state.startDate, "day")
+        const isStartSameAsToday = state.startDate.isSame(today, "day") && today.isSame(date, "day")
 
         const isSelectedDay = date.isSame(state.selectedDate, "day")
         // const isSelectedDay = date.isSameDate(selectedDate)
-        const isPastGoneDays = date.isBetween(state.startDate, today, "day") || (isSameAsStartDate && !today.isSame(date, "day"))
+        const isPastGoneDays = date.isBetween(state.startDate, today, "day") //|| (isSameAsStartDate && !today.isSame(date, "day"))
 
-        const dayIsBetween = date.isBetween(state.startDate, state.endDate) || isSelectedDay || isSameAsStartDate
+        const dayIsBetween = date.isBetween(state.startDate, state.endDate) || isSelectedDay || isStartSameAsToday
 
         // console.log("isSelectedDay", isSelectedDay)
         // console.log("isSameAsStartDate", isSameAsStartDate)
@@ -557,7 +558,7 @@ export default function SchedulePage(props) {
                                             variant="static"
                                             labelFunc={date => (date ? date.format("jYYYY/jMM/jDD") : "")}
                                             value={state.selectedDate}
-
+                                            onChange={(e) => { }}
                                             renderDay={renderWrappedWeekDay}
                                             // fullWidth
                                             minDate={today}
