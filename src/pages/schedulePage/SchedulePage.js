@@ -97,6 +97,7 @@ export default function SchedulePage(props) {
         state: PageState.NOT_COMPLETED,
         selectedExercises: [],
         therapyDays: [],
+        schedule: {},
         startDate: jMoment(),
         endDate: jMoment().add(1, "d"),
         selectedDate: jMoment()
@@ -139,6 +140,10 @@ export default function SchedulePage(props) {
     }
 
     const onExercisesChanged = (e) => {
+
+        let newList = e.map(item => item.exercise)
+
+        generateScheduleFromStartToEnd(newList)
 
         setState({ ...state, selectedExercises: e.map(item => item.exercise) })
     }
@@ -284,6 +289,37 @@ export default function SchedulePage(props) {
         }
     }
 
+    const generateScheduleFromStartToEnd = (newSelectedExercises) => {
+
+        var date = jMoment(state.startDate)
+        var formatedDate = date.format("jYYYY/jMM/jDD")
+        var autogenScheduleDay = newSelectedExercises.filter(exercise => exercise.type === "Exercise").map(exercise => { return { exerciseId: exercise.id, parameters: exercise.parameters, enabled: true } })
+        // console.log(exercises)
+        while (date.isBetween(state.startDate, state.endDate) || date.isSame(state.endDate, "day") || date.isSame(state.selectedDate, "day") || (state.startDate.isSame(today, "day") && today.isSame(date, "day"))) {
+            formatedDate = date.format("jYYYY/jMM/jDD")
+            if (state.schedule[formatedDate] === undefined) {
+                state.schedule[formatedDate] = autogenScheduleDay
+            } else {
+                var newlyAddedItems = autogenScheduleDay.filter(item => !state.schedule[formatedDate].some(e => e.exerciseId === item.exerciseId))
+                console.log("newlyAdded are", newlyAddedItems)
+                var filtererd = state.schedule[formatedDate].filter(item => {
+                    console.log("looking for ", item, autogenScheduleDay, autogenScheduleDay.some(e => e.exerciseId === item.exerciseId))
+                    return autogenScheduleDay.some(e => e.exerciseId === item.exerciseId)
+                })
+                console.log("filtered are", filtererd)
+
+                state.schedule[formatedDate] = [...filtererd, ...newlyAddedItems]
+            }
+            console.log("generating for ", date)
+            date = date.add(1, "day")
+
+        }
+        // setState({ ...state })
+    }
+    // generateScheduleFromStartToEnd()
+
+    console.log("state is ", state)
+
     const renderWrappedWeekDay = (date, _, dayInCurrentMonth, dayComponent) => {
 
         // let todayClone = today.toDate()
@@ -306,6 +342,12 @@ export default function SchedulePage(props) {
         const isPastGoneDays = date.isBetween(state.startDate, today, "day") //|| (isSameAsStartDate && !today.isSame(date, "day"))
 
         const dayIsBetween = date.isBetween(state.startDate, state.endDate) || isSelectedDay || isStartSameAsToday
+
+        if (dayIsBetween) {
+            let formatedDate = date.format("jYYYY/jMM/jDD")
+
+            // if (state.schedule)
+        }
 
         // console.log("isSelectedDay", isSelectedDay)
         // console.log("isSameAsStartDate", isSameAsStartDate)
