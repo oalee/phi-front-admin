@@ -316,12 +316,12 @@ export default function SchedulePage(props) {
             if (state.schedule[formatedDate] === undefined) {
                 state.schedule[formatedDate] = [...autogenScheduleDay]
             } else {
-                var newlyAddedItems = autogenScheduleDay.filter(item => !state.schedule[formatedDate].some(e => e.exerciseId === item.exerciseId))
+                var newlyAddedItems = autogenScheduleDay.filter(item => !state.schedule[formatedDate].some(e => e.exerciseId === item.exerciseId)).map(item => { return { ...item } })
                 // console.log("newlyAdded are", newlyAddedItems)
                 var filtererd = state.schedule[formatedDate].filter(item => {
                     // console.log("looking for ", item, autogenScheduleDay, autogenScheduleDay.some(e => e.exerciseId === item.exerciseId))
                     return autogenScheduleDay.some(e => e.exerciseId === item.exerciseId)
-                })
+                }).map(item => { return { ...item } })
                 // console.log("filtered are", filtererd)
 
                 state.schedule[formatedDate] = [...filtererd, ...newlyAddedItems]
