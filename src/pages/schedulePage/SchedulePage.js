@@ -104,12 +104,15 @@ export default function SchedulePage(props) {
 
 
     })
+
+    console.log("schedule is ", state.schedule)
     const apiContext = useAPIContext()
 
     const exercises = apiContext.state.exercises
 
-    console.log("end date is ", state.endDate)
+    // console.log("end date is ", state.endDate)
     const selectedDateText = state.selectedDate.format("dddd jD jMMMM jYYYY ")
+    const selectedDateKey = state.selectedDate.format("jYYYY/jMM/jDD")
 
     // const [createUser, createUserRes] = useMutation(CreatePatient)
 
@@ -132,10 +135,13 @@ export default function SchedulePage(props) {
 
     const handleEndDateChange = (date) => {
 
+
+        generateScheduleFromStartToEnd(state.selectedExercises, state.startDate, date)
         setState({ ...state, endDate: date })
     }
 
     const handleStartDateChange = (date) => {
+        generateScheduleFromStartToEnd(state.selectedExercises, date)
         setState({ ...state, startDate: date })
     }
 
@@ -143,7 +149,7 @@ export default function SchedulePage(props) {
 
         let newList = e.map(item => item.exercise)
 
-        generateScheduleFromStartToEnd(newList)
+        generateScheduleFromStartToEnd(newList, state.startDate, state.endDate)
 
         setState({ ...state, selectedExercises: e.map(item => item.exercise) })
     }
@@ -289,28 +295,38 @@ export default function SchedulePage(props) {
         }
     }
 
-    const generateScheduleFromStartToEnd = (newSelectedExercises) => {
+    // const generateForNew
 
-        var date = jMoment(state.startDate)
+    const generateScheduleFromStartToEnd = (newSelectedExercises = state.selectedExercises, startDate = state.startDate, endDate = state.endDate) => {
+
+        var date = jMoment(startDate)
         var formatedDate = date.format("jYYYY/jMM/jDD")
-        var autogenScheduleDay = newSelectedExercises.filter(exercise => exercise.type === "Exercise").map(exercise => { return { exerciseId: exercise.id, parameters: exercise.parameters, enabled: true } })
-        // console.log(exercises)
-        while (date.isBetween(state.startDate, state.endDate) || date.isSame(state.endDate, "day") || date.isSame(state.selectedDate, "day") || (state.startDate.isSame(today, "day") && today.isSame(date, "day"))) {
+        var autogenScheduleDay = newSelectedExercises.filter(exercise => exercise.type === "Exercise").map(exercise => { return { exerciseId: exercise.id, parameters: exercise.parameters, enabled: true, title: exercise.title } })
+        console.log("generating schedule", autogenScheduleDay)
+        console.log(startDate, endDate, date, date.isBetween(startDate, endDate))
+
+        if (date.isBefore(today)) {
+            date = today
+        }
+
+
+        while (date.isBetween(startDate, endDate) || date.isSame(endDate, "day") || date.isSame(startDate, "day") || (startDate.isSame(today, "day") && today.isSame(date, "day"))) {
             formatedDate = date.format("jYYYY/jMM/jDD")
+            // console.log("in looop")
             if (state.schedule[formatedDate] === undefined) {
-                state.schedule[formatedDate] = autogenScheduleDay
+                state.schedule[formatedDate] = [...autogenScheduleDay]
             } else {
                 var newlyAddedItems = autogenScheduleDay.filter(item => !state.schedule[formatedDate].some(e => e.exerciseId === item.exerciseId))
-                console.log("newlyAdded are", newlyAddedItems)
+                // console.log("newlyAdded are", newlyAddedItems)
                 var filtererd = state.schedule[formatedDate].filter(item => {
-                    console.log("looking for ", item, autogenScheduleDay, autogenScheduleDay.some(e => e.exerciseId === item.exerciseId))
+                    // console.log("looking for ", item, autogenScheduleDay, autogenScheduleDay.some(e => e.exerciseId === item.exerciseId))
                     return autogenScheduleDay.some(e => e.exerciseId === item.exerciseId)
                 })
-                console.log("filtered are", filtererd)
+                // console.log("filtered are", filtererd)
 
                 state.schedule[formatedDate] = [...filtererd, ...newlyAddedItems]
             }
-            console.log("generating for ", date)
+            // console.log("generating for ", date)
             date = date.add(1, "day")
 
         }
@@ -334,14 +350,14 @@ export default function SchedulePage(props) {
 
         // const start = startOfWeek(selectedDateClone);
         // const end = endOfWeek(selectedDateClone);
-        const isSameAsStartDate = date.isSame(state.startDate, "day")
+        const isSameAsStartDate = date.isSame(state.startDate, "day") && state.startDate.isSameOrAfter(today)
         const isStartSameAsToday = state.startDate.isSame(today, "day") && today.isSame(date, "day")
 
         const isSelectedDay = date.isSame(state.selectedDate, "day")
         // const isSelectedDay = date.isSameDate(selectedDate)
         const isPastGoneDays = date.isBetween(state.startDate, today, "day") //|| (isSameAsStartDate && !today.isSame(date, "day"))
 
-        const dayIsBetween = date.isBetween(state.startDate, state.endDate) || isSelectedDay || isStartSameAsToday
+        const dayIsBetween = date.isBetween(state.startDate, state.endDate) || isSelectedDay || isStartSameAsToday || isSameAsStartDate
 
         if (dayIsBetween) {
             let formatedDate = date.format("jYYYY/jMM/jDD")
@@ -388,55 +404,115 @@ export default function SchedulePage(props) {
     };
 
 
-    const handleParameterEnableSwap = (event) => {
-        const name = event.target.name;
-        const value = event.target.checked
-        // setState({
-        //     ...state, parameters: {
-        //         ...state.parameters,
-        //         [name]: {
-        //             ...state.parameters[name],
-        //             enabled: value
-        //         }
-        //     }
-        // })
+
+    const handleParameterEnableSwap = (item) => {
+
+        return (event) => {
+            const name = event.target.name;
+            const value = event.target.checked
+
+
+            state.schedule[selectedDateKey] = state.schedule[selectedDateKey].map(daySchedule => {
+                if (daySchedule.exerciseId === item.exerciseId) {
+                    daySchedule.parameters = {
+                        ...daySchedule.parameters,
+                        [name]: {
+                            ...daySchedule.parameters[name],
+                            enabled: value
+                        }
+                    }
+                }
+                return daySchedule
+            })
+
+            setState({
+                ...state
+            })
+        }
 
     }
 
-    const handleParameterChange = (event, value, isFirstValueAssign = true) => {
-        const name = event.target.name;
-        console.log("handlePar", value)
-        console.log("handlePar", event.target.name)
-        // const isFirstValueAssign = event.target.isFirst
-        console.log("handlePar", isFirstValueAssign)
+    // const handleParamEnable = (item) => handleParameterEnableSwap
 
-        // if (isFirstValueAssign)
-        //     setState({
-        //         ...state, parameters: {
-        //             ...state.parameters,
-        //             [name]: {
-        //                 ...state.parameters[name],
-        //                 value: parseInt(value)
-        //             }
-        //         }
-        //     })
-        // else
-        //     setState({
-        //         ...state, parameters: {
-        //             ...state.parameters,
-        //             [name]: {
-        //                 ...state.parameters[name],
-        //                 secondValue: parseInt(value)
-        //             }
-        //         }
-        //     })
+    const handleExerciseForDayEnableSwap = (event, item) => {
 
+        // console.log("handleExerciseEnable for dayy ", item, selectedDateKey)
+
+        const value = event.target.checked
+        state.schedule[selectedDateKey] = state.schedule[selectedDateKey].map(daySchedule => {
+            // console.log("mapping, ", daySchedule)
+            if (daySchedule.exerciseId === item.exerciseId) {
+                daySchedule = {
+                    ...daySchedule,
+                    enabled: value
+                }
+                // console.log("set value once??")
+            }
+            // console.log("mapping, ", daySchedule)
+
+            return daySchedule
+        })
+
+        setState({ ...state })
+
+
+    }
+
+    const handleParameterChange = (item) => {
+        return (event, value, isFirstValueAssign = true) => {
+            const name = event.target.name;
+            // console.log("handlePar", value)
+            // console.log("handlePar", event.target.name)
+            // // const isFirstValueAssign = event.target.isFirst
+            // console.log("handlePar", isFirstValueAssign)
+
+            if (isFirstValueAssign) {
+
+                state.schedule[selectedDateKey] = state.schedule[selectedDateKey].map(daySchedule => {
+                    if (daySchedule.exerciseId === item.exerciseId) {
+                        daySchedule = {
+                            ...daySchedule,
+                            parameters: {
+                                ...daySchedule.parameters,
+                                [name]: {
+                                    ...daySchedule.parameters[name],
+                                    value: parseInt(value)
+                                }
+                            }
+                        }
+                    }
+                    return daySchedule
+                })
+
+            }
+            else {
+                state.schedule[selectedDateKey] = state.schedule[selectedDateKey].map(daySchedule => {
+                    if (daySchedule.exerciseId === item.exerciseId) {
+                        daySchedule = {
+                            ...daySchedule,
+                            parameters: {
+                                ...daySchedule.parameters,
+                                [name]: {
+                                    ...daySchedule.parameters[name],
+                                    secondValue: parseInt(value)
+                                }
+                            }
+                        }
+                    }
+                    return daySchedule
+                })
+            }
+
+
+            setState({ ...state })
+        }
     }
 
     return (
         <>
             <div style={{
-                position: "relative"
+                position: "relative",
+                marginBottom: 200
             }}>
 
                 {
@@ -636,90 +712,69 @@ export default function SchedulePage(props) {
                                 </Typography>
                             </div>
 
-                            <Paper elevation={3}>
-                                <Accordion elevation={3}>
-                                    <AccordionSummary
-                                        expandIcon={<ExpandMoreIcon />}
-                                        aria-label="Expand"
-                                        aria-controls="additional-actions1-content"
-                                        id="additional-actions1-header"
-                                    >
-                                        <FormControlLabel
-                                            aria-label="Acknowledge"
-                                            onClick={(event) => event.stopPropagation()}
-                                            onFocus={(event) => event.stopPropagation()}
-                                            control={<Checkbox />}
-                                            label={exercises[0].title}
-                                        />
-                                    </AccordionSummary>
-                                    <AccordionDetails>
-
-                                        <div className={classes.parametersContainer}>
+                            {
+                                (state.schedule[selectedDateKey] && state.schedule[selectedDateKey].length > 0) &&
+                                <Paper elevation={3}>
 
 
-                                            {
+                                    {state.schedule[selectedDateKey].map(item => {
+                                        return (<Accordion elevation={3}
+                                        >
+                                            <AccordionSummary
+                                                expandIcon={<ExpandMoreIcon />}
+                                                aria-label="Expand"
+                                                aria-controls="additional-actions1-content"
+                                                id="additional-actions1-header"
+                                            >
+                                                <FormControlLabel
+                                                    aria-label="Acknowledge"
+                                                    onClick={(event) => event.stopPropagation()}
+                                                    onFocus={(event) => event.stopPropagation()}
+                                                    control={<Checkbox
+                                                        checked={item.enabled}
+                                                        onChange={(e) => {
+                                                            handleExerciseForDayEnableSwap(e, item)
+                                                        }}
+                                                        name={item.exerciseId}
+                                                        color="primary"
+                                                    />}
+                                                    label={item.title}
+                                                />
+                                            </AccordionSummary>
+                                            <AccordionDetails>
 
-                                                Object.keys(exercises[0].parameters).map(key =>
-                                                    <ParameterView parameter={exercises[0].parameters[key]}
-                                                        handleParameterChange={handleParameterChange}
-                                                        key={exercises[0].parameters[key].name}
-                                                        handleParameterEnableSwap={handleParameterEnableSwap}
-                                                    />)
+                                                {
+                                                    item.enabled &&
+                                                    <div className={classes.parametersContainer}>
 
 
-                                            }
+                                                        {
+
+                                                            Object.keys(item.parameters).map(key =>
+                                                                <ParameterView parameter={item.parameters[key]}
+                                                                    handleParameterChange={handleParameterChange(item)}
+                                                                    key={item.parameters[key].name}
+                                                                    handleParameterEnableSwap={handleParameterEnableSwap(item)}
+                                                                />)
+
+
+                                                        }
 
 
 
-                                        </div>
-                                    </AccordionDetails>
-                                </Accordion>
-                                <Accordion>
-                                    <AccordionSummary
-                                        expandIcon={<ExpandMoreIcon />}
-                                        aria-label="Expand"
-                                        aria-controls="additional-actions2-content"
-                                        id="additional-actions2-header"
-                                    >
-                                        <FormControlLabel
-                                            aria-label="Acknowledge"
-                                            onClick={(event) => event.stopPropagation()}
-                                            onFocus={(event) => event.stopPropagation()}
-                                            control={<Checkbox />}
-                                            label="I acknowledge that I should stop the focus event propagation"
-                                        />
-                                    </AccordionSummary>
-                                    <AccordionDetails>
-                                        <Typography color="textSecondary">
-                                            The focus event of the nested action will propagate up and also focus the accordion
-                                            unless you explicitly stop it.
-          </Typography>
-                                    </AccordionDetails>
-                                </Accordion>
-                                <Accordion>
-                                    <AccordionSummary
-                                        expandIcon={<ExpandMoreIcon />}
-                                        aria-label="Expand"
-                                        aria-controls="additional-actions3-content"
-                                        id="additional-actions3-header"
-                                    >
-                                        <FormControlLabel
-                                            aria-label="Acknowledge"
-                                            onClick={(event) => event.stopPropagation()}
-                                            onFocus={(event) => event.stopPropagation()}
-                                            control={<Checkbox />}
-                                            label="I acknowledge that I should provide an aria-label on each action that I add"
-                                        />
-                                    </AccordionSummary>
-                                    <AccordionDetails>
-                                        <Typography color="textSecondary">
-                                            If you forget to put an aria-label on the nested action, the label of the action will
-                                            also be included in the label of the parent button that controls the accordion
-                                            expansion.
-          </Typography>
-                                    </AccordionDetails>
-                                </Accordion>
-                            </Paper>
+                                                    </div>
+                                                }
+                                            </AccordionDetails>
+
+
+                                        </Accordion>
+                                        )
+                                    })
+                                    }
+                                </Paper>
+
+                            }
+
 
                         </div>
                     </div>
