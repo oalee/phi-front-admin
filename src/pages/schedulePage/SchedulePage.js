@@ -35,7 +35,7 @@ import { Trans } from "@lingui/macro";
 import { Fragment } from "react";
 import { t } from '@lingui/macro';
 import { useLazyQuery, useMutation, useQuery } from "@apollo/client";
-import { CreatePatient, GetAllExercises, GetMyPatients } from "../../api/queries";
+import { CreatePatient, GetAllExercises, GetMyPatients, CreateTherapySchedule } from "../../api/queries";
 import { Prompt, useLocation } from "react-router";
 import { useAPIContext } from "../../context/APIContext";
 import StyledButton from "../addEditExcercise/components/StyledButton/StyledButton";
@@ -94,7 +94,7 @@ export default function SchedulePage(props) {
     var patient = { ...location.state.patient.patient, username: location.state.patient.username }
 
     const [state, setState] = React.useState({
-        state: PageState.NOT_COMPLETED,
+        state: PageState.COMPLETED_NOT_SENT,
         selectedExercises: [],
         therapyDays: [],
         schedule: {},
@@ -104,8 +104,10 @@ export default function SchedulePage(props) {
 
 
     })
+    const [addSchedule, addScheduleRes] = useMutation(CreateTherapySchedule)
 
-    console.log("schedule is ", state.schedule)
+
+    console.log("addschedule is ", addScheduleRes)
     const apiContext = useAPIContext()
 
     const exercises = apiContext.state.exercises
@@ -113,6 +115,7 @@ export default function SchedulePage(props) {
     // console.log("end date is ", state.endDate)
     const selectedDateText = state.selectedDate.format("dddd jD jMMMM jYYYY ")
     const selectedDateKey = state.selectedDate.format("jYYYY/jMM/jDD")
+    // console.log(state.selectedDate.format("YYYY/MM/DD"))
 
     // const [createUser, createUserRes] = useMutation(CreatePatient)
 
@@ -207,7 +210,39 @@ export default function SchedulePage(props) {
                 props = {
                     ...props,
                     onClick: (e) => {
-                        console.log("doAddExcercise")
+                        const dates = Object.keys(state.schedule)
+
+                        console.log("doAddScheduless", {
+                            startDate: state.startDate.format("jYYYY/jMM/jDD"),
+                            endDate: state.endDate.format("jYYYY/jMM/jDD"),
+                            exercises: state.selectedExercises.map(exercise => exercise.id),
+                            days: dates.map(date => {
+                                // let val = state.schedule[date]
+                                return {
+                                    date: date,
+
+                                    parameters: state.schedule[date]
+                                }
+                            })
+                        })
+                        addSchedule({
+                            variables: {
+                                patientId: patient.id,
+                                scheduleInput: {
+                                    startDate: state.startDate.format("jYYYY/jMM/jDD"),
+                                    endDate: state.endDate.format("jYYYY/jMM/jDD"),
+                                    exercises: state.selectedExercises.map(exercise => exercise.id),
+                                    days: dates.map(date => {
+                                        // let val = state.schedule[date]
+                                        return {
+                                            date: date,
+
+                                            parameters: state.schedule[date]
+                                        }
+                                    })
+                                }
+                            }
+                        })
                         // doAddExcercise({
                         //     variables: {
                         //         addExerciseInput: state
@@ -677,6 +712,7 @@ export default function SchedulePage(props) {
                                             // fullWidth
                                             minDate={today}
                                             maxDate={state.endDate}
+                                            views="date"
                                         />
                                     </Paper>
 

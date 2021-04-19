@@ -365,6 +365,81 @@ mutation Mutation($userInput: UserInput) {
 
 `
 
+const CreateTherapySchedule = gql`
+mutation AddTherapyScheduleMutation($patientId: ID!, $scheduleInput: TherapyScheduleInput) {
+  addTherapySchedule(patientId: $patientId, therapyScheduleInput: $scheduleInput) {
+    id
+    updatedAt
+    createdAt
+    startDate
+    endDate
+    exerciseIds
+    days {
+      id
+      updatedAt
+      createdAt
+      date
+      parameters {
+        parameters {
+          sets {
+            enabled
+            name
+            value
+            secondValue
+            valueType
+            title
+          }
+          reps {
+            enabled
+            name
+            value
+            secondValue
+            valueType
+            title
+          }
+          repPerDay {
+            enabled
+            name
+            value
+            secondValue
+            valueType
+            title
+          }
+          hold {
+            enabled
+            name
+            value
+            secondValue
+            valueType
+            title
+          }
+          restPerSet {
+            enabled
+            name
+            value
+            secondValue
+            valueType
+            title
+          }
+          totalDuration {
+            enabled
+            name
+            value
+            secondValue
+            valueType
+            title
+          }
+        }
+        exerciseId
+        tite
+        id
+      }
+    }
+  }
+}
+
+`
+
 
 const GetMyPatients = gql`
 query Query {
@@ -383,4 +458,4 @@ query Query {
 
 `
 
-export { LOGIN, GETUSERS, GETME, AddExcercise, GetAllExercises, UpdateExercise, CreatePatient, GetMyPatients };
+export { LOGIN, GETUSERS, GETME, AddExcercise, GetAllExercises, UpdateExercise, CreatePatient, GetMyPatients, CreateTherapySchedule };
