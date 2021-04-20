@@ -49,6 +49,10 @@ export default function PatientsPage(props) {
 
     const location = useLocation()
 
+    const APIContext = useAPIContext()
+
+    console.log("api context in patiest page: ", APIContext)
+
     if (myPatientsRes.data && myPatients.length === 0) {
 
         setMyPatients(myPatientsRes?.data.myPatients)

@@ -1,13 +1,20 @@
 import { useLazyQuery } from "@apollo/client"
 import React from "react"
-import { GetAllExercises } from "../api/queries"
+import { GetAllExercises, GetMyPatients } from "../api/queries"
+import { useUserDispatch } from "./UserContext"
 
 const APIContext = React.createContext()
 
-function countReducer(state, action) {
+function reducer(state, action) {
 
     switch (action.type) {
 
+        case 'recievedPatients': {
+            return {
+                ...state,
+                patients: action.patients
+            }
+        }
         case 'received': {
 
             return { ...state, exercises: action.exercises }
@@ -45,11 +52,32 @@ function countReducer(state, action) {
 function APIProvider({ children }) {
 
     const [getAllExercises, exercises] = useLazyQuery(GetAllExercises)
+    const [getMyPatients, patientsRes] = useLazyQuery(GetMyPatients)
 
-    const [state, dispatch] = React.useReducer(countReducer, { getAllExercises, exercises: [] })
+    const [state, dispatch] = React.useReducer(reducer, { getAllExercises, exercises: [], patients: [] })
+
+    const userContext = useUserDispatch()
 
     console.log(exercises)
     console.log(state)
+    console.log("res iz ", patientsRes)
+
+    if (userContext) {
+        console.log("userContex is in API Provider ", userContext)
+        if (userContext.type === "Therapist") {
+            console.log("type is okay")
+            if (!patientsRes.loading && patientsRes.data === undefined) {
+                console.log("getMyPatients in Provider")
+                getMyPatients()
+            }
+        }
+    }
+
+    if (patientsRes.data != null && state.patients.length === 0) {
+        console.log("res iz ", patientsRes)
+        dispatch({ type: 'recievedPatients', patients: patientsRes.data.myPatients })
+    }
+
     if (exercises.data === undefined && exercises.loading === false)
         getAllExercises()
 
