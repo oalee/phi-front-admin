@@ -365,6 +365,81 @@ mutation Mutation($userInput: UserInput) {
 
 `
 
+const GetSchedule = gql`
+query Query($patientId: ID!) {
+  getSchedule(patientId: $patientId){
+    id
+    updatedAt
+    createdAt
+    startDate
+    endDate
+    exerciseIds
+    days {
+      id
+      updatedAt
+      createdAt
+      date
+      parameters {
+        parameters {
+          sets {
+            enabled
+            name
+            value
+            secondValue
+            valueType
+            title
+          }
+          reps {
+            enabled
+            name
+            value
+            secondValue
+            valueType
+            title
+          }
+          repPerDay {
+            enabled
+            name
+            value
+            secondValue
+            valueType
+            title
+          }
+          hold {
+            enabled
+            name
+            value
+            secondValue
+            valueType
+            title
+          }
+          restPerSet {
+            enabled
+            name
+            value
+            secondValue
+            valueType
+            title
+          }
+          totalDuration {
+            enabled
+            name
+            value
+            secondValue
+            valueType
+            title
+          }
+        }
+        exerciseId
+        title
+        id
+      }
+    }
+  }
+
+}
+`
+
 const CreateTherapySchedule = gql`
 mutation AddTherapyScheduleMutation($patientId: ID!, $scheduleInput: TherapyScheduleInput) {
   addTherapySchedule(patientId: $patientId, therapyScheduleInput: $scheduleInput) {
@@ -431,7 +506,7 @@ mutation AddTherapyScheduleMutation($patientId: ID!, $scheduleInput: TherapySche
           }
         }
         exerciseId
-        tite
+        title
         id
       }
     }
@@ -451,6 +526,76 @@ query Query {
       name
       age
       weight
+      schedule {
+        id
+        updatedAt
+        createdAt
+        startDate
+        endDate
+        exerciseIds
+        days {
+          id
+          updatedAt
+          createdAt
+          date
+          parameters {
+            parameters {
+              sets {
+                enabled
+                name
+                value
+                secondValue
+                valueType
+                title
+              }
+              reps {
+                enabled
+                name
+                value
+                secondValue
+                valueType
+                title
+              }
+              repPerDay {
+                enabled
+                name
+                value
+                secondValue
+                valueType
+                title
+              }
+              hold {
+                enabled
+                name
+                value
+                secondValue
+                valueType
+                title
+              }
+              restPerSet {
+                enabled
+                name
+                value
+                secondValue
+                valueType
+                title
+              }
+              totalDuration {
+                enabled
+                name
+                value
+                secondValue
+                valueType
+                title
+              }
+            }
+            exerciseId
+            title
+            id
+            enabled
+          }
+        }
+      }
     }
   }
 }
@@ -458,4 +603,4 @@ query Query {
 
 `
 
-export { LOGIN, GETUSERS, GETME, AddExcercise, GetAllExercises, UpdateExercise, CreatePatient, GetMyPatients, CreateTherapySchedule };
+export { LOGIN, GETUSERS, GETME, AddExcercise, GetAllExercises, UpdateExercise, CreatePatient, GetMyPatients, CreateTherapySchedule, GetSchedule };
