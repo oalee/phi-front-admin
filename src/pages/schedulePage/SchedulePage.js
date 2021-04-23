@@ -67,6 +67,7 @@ import clsx from "clsx";
 
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ParameterView from "../addEditExcercise/components/ParameterView/ParameterView";
+import { getUpdateDiff } from "../addEditExcercise/utils";
 
 
 
@@ -87,11 +88,15 @@ export default function SchedulePage(props) {
     // const [endDate, handleEndDateChange] = useState(jMoment().add(1, "d"));
     // const [selectedDate, handleDateChange] = useState(jMoment());
 
+    const apiContext = useAPIContext()
 
+    const exercises = apiContext.state.exercises
 
 
     var theme = useTheme();
     var patient = { ...location.state.patient.patient, username: location.state.patient.username }
+
+
 
     const [state, setState] = React.useState({
         state: PageState.COMPLETED_NOT_SENT,
@@ -104,13 +109,200 @@ export default function SchedulePage(props) {
 
 
     })
+    const [prevState, setPrevState] = React.useState({
+        state: PageState.NOT_LOADED,
+        createdAt: 0,
+        updatedAt: 0,
+        selectedExercises: [],
+        therapyDays: [],
+        schedule: {},
+        startDate: jMoment(),
+        endDate: jMoment().add(1, "d"),
+        selectedDate: jMoment()
+
+
+    })
+    const p2e = s => s.replace(/[۰-۹]/g, d => '۰۱۲۳۴۵۶۷۸۹'.indexOf(d))
+
+    const loadStateFromLocation = () => {
+
+        console.log("patient is ", patient)
+        if (patient.schedule) {
+            console.log("there is schedule")
+
+            if (prevState.state === PageState.NOT_LOADED) {
+
+                const genSchedule = patient.schedule.days.reduce((acc, day) => {
+                    acc[day.date] = day.parameters.map(item => { return { ...item } })
+                    return acc
+                }, {})
+                const genSchedule2 = patient.schedule.days.reduce((acc, day) => {
+                    acc[day.date] = day.parameters.map(item => { return { ...item } })
+                    return acc
+                }, {})
+
+                const startDate = jMoment(p2e(patient.schedule.startDate), "jYYYY/jMM/jDD")
+                const endDate = jMoment(p2e(patient.schedule.endDate), "jYYYY/jMM/jDD")
+
+
+                var selectedDate = jMoment(startDate)
+                if (selectedDate.isBefore(today, "day")) {
+                    if (today.isSameOrBefore(endDate))
+                        selectedDate = today
+                }
+
+                const selectedExercises = patient.schedule.exerciseIds.map(id => exercises.find(item => item.id === id))
+                const genState = {
+                    state: PageState.SENT,
+                    selectedExercises: selectedExercises,
+                    schedule: { ...genSchedule },
+                    startDate: startDate,
+                    endDate: endDate,
+                    selectedDate: selectedDate
+                }
+                const genState2 = {
+                    state: PageState.SENT,
+                    selectedExercises: selectedExercises,
+                    schedule: { ...genSchedule2 },
+                    startDate: startDate,
+                    endDate: endDate,
+                    selectedDate: selectedDate
+                }
+                setState({ ...genState })
+                setPrevState({ ...genState2 })
+
+            }
+
+        }
+    }
+    loadStateFromLocation()
+
+    const getScheduleDiff = () => {
+        var dif = {
+            schedule: {}
+        }
+        if (!prevState.startDate.isSame(state.startDate, "day"))
+            dif.startDate = state.startDate
+
+
+        if (!prevState.endDate.isSame(state.endDate, "day"))
+            dif.endDate = state.endDate
+
+
+        if (prevState.selectedExercises.length !== state.selectedExercises.length)
+            dif.selectedExercises = state.selectedExercises
+        else {
+
+            for (let i = 0; i < state.selectedExercises.length; i++) {
+                const element = state.selectedExercises[i];
+                const otherElement = prevState.selectedExercises[i]
+                if (element.id !== otherElement.id) {
+                    dif.selectedExercises = state.selectedExercises
+                    break;
+                }
+            }
+        }
+
+        const scheduleKeys = Object.keys(state.schedule)
+        for (let i = 0; i < scheduleKeys.length; i++) {
+
+            const key = scheduleKeys[i];
+            const day = state.schedule[key]
+
+
+            if (prevState.schedule[key] === undefined) {
+                dif.schedule[key] = day
+            } else {
+
+                day.forEach(item => {
+
+                    let found = prevState.schedule[key].find(val => val.id === item.id)
+                    console.log("comparing ", item, found)
+                    if (found) {
+                        if (item.enabled !== found.enabled) {
+                            //add to the diff
+                            if (dif.schedule[key] === undefined)
+                                dif.schedule[key] = []
+                            dif.schedule[key] = [...dif.schedule[key], { ...item }]
+                        } else {
+                            //now chek diff between parameters
+                            Object.keys(item.parameters).every(paramKey => {
+
+                                if (!isParameterEquals(item.parameters[paramKey], found.parameters[paramKey])) {
+                                    if (dif.schedule[key] === undefined)
+                                        dif.schedule[key] = []
+                                    dif.schedule[key] = [...dif.schedule[key], { ...item }]
+                                    return false
+
+                                }
+                                return true
+                            })
+
+
+                        }
+                    } else {
+                        // not found, just add it 
+                        if (dif.schedule[key] === undefined)
+                            dif.schedule[key] = []
+                        dif.schedule[key] = [...dif.schedule[key], { ...item }]
+                    }
+                });
+
+
+            }
+        }
+
+        return dif
+
+
+    }
+
+    console.log("diff is ", getScheduleDiff())
+
+
+
+    function isParameterEquals(first, second) {
+        if (first.enabled !== second.enabled)
+            return false
+        if (first.value !== second.value)
+            return false
+
+        if (first.secondValue && first.secondValue !== second.secondValue)
+            return false
+
+        return true
+    }
+
+
+    const compareStates = (prevState, state) => {
+
+        if (!prevState.startDate.isSame(state.startDate, "day"))
+            return false
+
+
+        if (!prevState.endDate.isSame(state.endDate, "day"))
+            return false
+
+        console.log("exercises", prevState.selectedExercises, state.selectedExercises)
+        if (prevState.selectedExercises !== state.selectedExercises)
+            return false
+
+
+        console.log("schedule", prevState.schedule, state.schedule)
+
+        if (prevState.schedule !== state.schedule)
+            return false
+
+        return true
+    }
+
     const [addSchedule, addScheduleRes] = useMutation(CreateTherapySchedule)
 
 
-    console.log("addschedule is ", addScheduleRes)
-    const apiContext = useAPIContext()
 
-    const exercises = apiContext.state.exercises
+    console.log("compare states is ", compareStates(prevState, state))
+    // console.log("addschedule is ", addScheduleRes)
+
 
     // console.log("end date is ", state.endDate)
     const selectedDateText = state.selectedDate.format("dddd jD jMMMM jYYYY ")
@@ -392,7 +584,7 @@ export default function SchedulePage(props) {
         // const isSelectedDay = date.isSameDate(selectedDate)
         const isPastGoneDays = date.isBetween(state.startDate, today, "day") //|| (isSameAsStartDate && !today.isSame(date, "day"))
 
-        const dayIsBetween = date.isBetween(state.startDate, state.endDate) || isSelectedDay || isStartSameAsToday || isSameAsStartDate
+        const dayIsBetween = date.isBetween(state.startDate, state.endDate, "day") || isSelectedDay || isStartSameAsToday || isSameAsStartDate || date.isSame(state.endDate, "day")
 
         if (dayIsBetween) {
             let formatedDate = date.format("jYYYY/jMM/jDD")
@@ -460,6 +652,8 @@ export default function SchedulePage(props) {
                 return daySchedule
             })
 
+            state.schedule = { ...state.schedule }
+
             setState({
                 ...state
             })
@@ -487,6 +681,7 @@ export default function SchedulePage(props) {
 
             return daySchedule
         })
+        state.schedule = { ...state.schedule }
 
         setState({ ...state })
 

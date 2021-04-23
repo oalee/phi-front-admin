@@ -4,7 +4,8 @@ const PageState = {
     COMPLETED_NOT_SENT: "Completed Not Sent",
     EDITED: "Edited",
     SENDING: "Sending",
-    SENT: "Sent"
+    SENT: "Sent",
+    NOT_LOADED: "Not Loaded"
 }
 
 export { PageState }
