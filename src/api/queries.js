@@ -508,6 +508,7 @@ mutation AddTherapyScheduleMutation($patientId: ID!, $scheduleInput: TherapySche
         exerciseId
         title
         id
+        enabled
       }
     }
   }

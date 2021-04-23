@@ -122,4 +122,32 @@ export default makeStyles(theme => ({
         borderTopRightRadius: "50%",
         borderBottomRightRadius: "50%",
     },
+    button: {
+        margin: theme.spacing(1),
+    },
+    saveButton: {
+        // width: theme.spacing(20),
+        display: "flex",
+        direction: "row",
+        justifyContent: "space-between",
+        alignItems: "center",
+        textTransform: "none",
+        // fontWeight: "bold",
+        fontSize: "large"
+    },
+    buttonSuccess: {
+        margin: theme.spacing(1),
+
+        backgroundColor: green[500],
+        '&:hover': {
+            backgroundColor: green[700],
+        },
+    }, buttonProgress: {
+        color: green[500],
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        marginTop: -12,
+        marginLeft: -12,
+    },
 }))
