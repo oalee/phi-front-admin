@@ -35,7 +35,7 @@ import { Trans } from "@lingui/macro";
 import { Fragment } from "react";
 import { t } from '@lingui/macro';
 import { useLazyQuery, useMutation, useQuery } from "@apollo/client";
-import { CreatePatient, GetAllExercises, GetMyPatients, CreateTherapySchedule } from "../../api/queries";
+import { CreatePatient, GetAllExercises, GetMyPatients, CreateTherapySchedule, UpdateTherapySchedule } from "../../api/queries";
 import { Prompt, useLocation } from "react-router";
 import { useAPIContext } from "../../context/APIContext";
 import StyledButton from "../addEditExcercise/components/StyledButton/StyledButton";
@@ -71,7 +71,7 @@ import clsx from "clsx";
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ParameterView from "../addEditExcercise/components/ParameterView/ParameterView";
 import { getUpdateDiff } from "../addEditExcercise/utils";
-import { copyState, genStateFromAPIRes, getScheduleDiff, isStateEdited } from "./utils";
+import { copyState, genStateFromAPIRes, getScheduleDiff, getUpdateInput, isStateEdited } from "./utils";
 
 
 
@@ -129,6 +129,8 @@ export default function SchedulePage(props) {
     })
 
     const [addSchedule, addScheduleRes] = useMutation(CreateTherapySchedule)
+    const [updateSchedule, updateScheduleRes] = useMutation(UpdateTherapySchedule)
+
 
 
     const loadStateFromLocation = () => {
@@ -291,7 +293,7 @@ export default function SchedulePage(props) {
             //     return acc
             // }, {})
 
-            // setState({ ...genState })
+            setState({ ...genStateFromAPIRes(addScheduleRes.data.addTherapySchedule, exercises) })
             setPrevState({ ...genStateFromAPIRes(addScheduleRes.data.addTherapySchedule, exercises), addScheduleLoaded: true })
 
 
@@ -400,12 +402,14 @@ export default function SchedulePage(props) {
                 props = {
                     ...props,
                     onClick: () => {
-                        // updateExercise({
-                        //     variables: {
-                        //         updateInput: getUpdateDiff(prevExcercise, state)
-                        //     }
-                        // })
-                        // setState({ ...state, state: PageState.SENDING })
+                        updateSchedule({
+                            variables: {
+                                patientId: patient.id,
+
+                                updateInput: getUpdateInput(state, prevState)
+                            }
+                        })
+                        setState({ ...state, state: PageState.SENDING })
 
                     }
                 }

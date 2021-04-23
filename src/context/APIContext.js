@@ -7,6 +7,7 @@ const APIContext = React.createContext()
 
 function reducer(state, action) {
 
+    console.log("do reducer ", action)
     switch (action.type) {
 
         case 'recievedPatients': {
@@ -15,6 +16,27 @@ function reducer(state, action) {
                 patients: action.patients
             }
         }
+
+        case 'addSchedule': {
+
+            console.log("addSchedule with action ", action)
+            return {
+                ...state,
+                patients: state.patients.map(patient => {
+                    if (action.patient.id === patient.patient.id) {
+                        // patient.patient.schedule = { ...action.schedule }
+                        console.log("patienttt", patient)
+                        console.log("patienttt", patient.patinet)
+                        let newPatient = { ...patient, patient: { ...patient.patient, schedule: action.schedule } }
+                        console.log("new val should be ", newPatient)
+                        return newPatient
+                    }
+                    return patient
+                })
+            }
+
+        }
+
         case 'received': {
 
             return { ...state, exercises: action.exercises }
@@ -58,8 +80,8 @@ function APIProvider({ children }) {
 
     const userContext = useUserDispatch()
 
-    console.log(exercises)
-    console.log(state)
+    // console.log(exercises)
+    console.log("state In provider is ", state)
     console.log("res iz ", patientsRes)
 
     if (userContext) {

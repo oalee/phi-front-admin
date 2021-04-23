@@ -41,7 +41,7 @@ export default function PatientsPage(props) {
 
     const [createUser, createUserRes] = useMutation(CreatePatient)
 
-    const myPatientsRes = useQuery(GetMyPatients)
+    // const myPatientsRes = useQuery(GetMyPatients)
 
     const [myPatients, setMyPatients] = React.useState([])
 
@@ -53,10 +53,10 @@ export default function PatientsPage(props) {
 
     console.log("api context in patiest page: ", APIContext)
 
-    if (myPatientsRes.data && myPatients.length === 0) {
+    // if (myPatientsRes.data && myPatients.length === 0) {
 
-        setMyPatients(myPatientsRes?.data.myPatients)
-    }
+    //     setMyPatients(myPatientsRes?.data.myPatients)
+    // }
     console.log("my patients", myPatients)
 
     if (createUserRes.data?.addUser) {
@@ -75,6 +75,11 @@ export default function PatientsPage(props) {
 
     // const apiContext = useAPIContext()
 
+
+    useEffect(() => {
+        setMyPatients(APIContext.state.patients)
+
+    }, [APIContext.state.patients])
 
 
 
@@ -174,7 +179,7 @@ export default function PatientsPage(props) {
 
 
                 {
-                    (myPatientsRes?.data) &&
+                    (myPatients.length > 0) &&
 
                     <Card className={classes.patientsContainer} >
 
