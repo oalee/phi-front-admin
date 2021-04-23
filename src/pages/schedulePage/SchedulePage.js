@@ -123,8 +123,7 @@ export default function SchedulePage(props) {
         startDate: jMoment(),
         endDate: jMoment().add(1, "d"),
         selectedDate: jMoment(),
-        addScheduleLoaded: false
-
+        addScheduleLoaded: false,
 
     })
 
@@ -192,7 +191,7 @@ export default function SchedulePage(props) {
 
 
 
-    if (prevState != null && prevState.state !== PageState.NOT_LOADED) {
+    if (prevState != null && prevState.state !== PageState.NOT_LOADED && state.state !== PageState.SENDING) {
         console.log("prev is", prevState)
         var edited = isStateEdited(state, prevState)
 
@@ -304,6 +303,18 @@ export default function SchedulePage(props) {
         if (state.state === PageState.SENDING) {
             setState({ ...state, state: PageState.SENT })
         }
+    }
+
+    if (updateScheduleRes.data != null) {
+
+        let transformed = genStateFromAPIRes(updateScheduleRes.data.updateTherapySchedule, exercises)
+        if (isStateEdited(transformed, prevState)) {
+            apiContext.dispatch({ type: 'addSchedule', schedule: updateScheduleRes.data.updateTherapySchedule, patient: patient })
+            setState({ ...genStateFromAPIRes(updateScheduleRes.data.updateTherapySchedule, exercises) })
+            setPrevState({ ...transformed, addScheduleLoaded: true })
+
+        }
+
     }
 
     const stateToSecondButtonProps = () => {
