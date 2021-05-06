@@ -273,6 +273,8 @@ export default function SchedulePage(props) {
 
         generateScheduleFromStartToEnd(newList, state.startDate, state.endDate)
 
+        console.log("prev exercise list is ", state.selectedExercises, "new is ", newList)
+
         setState({ ...state, selectedExercises: e.map(item => item.exercise) })
     }
 

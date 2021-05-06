@@ -84,6 +84,10 @@ function getUpdateDiff(prevExcercise, state) {
         }
     }
 
+    if (prevExcercise.videos.length !== state.videos.length) {
+        diff.videos = state.videos
+    }
+
     Object.keys(prevExcercise.assesments).forEach(key => {
 
         if (!isAssesmetEquals(prevExcercise.assesments[key], state.assesments[key])) {

@@ -15,7 +15,7 @@ function getUpdateInput(state, prevState) {
     if (diff.endDate)
         diff.endDate = diff.endDate.format("jYYYY/jMM/jDD")
 
-    if (diff.exercises)
+    if (diff.selectedExercises)
         diff.exercises = diff.selectedExercises.map(exercise => exercise.id)
 
     diff.selectedExercises = undefined
@@ -130,6 +130,7 @@ function copyState(state) {
         copySchedule[key] = copy.schedule[key].map(item => { return { ...item, parameters: { ...item.parameters } } })
     })
     copy.schedule = copySchedule
+    copy.selectedExercises = [...state.selectedExercises]
     // copy.schedule = copy.schedule.map(dayList => {
 
     //     return dayList.map(item => { return { ...item, parameters: { ...item.parameters } } })
