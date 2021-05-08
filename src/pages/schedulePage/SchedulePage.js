@@ -71,7 +71,7 @@ import clsx from "clsx";
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ParameterView from "../addEditExcercise/components/ParameterView/ParameterView";
 import { getUpdateDiff } from "../addEditExcercise/utils";
-import { copyState, genStateFromAPIRes, getScheduleDiff, getUpdateInput, isStateEdited } from "./utils";
+import { copyState, genStateFromAPIRes, getScheduleDiff, getUpdateInput, isStateEdited, stateToCreateScheduleInput } from "./utils";
 
 
 
@@ -375,6 +375,7 @@ export default function SchedulePage(props) {
                             endDate: state.endDate.format("jYYYY/jMM/jDD"),
                             exercises: state.selectedExercises.map(exercise => exercise.id),
                             days: dates.map(date => {
+                                console.log("date is", date, state.schedule[date])
                                 // let val = state.schedule[date]
                                 return {
                                     date: date,
@@ -382,23 +383,10 @@ export default function SchedulePage(props) {
                                 }
                             })
                         })
-                        addSchedule({
-                            variables: {
-                                patientId: patient.id,
-                                scheduleInput: {
-                                    startDate: state.startDate.format("jYYYY/jMM/jDD"),
-                                    endDate: state.endDate.format("jYYYY/jMM/jDD"),
-                                    exercises: state.selectedExercises.map(exercise => exercise.id),
-                                    days: dates.map(date => {
-                                        // let val = state.schedule[date]
-                                        return {
-                                            date: date,
 
-                                            parameters: state.schedule[date]
-                                        }
-                                    })
-                                }
-                            }
+
+                        addSchedule({
+                            variables: stateToCreateScheduleInput(state, patient)
                         })
                         // doAddExcercise({
                         //     variables: {
@@ -495,7 +483,18 @@ export default function SchedulePage(props) {
 
         var date = jMoment(startDate)
         var formatedDate = date.format("jYYYY/jMM/jDD")
-        var autogenScheduleDay = newSelectedExercises.filter(exercise => exercise.type === "Exercise").map(exercise => { return { exerciseId: exercise.id, parameters: exercise.parameters, enabled: true, title: exercise.title } })
+
+
+        var autogenScheduleDay = newSelectedExercises.filter(exercise => exercise.type === "Exercise").map(exercise => {
+            let params = exercise.parameters.reduce((acc, item) => {
+                return {
+                    ...acc,
+                    [item.name]: item
+                }
+            }, {})
+            return { exerciseId: exercise.id, parameters: params, enabled: true, title: exercise.title }
+
+        })
         console.log("generating schedule", autogenScheduleDay)
         console.log(startDate, endDate, date, date.isBetween(startDate, endDate))
 
@@ -653,6 +652,23 @@ export default function SchedulePage(props) {
         setState({ ...state })
 
 
+    }
+
+    const handleAdditionalInstructionChange = (item) => {
+        return (e) => {
+            state.schedule[selectedDateKey] = state.schedule[selectedDateKey].map(daySchedule => {
+                if (daySchedule.exerciseId === item.exerciseId) {
+                    daySchedule = {
+                        ...daySchedule,
+                        additionalInstructions: e.target.value
+                    }
+                }
+                return daySchedule
+            })
+
+            setState({ ...state })
+
+        }
     }
 
     const handleParameterChange = (item) => {
@@ -943,24 +959,36 @@ export default function SchedulePage(props) {
 
                                                 {
                                                     item.enabled &&
-                                                    <div className={classes.parametersContainer}>
+                                                    <div style={{ display: "flex", flexDirection: "column" }}>
+                                                        <div className={classes.parametersContainer}>
 
 
-                                                        {
+                                                            {
 
-                                                            Object.keys(item.parameters).map(key =>
-                                                                <ParameterView parameter={item.parameters[key]}
-                                                                    handleParameterChange={handleParameterChange(item)}
-                                                                    key={item.parameters[key].name}
-                                                                    handleParameterEnableSwap={handleParameterEnableSwap(item)}
-                                                                />)
-
-
-                                                        }
+                                                                Object.keys(item.parameters).map(key =>
+                                                                    <ParameterView parameter={item.parameters[key]}
+                                                                        handleParameterChange={handleParameterChange(item)}
+                                                                        key={item.parameters[key].name}
+                                                                        handleParameterEnableSwap={handleParameterEnableSwap(item)}
+                                                                    />)
 
 
+                                                            }
+
+
+
+                                                        </div>
+
+
+                                                        <TextField className={classes.longDescription} multiline rows={5} rowsMax={20} id="outlined-basic"
+                                                            label={t`Additional Instructions`} variant="outlined"
+                                                            value={item.additionalInstructions}
+                                                            onChange={handleAdditionalInstructionChange(item)}
+                                                            name="additionalInstruction"
+                                                        />
 
                                                     </div>
+
                                                 }
                                             </AccordionDetails>
 

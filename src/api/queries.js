@@ -310,7 +310,6 @@ mutation UpdateTherapyScheduleMutation($patientId: ID!, $updateInput: UpdateTher
         }
         additionalInstructions
         exerciseId
-        title
         id
         enabled
       }

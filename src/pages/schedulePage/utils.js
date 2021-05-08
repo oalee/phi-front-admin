@@ -25,10 +25,21 @@ function getUpdateInput(state, prevState) {
     if (dates.length > 0)
         diff.days = dates.map(date => {
             // let val = state.schedule[date]
+            let exerciseParameters = state.schedule[date].map(exerciseParameter => {
+                let keys = Object.keys(exerciseParameter.parameters)
+                let transformedParams = keys.map(key => exerciseParameter.parameters[key])
+
+                return {
+                    ...exerciseParameter,
+                    title: undefined,
+                    parameters: transformedParams
+
+                }
+            })
             return {
                 date: date,
                 id: state.dateIds[date],
-                parameters: diff.schedule[date]
+                parameters: exerciseParameters
             }
         })
     diff.schedule = undefined
@@ -39,6 +50,41 @@ function getUpdateInput(state, prevState) {
 
     return diff
 
+
+}
+
+function stateToCreateScheduleInput(state, patient) {
+    const dates = Object.keys(state.schedule)
+
+    return {
+        patientId: patient.id,
+        scheduleInput: {
+            startDate: state.startDate.format("jYYYY/jMM/jDD"),
+            endDate: state.endDate.format("jYYYY/jMM/jDD"),
+            exercises: state.selectedExercises.map(exercise => exercise.id),
+            days: dates.map(date => {
+
+                let exerciseParameters = state.schedule[date].map(exerciseParameter => {
+                    let keys = Object.keys(exerciseParameter.parameters)
+                    let transformedParams = keys.map(key => exerciseParameter.parameters[key])
+
+                    return {
+                        ...exerciseParameter,
+                        title: undefined,
+                        parameters: transformedParams
+
+                    }
+                })
+                // let keys = Object.keys(state.schedule[date].parameters.parameters)
+                // let transformedParams = keys.map(key => state.schedule[date].parameters.parameters[key])
+                // let val = state.schedule[date]
+                return {
+                    date: date,
+                    parameters: exerciseParameters
+                }
+            })
+        }
+    }
 
 }
 
@@ -84,7 +130,9 @@ function getScheduleDiff(state, prevState) {
                 let found = prevState.schedule[key].find(val => val.id === item.id)
                 // console.log("comparing ", item, found)
                 if (found) {
-                    if (item.enabled !== found.enabled) {
+
+
+                    if (item.enabled !== found.enabled || item.additionalInstructions !== found.additionalInstructions) {
                         //add to the diff
                         if (dif.schedule[key] === undefined)
                             dif.schedule[key] = []
@@ -171,7 +219,19 @@ function isStateEdited(state, prevState) {
 function genStateFromAPIRes(schedule, exercises) {
     let today = jMoment()
     const genSchedule = schedule.days.reduce((acc, day) => {
-        acc[day.date] = day.parameters.map(item => { return { ...item } })
+
+
+        acc[day.date] = day.parameters.map(item => {
+
+            let exer = exercises.find(exer => exer.id === item.exerciseId)
+            // console.log("item is in gen", item, title)
+            return {
+                ...item,
+                title: exer.title,
+                parameters: item.parameters.reduce((accu, param) => { return { ...accu, [param.name]: param } }, {})
+
+            }
+        })
         return acc
     }, {})
     const genScheduleDateIds = schedule.days.reduce((acc, day) => {
@@ -207,4 +267,4 @@ function genStateFromAPIRes(schedule, exercises) {
 function p2e(s) { return s.replace(/[۰-۹]/g, d => '۰۱۲۳۴۵۶۷۸۹'.indexOf(d)) }
 
 
-export { getScheduleDiff, isStateEdited, genStateFromAPIRes, copyState, getUpdateInput }
+export { getScheduleDiff, isStateEdited, genStateFromAPIRes, copyState, getUpdateInput, stateToCreateScheduleInput }
