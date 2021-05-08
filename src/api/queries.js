@@ -16,6 +16,8 @@ query Query {
     id
     longDescription
     type
+    instructions
+    additionalInstructions
     pictures {
       url
       width
@@ -28,55 +30,14 @@ query Query {
     shortDescription
     title
     parameters {
-      sets {
+        id
         enabled
         name
         value
         secondValue
         valueType
         title
-
-      }
-      reps {
-        enabled
-        name
-        value
-        secondValue
-        valueType
-        title
-      }
-      repPerDay {
-        enabled
-        name
-        value
-        secondValue
-        valueType
-        title
-      }
-      hold {
-        enabled
-        name
-        value
-        secondValue
-        valueType
-        title
-      }
-      restPerSet {
-        enabled
-        name
-        value
-        secondValue
-        valueType
-        title
-      }
-      totalDuration {
-        enabled
-        name
-        value
-        secondValue
-        valueType
-        title
-      }
+     
     }
     videos {
       url
@@ -88,26 +49,12 @@ query Query {
       id
     }
     assesments {
-      tiredness {
+
+        id
         enabled
         name
         title
-      }
-      dificulty {
-        enabled
-        name
-        title
-      }
-      shortnessOfBreath {
-        enabled
-        name
-        title
-      }
-      pain {
-        enabled
-        name
-        title
-      }
+    
     }
   }
  
@@ -122,6 +69,8 @@ mutation Mutation($updateInput: UpdateInput) {
     updatedAt
     id
     longDescription
+    instructions
+    additionalInstructions
     pictures {
       url
       width
@@ -134,54 +83,15 @@ mutation Mutation($updateInput: UpdateInput) {
     shortDescription
     title
     parameters {
-      sets {
+        id
         enabled
         name
         value
         secondValue
         valueType
         title
-      }
-      reps {
-        enabled
-        name
-        value
-        secondValue
-        valueType
-        title
-      }
-      repPerDay {
-        enabled
-        name
-        value
-        secondValue
-        valueType
-        title
-      }
-      hold {
-        enabled
-        name
-        value
-        secondValue
-        valueType
-        title
-      }
-      restPerSet {
-        enabled
-        name
-        value
-        secondValue
-        valueType
-        title
-      }
-      totalDuration {
-        enabled
-        name
-        value
-        secondValue
-        valueType
-        title
-      }
+      
+
     }
     videos {
       url
@@ -193,27 +103,13 @@ mutation Mutation($updateInput: UpdateInput) {
       id
     }
     assesments {
-      tiredness {
+        id
         enabled
         name
         title
       }
-      dificulty {
-        enabled
-        name
-        title
-      }
-      shortnessOfBreath {
-        enabled
-        name
-        title
-      }
-      pain {
-        enabled
-        name
-        title
-      }
-    }
+   
+    
     
   }
 }
@@ -227,6 +123,8 @@ mutation Mutation($addExerciseInput: ExerciseInput) {
     updatedAt
     id
     longDescription
+    instructions
+    additionalInstructions
     pictures {
       url
       width
@@ -239,54 +137,15 @@ mutation Mutation($addExerciseInput: ExerciseInput) {
     shortDescription
     title
     parameters {
-      sets {
+        id
         enabled
         name
         value
         secondValue
         valueType
         title
-      }
-      reps {
-        enabled
-        name
-        value
-        secondValue
-        valueType
-        title
-      }
-      repPerDay {
-        enabled
-        name
-        value
-        secondValue
-        valueType
-        title
-      }
-      hold {
-        enabled
-        name
-        value
-        secondValue
-        valueType
-        title
-      }
-      restPerSet {
-        enabled
-        name
-        value
-        secondValue
-        valueType
-        title
-      }
-      totalDuration {
-        enabled
-        name
-        value
-        secondValue
-        valueType
-        title
-      }
+     
+      
     }
     videos {
       url
@@ -298,27 +157,13 @@ mutation Mutation($addExerciseInput: ExerciseInput) {
       id
     }
     assesments {
-      tiredness {
+        id
         enabled
         name
         title
       }
-      dificulty {
-        enabled
-        name
-        title
-      }
-      shortnessOfBreath {
-        enabled
-        name
-        title
-      }
-      pain {
-        enabled
-        name
-        title
-      }
-    }
+    
+    
     
   }
 }
@@ -380,8 +225,8 @@ query Query($patientId: ID!) {
       createdAt
       date
       parameters {
-        parameters {
-          sets {
+        parameters{
+            id
             enabled
             name
             value
@@ -389,49 +234,9 @@ query Query($patientId: ID!) {
             valueType
             title
           }
-          reps {
-            enabled
-            name
-            value
-            secondValue
-            valueType
-            title
-          }
-          repPerDay {
-            enabled
-            name
-            value
-            secondValue
-            valueType
-            title
-          }
-          hold {
-            enabled
-            name
-            value
-            secondValue
-            valueType
-            title
-          }
-          restPerSet {
-            enabled
-            name
-            value
-            secondValue
-            valueType
-            title
-          }
-          totalDuration {
-            enabled
-            name
-            value
-            secondValue
-            valueType
-            title
-          }
-        }
+        
+        additionalInstructions
         exerciseId
-        title
         id
       }
     }
@@ -456,7 +261,7 @@ mutation AddTherapyScheduleMutation($patientId: ID!, $scheduleInput: TherapySche
       date
       parameters {
         parameters {
-          sets {
+      
             enabled
             name
             value
@@ -464,49 +269,10 @@ mutation AddTherapyScheduleMutation($patientId: ID!, $scheduleInput: TherapySche
             valueType
             title
           }
-          reps {
-            enabled
-            name
-            value
-            secondValue
-            valueType
-            title
-          }
-          repPerDay {
-            enabled
-            name
-            value
-            secondValue
-            valueType
-            title
-          }
-          hold {
-            enabled
-            name
-            value
-            secondValue
-            valueType
-            title
-          }
-          restPerSet {
-            enabled
-            name
-            value
-            secondValue
-            valueType
-            title
-          }
-          totalDuration {
-            enabled
-            name
-            value
-            secondValue
-            valueType
-            title
-          }
-        }
+         
+        
+        additionalInstructions
         exerciseId
-        title
         id
         enabled
       }
@@ -532,55 +298,17 @@ mutation UpdateTherapyScheduleMutation($patientId: ID!, $updateInput: UpdateTher
       date
       parameters {
         parameters {
-          sets {
+   
             enabled
             name
             value
             secondValue
             valueType
             title
-          }
-          reps {
-            enabled
-            name
-            value
-            secondValue
-            valueType
-            title
-          }
-          repPerDay {
-            enabled
-            name
-            value
-            secondValue
-            valueType
-            title
-          }
-          hold {
-            enabled
-            name
-            value
-            secondValue
-            valueType
-            title
-          }
-          restPerSet {
-            enabled
-            name
-            value
-            secondValue
-            valueType
-            title
-          }
-          totalDuration {
-            enabled
-            name
-            value
-            secondValue
-            valueType
-            title
-          }
+          
+         
         }
+        additionalInstructions
         exerciseId
         title
         id
@@ -616,57 +344,17 @@ query Query {
           date
           parameters {
             parameters {
-              sets {
+                id
                 enabled
                 name
                 value
                 secondValue
                 valueType
                 title
-              }
-              reps {
-                enabled
-                name
-                value
-                secondValue
-                valueType
-                title
-              }
-              repPerDay {
-                enabled
-                name
-                value
-                secondValue
-                valueType
-                title
-              }
-              hold {
-                enabled
-                name
-                value
-                secondValue
-                valueType
-                title
-              }
-              restPerSet {
-                enabled
-                name
-                value
-                secondValue
-                valueType
-                title
-              }
-              totalDuration {
-                enabled
-                name
-                value
-                secondValue
-                valueType
-                title
-              }
+           
             }
+            additionalInstructions
             exerciseId
-            title
             id
             enabled
           }

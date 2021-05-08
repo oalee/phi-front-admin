@@ -95,15 +95,15 @@ function APIProvider({ children }) {
         }
     }
 
-    if (patientsRes.data != null && state.patients.length === 0) {
+    if (patientsRes.data != null && state.patients.length !== patientsRes.data.myPatients.length) {
         console.log("res iz ", patientsRes)
         dispatch({ type: 'recievedPatients', patients: patientsRes.data.myPatients })
     }
 
-    if (exercises.data === undefined && exercises.loading === false)
+    if (exercises.data === undefined && exercises.loading === false && exercises.called === false)
         getAllExercises()
 
-    if (exercises.data != null && state.exercises.length === 0) {
+    if (exercises.data != null && exercises.data.allExercises.length !== 0 && state.exercises.length === 0) {
         console.log('dispatch')
         dispatch({ type: 'received', exercises: exercises.data.allExercises })
     }
