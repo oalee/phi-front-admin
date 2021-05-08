@@ -44,7 +44,7 @@ import ParameterView from "./components/ParameterView/ParameterView";
 import { isNonEmptyArray } from "@apollo/client/utilities";
 import { useLazyQuery, useMutation } from "@apollo/client";
 import { AddExcercise, UpdateExercise } from "../../api/queries";
-import { getUpdateDiff, isExerciseEdited } from "./utils";
+import { exerciseToState, getUpdateDiff, getUpdateQuery, isExerciseEdited, stateToExerciseInput } from "./utils";
 import { useAPIContext } from "../../context/APIContext";
 
 
@@ -147,28 +147,30 @@ export default function AddEditExercisePage(props) {
 
     console.log("location is", location)
     if (location.state && location.state.exercise != null && state.state === PageState.NOT_COMPLETED) {
-        const mergedParams = {}
+        // const mergedParams = {}
         const exercise = location.state.exercise
-        console.log(exercise.parameters)
-        Object.keys(state.parameters).forEach(key => {
-            // console.log("key is", key)
-            // console.log("value is", state.parameters[key])
-            mergedParams[key] = { ...state.parameters[key], ...exercise.parameters[key] }
+        // console.log(exercise.parameters)
+        // Object.keys(state.parameters).forEach(key => {
+        //     // console.log("key is", key)
+        //     // console.log("value is", state.parameters[key])
+        //     let exerParam = exercise.parameters.find(item => item.name === state.parameters[key].name)
+        //     mergedParams[key] = { ...state.parameters[key], ...exerParam }
 
-        })
-        // console.log("mergedParames", mergedParams)
+        // })
+        // // console.log("mergedParames", mergedParams)
 
-        const mergedAssesments = {}
-        Object.keys(state.assesments).forEach(key => {
-            // console.log("key is", key)
-            // console.log("value is", state.assesments[key])
-            mergedAssesments[key] = { ...state.assesments[key], ...exercise.assesments[key] }
+        // const mergedAssesments = {}
+        // Object.keys(state.assesments).forEach(key => {
+        //     // console.log("key is", key)
+        //     // console.log("value is", state.assesments[key])
+        //     let exerAsses = exercise.assesments.find(item => item.name === state.assesments[key].name)
+        //     mergedAssesments[key] = { ...state.assesments[key], ...exerAsses }
 
-        })
-        console.log("mergedAssesments", mergedAssesments)
+        // })
+        // console.log("mergedAssesments", mergedAssesments)
 
-        setState({ ...exercise, parameters: mergedParams, assesments: mergedAssesments, state: PageState.SENT })
-        setPrevExcercise({ ...exercise, parameters: mergedParams, assesments: mergedAssesments })
+        setState({ ...exerciseToState(exercise), state: PageState.SENT })
+        setPrevExcercise({ ...exerciseToState(exercise) })
     }
 
     // console.log("the res is ", addExcerciseQuery)
@@ -194,11 +196,12 @@ export default function AddEditExercisePage(props) {
 
         // console.log("a")
 
-        if (addExcerciseQuery.data.addExercise !== prevExcercise) {
+        if (isExerciseEdited(exerciseToState(addExcerciseQuery.data.addExercise), prevExcercise)) {
             // console.log("an exercise is added", addExcerciseQuery.data.addExercise)
             apiContext.dispatch({ type: 'added', exercise: addExcerciseQuery.data.addExercise })
             console.log('after dispatch is ', apiContext.state)
-            setPrevExcercise(addExcerciseQuery.data.addExercise)
+            setState(exerciseToState(addExcerciseQuery.data.addExercise))
+            setPrevExcercise(exerciseToState(addExcerciseQuery.data.addExercise))
 
         }
 
@@ -212,10 +215,10 @@ export default function AddEditExercisePage(props) {
 
 
         console.log("got update res ", updateExerciseRes.data.updateExercise)
-        if (isExerciseEdited(updateExerciseRes.data.updateExercise, prevExcercise)
+        if (isExerciseEdited(exerciseToState(updateExerciseRes.data.updateExercise), prevExcercise)
         ) {
             console.log("sett it")
-            setPrevExcercise(updateExerciseRes.data.updateExercise)
+            setPrevExcercise(exerciseToState(updateExerciseRes.data.updateExercise))
             apiContext.dispatch({ type: 'updated', exercise: updateExerciseRes.data.updateExercise })
 
             // if (state.state === PageState.SENDING)
@@ -425,7 +428,7 @@ export default function AddEditExercisePage(props) {
                         console.log("doAddExcercise")
                         doAddExcercise({
                             variables: {
-                                addExerciseInput: state
+                                addExerciseInput: stateToExerciseInput(state)
                             }
                         })
                         setState({ ...state, state: PageState.SENDING })
@@ -440,7 +443,7 @@ export default function AddEditExercisePage(props) {
                     onClick: () => {
                         updateExercise({
                             variables: {
-                                updateInput: getUpdateDiff(prevExcercise, state)
+                                updateInput: getUpdateQuery(prevExcercise, state)
                             }
                         })
                         setState({ ...state, state: PageState.SENDING })

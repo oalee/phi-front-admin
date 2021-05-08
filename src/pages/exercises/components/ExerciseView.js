@@ -21,9 +21,9 @@ const useStyles = makeStyles(theme => ({
         margin: theme.spacing(4)
     },
     media: {
-        minHeight: 100,
-        maxHeight: 100,
-        minWidth: 100
+        height: 120,
+        width: 120,
+        margin: 5
     },
 }))
 
@@ -40,16 +40,16 @@ export default function ExerciseView(props) {
                 <CardMedia
                     className={classes.media}
                     image={exercise.pictures[0].url}
-                    title={exercise.title}
+                // title={exercise.title}
 
                 />
                 <CardContent>
-                    <Typography gutterBottom variant="h5" component="h2">
+                    <Typography gutterBottom variant="h6" component="h2">
                         {exercise.title}
                     </Typography>
-                    <Typography variant="body2" color="textSecondary" component="p">
+                    {/* <Typography variant="body2" color="textSecondary" component="p">
                         {exercise.shortDescription}
-                    </Typography>
+                    </Typography> */}
                 </CardContent>
             </CardActionArea>
             <CardActions>

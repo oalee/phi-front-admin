@@ -44,6 +44,60 @@ function isExerciseEdited(state, prevExcercise) {
 
 }
 
+function exerciseToState(exercise) {
+
+    console.log("exerciseToState ", exercise)
+    let params = exercise.parameters.reduce((acc, item) => {
+        return {
+            ...acc,
+            [item.name]: item
+        }
+    }, {})
+
+    console.log("param will be ", params)
+
+    let assessment = exercise.assesments.reduce((acc, item) => {
+        return {
+            ...acc,
+            [item.name]: item
+        }
+    }, {})
+
+
+    return {
+        ...exercise,
+        parameters: params,
+        assesments: assessment
+
+    }
+}
+
+function getUpdateQuery(prevExercise, state) {
+
+    let diff = getUpdateDiff(prevExercise, state)
+    if (diff.assesments) {
+        let assesKeys = Object.keys(state.assesments)
+        diff.assesments = assesKeys.map(item => state.assesments[item])
+    }
+    if (diff.parameters) {
+        let assesKeys = Object.keys(state.parameters)
+        diff.parameters = assesKeys.map(item => state.parameters[item])
+    }
+
+    return diff
+}
+
+function stateToExerciseInput(state) {
+    let paramKeys = Object.keys(state.parameters)
+    let assesKeys = Object.keys(state.assesments)
+
+    return {
+        ...state,
+        instructions: state.longDescription,
+        parameters: paramKeys.map(item => state.parameters[item]),
+        assesments: assesKeys.map(item => state.assesments[item])
+    }
+}
 
 function getUpdateDiff(prevExcercise, state) {
 
@@ -123,4 +177,4 @@ function isParameterEquals(first, second) {
     return true
 }
 
-export { isExerciseEdited, getUpdateDiff }
+export { isExerciseEdited, getUpdateDiff, exerciseToState, stateToExerciseInput, getUpdateQuery }
