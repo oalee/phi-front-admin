@@ -224,6 +224,28 @@ query Query($patientId: ID!) {
       updatedAt
       createdAt
       date
+      evaluation {
+        id
+        exerciseId
+        parameters {
+          id
+          enabled
+          name
+          value
+          secondValue
+          valueType
+          title
+        }
+        feedback
+        assesments {
+          id
+          enabled
+          name
+          title
+          value
+        }
+      }
+
       parameters {
         parameters{
             id
@@ -234,6 +256,7 @@ query Query($patientId: ID!) {
             valueType
             title
           }
+    
         
         additionalInstructions
         exerciseId
@@ -296,6 +319,29 @@ mutation UpdateTherapyScheduleMutation($patientId: ID!, $updateInput: UpdateTher
       updatedAt
       createdAt
       date
+
+      evaluation {
+        id
+        exerciseId
+        parameters {
+          id
+          enabled
+          name
+          value
+          secondValue
+          valueType
+          title
+        }
+        feedback
+        assesments {
+          id
+          enabled
+          name
+          title
+          value
+        }
+      }
+
       parameters {
         parameters {
    
@@ -308,6 +354,8 @@ mutation UpdateTherapyScheduleMutation($patientId: ID!, $updateInput: UpdateTher
           
          
         }
+       
+        
         additionalInstructions
         exerciseId
         id
@@ -341,6 +389,30 @@ query Query {
           updatedAt
           createdAt
           date
+
+          evaluation {
+            id
+            exerciseId
+            parameters {
+              id
+              enabled
+              name
+              value
+              secondValue
+              valueType
+              title
+            }
+            feedback
+            assesments {
+              id
+              enabled
+              name
+              title
+              value
+            }
+          }
+
+
           parameters {
             parameters {
                 id
@@ -352,6 +424,8 @@ query Query {
                 title
            
             }
+
+      
             additionalInstructions
             exerciseId
             id

@@ -131,6 +131,7 @@ function getScheduleDiff(state, prevState) {
                 // console.log("comparing ", item, found)
                 if (found) {
 
+                    // console.log("IN COMPARE, ", item)
 
                     if (item.enabled !== found.enabled || item.additionalInstructions !== found.additionalInstructions) {
                         //add to the diff

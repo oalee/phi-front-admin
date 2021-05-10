@@ -775,7 +775,15 @@ export default function SchedulePage(props) {
                                 </Button>
 
                             </Paper>
-                            <Paper style={{ width: 300, margin: 20, padding: 20 }}>
+                            <Paper style={{ width: 300, margin: 20, padding: 20 }}
+
+                                onClick={(e) => {
+
+                                    props.history.push('/app/evaluation', {
+                                        patient: patient
+                                    })
+                                }}
+                            >
                                 <Typography style={{ marginTop: 25 }} variant="h5" >
                                     <Trans>Done Assesments</Trans> : 22
                                 </Typography>
