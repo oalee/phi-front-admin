@@ -72,6 +72,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ParameterView from "../addEditExcercise/components/ParameterView/ParameterView";
 import { getUpdateDiff } from "../addEditExcercise/utils";
 import { copyState, genStateFromAPIRes, getScheduleDiff, getUpdateInput, isStateEdited, stateToCreateScheduleInput } from "./utils";
+import { useUserDispatch } from "../../context/UserContext";
 
 
 
@@ -93,8 +94,14 @@ export default function SchedulePage(props) {
     // const [selectedDate, handleDateChange] = useState(jMoment());
 
     const apiContext = useAPIContext()
+    const userContext = useUserDispatch()
 
     const exercises = apiContext.state.exercises
+
+    const questionares = userContext.therapist.questionares
+
+    console.log("questionares are ", questionares, userContext)
+
 
 
     var theme = useTheme();

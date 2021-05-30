@@ -178,6 +178,21 @@ const GETME = gql`
       type
       therapist {
         name
+        questionares {
+          id
+          title
+          questions {
+            order
+            id
+            question
+            answerType
+            options {
+              order
+              id
+              value
+            }
+          }
+        }
       }
     }
   }
