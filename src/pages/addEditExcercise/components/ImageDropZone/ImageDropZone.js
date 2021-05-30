@@ -11,6 +11,7 @@ import { v4 as uuid } from "uuid"
 import { Trans } from '@lingui/macro';
 import DraggableFileList from '../DraggableFileList/DraggableFileList';
 import FlipMove from 'react-flip-move';
+import { BASE_URL } from '../../../../api/utils';
 const axios = require('axios').default;
 
 
@@ -49,7 +50,7 @@ export default function ImageDropZone(props) {
             },
             method: "POST",
             data: formData,
-            url: "http://localhost:5000/upload_image", // route name
+            url: BASE_URL + ":5000/upload_image", // route name
             // baseURL: "http://localhost:5000/upload-image", //local url
             onUploadProgress: progress => {
                 console.log(`upload progress ${progress}`)
