@@ -3,7 +3,7 @@ import { setContext } from '@apollo/client/link/context';
 import { BASE_URL } from './utils';
 
 const httpLink = createHttpLink({
-  uri: BASE_URL,
+  uri: BASE_URL + ":4000",
 });
 
 const authLink = setContext((_, { headers }) => {
