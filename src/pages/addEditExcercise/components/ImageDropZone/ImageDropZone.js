@@ -1,4 +1,4 @@
-import { Paper, RootRef } from '@material-ui/core';
+import { CircularProgress, Paper, RootRef, Typography } from '@material-ui/core';
 import React, { forwardRef, useCallback, useEffect } from 'react';
 import { DndProvider } from 'react-dnd';
 import { useDropzone } from 'react-dropzone';
@@ -12,6 +12,7 @@ import { Trans } from '@lingui/macro';
 import DraggableFileList from '../DraggableFileList/DraggableFileList';
 import FlipMove from 'react-flip-move';
 import { BASE_URL } from '../../../../api/utils';
+import { NumberCircularProgress } from './NumberCircularProgress';
 const axios = require('axios').default;
 
 
@@ -22,18 +23,20 @@ export default function ImageDropZone(props) {
 
     const [state, setState] = React.useState({
         files: [...list],
-        uploadProgress: 0
+        uploadProgress: 0,
+        isUploading: false,
+        uploadError: false,
     });
 
-    useEffect(() => { setState({ files: [...list], uploadProgress: 0 }) }, [list]);
+    useEffect(() => {
+        setState({
+            files: [...list], uploadProgress: 20, isUploading: false,
+        })
+    }, [list]);
 
     // console.log("STATE IZ IN DROP, ", state)
 
-    const [uploadProgress, setUploadProgress] = React.useState({
 
-        progress: 0,
-        id: null,
-    })
 
 
     // console.log("state files is", state)
@@ -43,6 +46,8 @@ export default function ImageDropZone(props) {
         formData.append("type", type);
         formData.append("file", file);
         formData.append("id", uuid())
+
+
         axios({
             headers: {
                 "Content-Type": "multipart/form-data",
@@ -58,6 +63,9 @@ export default function ImageDropZone(props) {
                 const totalSizeInMB = total / 1000000;
                 const loadedSizeInMB = loaded / 1000000;
                 const uploadPercentage = (loadedSizeInMB / totalSizeInMB) * 100;
+
+                setState({ ...state, isUploading: true, uploadProgress: uploadPercentage })
+
                 // setState({ uploadProgress: uploadPercentage, ...state })
                 console.log("total size in MB ==> ", totalSizeInMB);
                 console.log("uploaded size in MB ==> ", loadedSizeInMB);
@@ -75,7 +83,12 @@ export default function ImageDropZone(props) {
 
             // setState({ ...state, files: nList })
 
-        }).catch(e => { console.log("error ", e) });
+        }).catch(e => {
+            console.log("error ", e)
+
+            setState({ ...state, isUploading: false })
+
+        });
 
         // fetch("http://localhost:5000/upload_image", {
         //     method: 'post',
@@ -88,7 +101,7 @@ export default function ImageDropZone(props) {
     const onAddAnFile = (file) => {
         // console.log("on Add an file , ", state)
         state.files.push(file)
-        setState({ ...state, files: state.files })
+        setState({ ...state, files: state.files, isUploading: false })
         onListChanged(state.files)
         // console.log("after Add an file , ", state)
 
@@ -163,6 +176,35 @@ export default function ImageDropZone(props) {
                 <p><Trans>Drag 'n' drop some files here, or click to select files</Trans></p>
 
                 {/* <FileView fileName={"test"} /> */}
+
+                {
+                    state.isUploading &&
+                    <Paper style={{
+                        marginTop: 20,
+                        minWidth: 300, maxWidth: 600, minHeight: 100, maxHeight: 200,
+
+                        border: "solid", borderRadius: 4, borderWidth: 2,
+                        display: 'flex',
+                        flexDirection: "column",
+                        alignItems: "center",
+                        justifyContent: "start",
+
+                    }} >
+
+                        <Typography style={{ marginTop: 20 }}> <Trans>Uploading...</Trans>  </Typography>
+
+
+
+                        <NumberCircularProgress
+                            style={{
+                                marginTop: 20
+                            }}
+                            value={state.uploadProgress}
+                        />
+
+
+                    </Paper>
+                }
 
                 {state.files.map(file => {
 
