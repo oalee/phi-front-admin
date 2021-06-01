@@ -42,21 +42,21 @@ function AppProvider({ children }) {
   const usersLink = user && user.type === "Admin" ? '/app/notifications' : '/app/patients'
 
   const menu = [
-    { id: 0, label: t`Dashboard`, link: '/app/dashboard', icon: <HomeIcon /> },
-    { id: 1, label: t`Eductional`, link: '/app/exercises', icon: <TypographyIcon /> },
-    { id: 2, label: t`Exercises`, link: '/app/tables', icon: <TableIcon /> },
+    // { id: 0, label: t`Dashboard`, link: '/app/dashboard', icon: <HomeIcon /> },
+    { id: 1, label: t`Exercises and Eductional`, link: '/app/exercises', icon: <TypographyIcon /> },
+    // { id: 2, label: t`Exercises`, link: '/app/tables', icon: <TableIcon /> },
     { id: 3, label: usersLabel, link: usersLink, icon: <NotificationsIcon /> },
-    {
-      id: 4,
-      label: t`UI Elements`,
-      link: '/app/ui',
-      icon: <UIElementsIcon />,
-      children: [
-        { label: t`Icons`, link: '/app/ui/icons' },
-        { label: t`Charts`, link: '/app/ui/charts' },
-        { label: t`Maps`, link: '/app/ui/maps' },
-      ],
-    },
+    // {
+    //   id: 4,
+    //   label: t`UI Elements`,
+    //   link: '/app/ui',
+    //   icon: <UIElementsIcon />,
+    //   children: [
+    //     { label: t`Icons`, link: '/app/ui/icons' },
+    //     { label: t`Charts`, link: '/app/ui/charts' },
+    //     { label: t`Maps`, link: '/app/ui/maps' },
+    //   ],
+    // },
     { id: 5, type: 'divider' },
     { id: 6, type: 'title', label: t`Help` },
     { id: 7, label: t`Library`, link: '', icon: <LibraryIcon /> },

@@ -10,13 +10,13 @@ import {
   Link
 } from "@material-ui/core";
 import {
-  Menu as MenuIcon,
+  MenuOpen as MenuIcon,
   MailOutline as MailIcon,
   NotificationsNone as NotificationsIcon,
   Person as AccountIcon,
   Search as SearchIcon,
   Send as SendIcon,
-  ArrowBack as ArrowBackIcon,
+  Menu as ArrowBackIcon,
 } from "@material-ui/icons";
 import classNames from "classnames";
 
@@ -131,15 +131,15 @@ export default function Header(props) {
               }}
             />
           ) : (
-              <MenuIcon
-                classes={{
-                  root: classNames(
-                    classes.headerIcon,
-                    classes.headerIconCollapse,
-                  ),
-                }}
-              />
-            )}
+            <MenuIcon
+              classes={{
+                root: classNames(
+                  classes.headerIcon,
+                  classes.headerIconCollapse,
+                ),
+              }}
+            />
+          )}
         </IconButton>
         <Typography variant="h6" weight="medium" className={classes.logotype}>
           {/* <Trans>Toolbar Title</Trans> */}

@@ -15,6 +15,7 @@ import {
   LibraryBooks as LibraryIcon,
   HelpOutline as FAQIcon,
   ArrowBack as ArrowBackIcon,
+  MenuOpenOutlined
 } from "@material-ui/icons";
 import classNames from 'classnames';
 

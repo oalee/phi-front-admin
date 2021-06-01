@@ -14,6 +14,7 @@ import SidebarLink from "./components/SidebarLink/SidebarLink";
 import { getText } from "../../utils/textUtils"
 import {
   ArrowBack as ArrowBackIcon,
+  MenuOpenOutlined
 } from "@material-ui/icons";
 // context
 import {
@@ -23,9 +24,10 @@ import {
 } from "../../context/LayoutContext";
 import { useAppContext } from "../../context/AppContext";
 
-import avatarPlaceholder from "../../static/images/avatar_placeholder.svg"
 import { t } from "@lingui/macro";
 import { useUserDispatch } from "../../context/UserContext";
+
+const avatarPlaceholder = require("../../static/images/avatar_placeholder.svg").default
 
 function Sidebar({ location }) {
 
@@ -102,7 +104,7 @@ function Sidebar({ location }) {
       <List className={classes.sidebarList}>
         <div>
           <div className={classes.avatarContainer}>
-            <img alt="Remy Sharp" src={avatarPlaceholder} className={classNames(classes.avatar, {
+            <img alt="avatar" src={avatarPlaceholder} className={classNames(classes.avatar, {
               [classes.avatar]: isSidebarOpened,
               [classes.avatarCollapsed]: !isSidebarOpened,
             })} />
