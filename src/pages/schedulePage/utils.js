@@ -171,6 +171,7 @@ function getScheduleDiff(state, prevState) {
 
 }
 
+
 function copyState(state) {
 
     let copy = { ...state }
@@ -218,6 +219,10 @@ function isStateEdited(state, prevState) {
 }
 
 function genStateFromAPIRes(schedule, exercises) {
+
+
+    console.log("api res iz ", schedule)
+
     let today = jMoment()
     const genSchedule = schedule.days.reduce((acc, day) => {
 
@@ -235,6 +240,10 @@ function genStateFromAPIRes(schedule, exercises) {
         })
         return acc
     }, {})
+
+
+
+
     const genScheduleDateIds = schedule.days.reduce((acc, day) => {
         acc[day.date] = day.id
         return acc

@@ -97,8 +97,9 @@ export default function SchedulePage(props) {
     const userContext = useUserDispatch()
 
     const exercises = apiContext.state.exercises
-
     const questionares = userContext.therapist.questionares
+    const exerciseOptions = exercises.map(exercise => { return { value: exercise.title, label: exercise.title, exercise: exercise } })
+    const questionareOptions = questionares.map(questionare => { return { value: questionare.title, label: questionare.title, questionare: questionare } })
 
     console.log("questionares are ", questionares, userContext)
 
@@ -116,7 +117,8 @@ export default function SchedulePage(props) {
         schedule: {},
         startDate: jMoment(),
         endDate: jMoment().add(1, "d"),
-        selectedDate: jMoment()
+        selectedDate: jMoment(),
+        questionares: {}
 
 
     })
@@ -131,6 +133,8 @@ export default function SchedulePage(props) {
         endDate: jMoment().add(1, "d"),
         selectedDate: jMoment(),
         addScheduleLoaded: false,
+        questionares: {}
+
 
     })
 
@@ -141,48 +145,11 @@ export default function SchedulePage(props) {
 
     const loadStateFromLocation = () => {
 
-        console.log("patient is ", patient)
         if (patient.schedule) {
-            console.log("there is schedule")
 
             if (prevState.state === PageState.NOT_LOADED) {
 
-                // const genSchedule = patient.schedule.days.reduce((acc, day) => {
-                //     acc[day.date] = day.parameters.map(item => { return { ...item } })
-                //     return acc
-                // }, {})
-                // const genSchedule2 = patient.schedule.days.reduce((acc, day) => {
-                //     acc[day.date] = day.parameters.map(item => { return { ...item } })
-                //     return acc
-                // }, {})
 
-                // const startDate = jMoment(p2e(patient.schedule.startDate), "jYYYY/jMM/jDD")
-                // const endDate = jMoment(p2e(patient.schedule.endDate), "jYYYY/jMM/jDD")
-
-
-                // var selectedDate = jMoment(startDate)
-                // if (selectedDate.isBefore(today, "day")) {
-                //     if (today.isSameOrBefore(endDate))
-                //         selectedDate = today
-                // }
-
-                // const selectedExercises = patient.schedule.exerciseIds.map(id => exercises.find(item => item.id === id))
-                // const genState = {
-                //     state: PageState.SENT,
-                //     selectedExercises: selectedExercises,
-                //     schedule: { ...genSchedule },
-                //     startDate: startDate,
-                //     endDate: endDate,
-                //     selectedDate: selectedDate
-                // }
-                // const genState2 = {
-                //     state: PageState.SENT,
-                //     selectedExercises: selectedExercises,
-                //     schedule: { ...genSchedule2 },
-                //     startDate: startDate,
-                //     endDate: endDate,
-                //     selectedDate: selectedDate
-                // }
                 setState({ ...genStateFromAPIRes(patient.schedule, exercises) })
                 setPrevState({ ...genStateFromAPIRes(patient.schedule, exercises) })
 
@@ -259,7 +226,6 @@ export default function SchedulePage(props) {
     // const [getAllExercises, getAllExercisesState] = useLazyQuery(GetAllExercises)
 
     // const apiContext = useAPIContext()
-    const exerciseOptions = exercises.map(exercise => { return { value: exercise.title, label: exercise.title, exercise: exercise } })
 
 
     const handleEndDateChange = (date) => {
@@ -272,6 +238,11 @@ export default function SchedulePage(props) {
     const handleStartDateChange = (date) => {
         generateScheduleFromStartToEnd(state.selectedExercises, date)
         setState({ ...state, startDate: date })
+    }
+
+
+    const onQuestionareChanged = (e) => {
+
     }
 
     const onExercisesChanged = (e) => {
@@ -484,7 +455,6 @@ export default function SchedulePage(props) {
         }
     }
 
-    // const generateForNew
 
     const generateScheduleFromStartToEnd = (newSelectedExercises = state.selectedExercises, startDate = state.startDate, endDate = state.endDate) => {
 
@@ -512,25 +482,24 @@ export default function SchedulePage(props) {
 
         while (date.isBetween(startDate, endDate) || date.isSame(endDate, "day") || date.isSame(startDate, "day") || (startDate.isSame(today, "day") && today.isSame(date, "day"))) {
             formatedDate = date.format("jYYYY/jMM/jDD")
-            // console.log("in looop")
+
             if (state.schedule[formatedDate] === undefined) {
                 state.schedule[formatedDate] = [...autogenScheduleDay]
             } else {
                 var newlyAddedItems = autogenScheduleDay.filter(item => !state.schedule[formatedDate].some(e => e.exerciseId === item.exerciseId)).map(item => { return { ...item } })
-                // console.log("newlyAdded are", newlyAddedItems)
+
                 var filtererd = state.schedule[formatedDate].filter(item => {
-                    // console.log("looking for ", item, autogenScheduleDay, autogenScheduleDay.some(e => e.exerciseId === item.exerciseId))
+
                     return autogenScheduleDay.some(e => e.exerciseId === item.exerciseId)
                 }).map(item => { return { ...item } })
-                // console.log("filtered are", filtererd)
+
 
                 state.schedule[formatedDate] = [...filtererd, ...newlyAddedItems]
             }
-            // console.log("generating for ", date)
+
             date = date.add(1, "day")
 
         }
-        // setState({ ...state })
     }
     // generateScheduleFromStartToEnd()
 
@@ -538,18 +507,7 @@ export default function SchedulePage(props) {
 
     const renderWrappedWeekDay = (date, _, dayInCurrentMonth, dayComponent) => {
 
-        // let todayClone = today.toDate()
 
-        // let dateClone = (date).toDate();
-        // let selectedDateClone = (selectedDate).toDate();
-        // console.log("date is ", date)
-        // console.log("selected date is ", selectedDate)
-        // console.log("today is ", today)
-        // console.log("startDay is ", startDate)
-        // console.log("endDate is ", endDate)
-
-        // const start = startOfWeek(selectedDateClone);
-        // const end = endOfWeek(selectedDateClone);
         const isSameAsStartDate = date.isSame(state.startDate, "day") && state.startDate.isSameOrAfter(today)
         const isStartSameAsToday = state.startDate.isSame(today, "day") && today.isSame(date, "day")
 
@@ -565,14 +523,7 @@ export default function SchedulePage(props) {
             // if (state.schedule)
         }
 
-        // console.log("isSelectedDay", isSelectedDay)
-        // console.log("isSameAsStartDate", isSameAsStartDate)
 
-        // console.log("isPastGoneDays", isPastGoneDays)
-        // console.log("dayIsBetween", dayIsBetween)
-
-        // const isLastDay = true
-        // const isPastGoneDays = isWithinInterval(dateClone, { startDateClone, todayClone })
 
         const wrapperClassName = clsx({
             [classes.highlight]: dayIsBetween,
@@ -634,11 +585,10 @@ export default function SchedulePage(props) {
 
     }
 
-    // const handleParamEnable = (item) => handleParameterEnableSwap
+
 
     const handleExerciseForDayEnableSwap = (event, item) => {
 
-        // console.log("handleExerciseEnable for dayy ", item, selectedDateKey)
 
         const value = event.target.checked
         state.schedule[selectedDateKey] = state.schedule[selectedDateKey].map(daySchedule => {
@@ -648,9 +598,9 @@ export default function SchedulePage(props) {
                     ...daySchedule,
                     enabled: value
                 }
-                // console.log("set value once??")
+
             }
-            // console.log("mapping, ", daySchedule)
+
 
             return daySchedule
         })
@@ -681,10 +631,6 @@ export default function SchedulePage(props) {
     const handleParameterChange = (item) => {
         return (event, value, isFirstValueAssign = true) => {
             const name = event.target.name;
-            // console.log("handlePar", value)
-            // console.log("handlePar", event.target.name)
-            // // const isFirstValueAssign = event.target.isFirst
-            // console.log("handlePar", isFirstValueAssign)
 
             if (isFirstValueAssign) {
 
@@ -1002,6 +948,9 @@ export default function SchedulePage(props) {
                                                             name="additionalInstruction"
                                                         />
 
+
+
+
                                                     </div>
 
                                                 }
@@ -1012,9 +961,30 @@ export default function SchedulePage(props) {
                                         )
                                     })
                                     }
+
                                 </Paper>
 
+
+
                             }
+
+                            <Typography style={{ marginTop: 25 }} variant="h2" >
+                                <Trans>Questionares</Trans>
+                            </Typography>
+                            <div style={{ marginTop: 20 }}>
+
+                                <Select
+                                    defaultValue={[]}
+                                    isMulti
+                                    name="exercises"
+                                    options={questionareOptions}
+                                    className="basic-multi-select"
+                                    classNamePrefix="select"
+                                    styles={selectStyle}
+                                    onChange={onQuestionareChanged}
+                                    placeholder={t`Select Questionare`}
+                                />
+                            </div>
 
 
                         </div>

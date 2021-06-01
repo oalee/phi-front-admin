@@ -56,7 +56,7 @@ export default function ImageDropZone(props) {
             method: "POST",
             data: formData,
             url: BASE_URL + ":5000/upload_image", // route name
-            // baseURL: "http://localhost:5000/upload-image", //local url
+            // baseURL: "http://localhost:5000/upload_image", //local url
             onUploadProgress: progress => {
                 console.log(`upload progress ${progress}`)
                 const { total, loaded } = progress;
@@ -64,7 +64,7 @@ export default function ImageDropZone(props) {
                 const loadedSizeInMB = loaded / 1000000;
                 const uploadPercentage = (loadedSizeInMB / totalSizeInMB) * 100;
 
-                setState({ ...state, isUploading: true, uploadProgress: uploadPercentage })
+                setState({ ...state, isUploading: true, uploadProgress: Math.round(uploadPercentage) })
 
                 // setState({ uploadProgress: uploadPercentage, ...state })
                 console.log("total size in MB ==> ", totalSizeInMB);
