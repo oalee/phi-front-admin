@@ -71,7 +71,7 @@ import clsx from "clsx";
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ParameterView from "../addEditExcercise/components/ParameterView/ParameterView";
 import { getUpdateDiff } from "../addEditExcercise/utils";
-import { copyState, genStateFromAPIRes, getScheduleDiff, getUpdateInput, isStateEdited, stateToCreateScheduleInput } from "./utils";
+import { copyState, genStateFromAPIRes, getDoneAssessmentsCount, getScheduleDiff, getUpdateInput, isStateEdited, stateToCreateScheduleInput } from "./utils";
 import { useUserDispatch } from "../../context/UserContext";
 
 
@@ -159,7 +159,10 @@ export default function SchedulePage(props) {
         })
     }
 
-    console.log("selectedQuestionaresForDay", selectedQuestionaresForDay)
+
+    const statistics = getDoneAssessmentsCount(patient.schedule)
+
+    // console.log("selectedQuestionaresForDay", selectedQuestionaresForDay)
 
     const loadStateFromLocation = () => {
 
@@ -763,21 +766,21 @@ export default function SchedulePage(props) {
                                 }}
                             >
                                 <Typography style={{ marginTop: 25 }} variant="h5" >
-                                    <Trans>Done Assesments</Trans> : 22
+                                    <Trans>Done Assesments</Trans> : {statistics.doneAssessments}
                                 </Typography>
 
 
 
                                 <Typography style={{ marginTop: 25 }} variant="h5" >
-                                    <Trans>Unread Assesments</Trans> : 5
+                                    <Trans>Unread Assesments</Trans> : 0
                                 </Typography>
 
                                 <Typography style={{ marginTop: 25 }} variant="h5" >
-                                    <Trans>Sessions Done</Trans> : 5
+                                    <Trans>Sessions Done</Trans> : {statistics.doneDays}
                                 </Typography>
 
                                 <Typography style={{ marginTop: 25 }} variant="h5" >
-                                    <Trans>Sessions</Trans> : 5
+                                    <Trans>Sessions</Trans> : {statistics.totalDays}
                                 </Typography>
 
                                 <Button size="large" color="primary" style={{ marginTop: 15 }}>
@@ -919,6 +922,8 @@ export default function SchedulePage(props) {
 
                                     {state.schedule[selectedDateKey].map(item => {
                                         return (<Accordion elevation={3}
+                                            key={item.id}
+
                                         >
                                             <AccordionSummary
                                                 expandIcon={<ExpandMoreIcon />}
@@ -945,7 +950,9 @@ export default function SchedulePage(props) {
 
                                                 {
                                                     item.enabled &&
-                                                    <div style={{ display: "flex", flexDirection: "column" }}>
+                                                    <div style={{ display: "flex", flexDirection: "column" }}
+
+                                                    >
                                                         <div className={classes.parametersContainer}>
 
 
@@ -968,7 +975,7 @@ export default function SchedulePage(props) {
 
                                                         <TextField className={classes.longDescription} multiline rows={5} rowsMax={20} id="outlined-basic"
                                                             label={t`Additional Instructions`} variant="outlined"
-                                                            value={item.additionalInstructions}
+                                                            value={item.additionalInstructions || ""}
                                                             onChange={handleAdditionalInstructionChange(item)}
                                                             name="additionalInstruction"
                                                         />

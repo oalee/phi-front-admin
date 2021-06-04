@@ -20,7 +20,7 @@ function getUpdateInput(state, prevState) {
 
     diff.selectedExercises = undefined
 
-    const dates = Object.keys(diff.schedule)
+    // const dates = Object.keys(diff.schedule)
 
     const mySet = new Set([
         ...Object.keys(diff.schedule)
@@ -28,13 +28,13 @@ function getUpdateInput(state, prevState) {
 
     ]);
 
-    console.log("set is ", mySet)
+    // console.log("set is ", mySet)
 
     if (mySet.size > 0)
         diff.days = [...mySet].map(date => {
             // let val = state.schedule[date]
 
-            console.log("date is ", date)
+            // console.log("date is ", date)
 
             if (diff.schedule[date]) {
 
@@ -286,10 +286,35 @@ function isStateEdited(state, prevState) {
     return true
 }
 
+function getDoneAssessmentsCount(schedule) {
+
+    console.log(schedule)
+    if (schedule === undefined) {
+
+        return {
+            totalDays: 0,
+            doneDays: 0,
+            doneAssessments: 0
+        }
+    }
+
+    const filtered = schedule.days.filter(item => item.evaluation.length !== 0)
+    const totalDays = schedule.days.length
+    const doneDays = filtered.length
+    const doneAssessments = filtered.reduce((acc, cur) =>
+        acc + cur.evalutaion.length
+        , 0)
+    return {
+        totalDays,
+        doneDays,
+        doneAssessments
+    }
+}
+
 function genStateFromAPIRes(schedule, exercises) {
 
 
-    // console.log("api res iz ", schedule)
+    console.log("api res iz ", schedule)
 
     let today = jMoment()
 
@@ -356,4 +381,4 @@ function genStateFromAPIRes(schedule, exercises) {
 function p2e(s) { return s.replace(/[۰-۹]/g, d => '۰۱۲۳۴۵۶۷۸۹'.indexOf(d)) }
 
 
-export { getScheduleDiff, isStateEdited, genStateFromAPIRes, copyState, getUpdateInput, stateToCreateScheduleInput }
+export { getScheduleDiff, isStateEdited, genStateFromAPIRes, copyState, getUpdateInput, stateToCreateScheduleInput, getDoneAssessmentsCount }

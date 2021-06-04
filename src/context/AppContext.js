@@ -62,7 +62,7 @@ function AppProvider({ children }) {
     { id: 7, label: t`Library`, link: '', icon: <LibraryIcon /> },
     { id: 8, label: t`About us`, link: '', icon: <SupportIcon /> },
     { id: 9, label: t`FAQ`, link: '', icon: <FAQIcon /> },
-    { id: 9, label: t`Privacy Policy`, link: '', icon: <FAQIcon /> },
+    { id: 10, label: t`Privacy Policy`, link: '', icon: <FAQIcon /> },
 
     // { id: 10, type: 'divider' },
     // { id: 11, type: 'title', label: t`PROJECTS` },
