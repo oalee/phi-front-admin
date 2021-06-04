@@ -132,7 +132,8 @@ function Sidebar({ location }) {
           </div>
 
           {menu.map(link => (
-            <div>
+            <div key={link.id}
+            >
               <SidebarLink
                 key={link.id}
                 location={location}

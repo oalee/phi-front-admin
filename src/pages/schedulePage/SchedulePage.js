@@ -96,12 +96,7 @@ export default function SchedulePage(props) {
     const apiContext = useAPIContext()
     const userContext = useUserDispatch()
 
-    const exercises = apiContext.state.exercises
-    const questionares = userContext.therapist.questionares
-    const exerciseOptions = exercises.map(exercise => { return { value: exercise.title, label: exercise.title, exercise: exercise } })
-    const questionareOptions = questionares.map(questionare => { return { value: questionare.title, label: questionare.title, questionare: questionare } })
-
-    console.log("questionares are ", questionares, userContext)
+    // console.log("questionares are ", questionares, userContext)
 
 
 
@@ -118,7 +113,8 @@ export default function SchedulePage(props) {
         startDate: jMoment(),
         endDate: jMoment().add(1, "d"),
         selectedDate: jMoment(),
-        questionares: {}
+        questionares: {},
+        questionareSchedule: {}
 
 
     })
@@ -133,7 +129,9 @@ export default function SchedulePage(props) {
         endDate: jMoment().add(1, "d"),
         selectedDate: jMoment(),
         addScheduleLoaded: false,
-        questionares: {}
+        questionares: {},
+        questionareSchedule: {}
+
 
 
     })
@@ -142,6 +140,26 @@ export default function SchedulePage(props) {
     const [updateSchedule, updateScheduleRes] = useMutation(UpdateTherapySchedule)
 
 
+    const selectedDateText = state.selectedDate.format("dddd jD jMMMM jYYYY ")
+    const selectedDateKey = state.selectedDate.format("jYYYY/jMM/jDD")
+
+
+    const exercises = apiContext.state.exercises
+    const questionares = userContext.therapist.questionares
+    const exerciseOptions = exercises.map(exercise => { return { value: exercise.title, label: exercise.title, exercise: exercise } })
+    const questionareOptions = questionares.map(questionare => { return { value: questionare.title, label: questionare.title, questionare: questionare } })
+    var selectedQuestionaresForDay = []
+    if (state.questionareSchedule[selectedDateKey]) {
+        selectedQuestionaresForDay = state.questionareSchedule[selectedDateKey].map(id => {
+
+            let questionare = questionares.find(item => item.id === id)
+            return {
+                value: questionare.title, label: questionare.title, questionare: questionare
+            }
+        })
+    }
+
+    console.log("selectedQuestionaresForDay", selectedQuestionaresForDay)
 
     const loadStateFromLocation = () => {
 
@@ -206,8 +224,6 @@ export default function SchedulePage(props) {
 
 
     // console.log("end date is ", state.endDate)
-    const selectedDateText = state.selectedDate.format("dddd jD jMMMM jYYYY ")
-    const selectedDateKey = state.selectedDate.format("jYYYY/jMM/jDD")
     // console.log(state.selectedDate.format("YYYY/MM/DD"))
 
     // const [createUser, createUserRes] = useMutation(CreatePatient)
@@ -242,6 +258,10 @@ export default function SchedulePage(props) {
 
 
     const onQuestionareChanged = (e) => {
+
+        const newSelectedQuestionareIds = e.map(item => item.questionare.id)
+        state.questionareSchedule[selectedDateKey] = [...newSelectedQuestionareIds]
+        setState({ ...state })
 
     }
 
@@ -480,8 +500,13 @@ export default function SchedulePage(props) {
         }
 
 
+
         while (date.isBetween(startDate, endDate) || date.isSame(endDate, "day") || date.isSame(startDate, "day") || (startDate.isSame(today, "day") && today.isSame(date, "day"))) {
             formatedDate = date.format("jYYYY/jMM/jDD")
+
+
+            if (state.questionareSchedule[formatedDate] === undefined)
+                state.questionareSchedule[formatedDate] = []
 
             if (state.schedule[formatedDate] === undefined) {
                 state.schedule[formatedDate] = [...autogenScheduleDay]
@@ -968,25 +993,31 @@ export default function SchedulePage(props) {
 
                             }
 
-                            <Typography style={{ marginTop: 25 }} variant="h2" >
-                                <Trans>Questionares</Trans>
-                            </Typography>
-                            <div style={{ marginTop: 20 }}>
+                            {(state.questionareSchedule[selectedDateKey]) &&
 
-                                <Select
-                                    defaultValue={[]}
-                                    isMulti
-                                    name="exercises"
-                                    options={questionareOptions}
-                                    className="basic-multi-select"
-                                    classNamePrefix="select"
-                                    styles={selectStyle}
-                                    onChange={onQuestionareChanged}
-                                    placeholder={t`Select Questionare`}
-                                />
-                            </div>
+                                <div>
+                                    <Typography style={{ marginTop: 25 }} variant="h2" >
+                                        <Trans>Questionares</Trans>
+                                    </Typography>
+                                    <div style={{ marginTop: 20 }}>
 
+                                        <Select
 
+                                            value={
+                                                selectedQuestionaresForDay
+                                            }
+                                            isMulti
+                                            name="questionare"
+                                            options={questionareOptions}
+                                            className="basic-multi-select"
+                                            classNamePrefix="select"
+                                            styles={selectStyle}
+                                            onChange={onQuestionareChanged}
+                                            placeholder={t`Select Questionare`}
+                                        />
+                                    </div>
+                                </div>
+                            }
                         </div>
                     </div>
                 </div>

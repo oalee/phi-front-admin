@@ -55,8 +55,8 @@ export default function ImageDropZone(props) {
             },
             method: "POST",
             data: formData,
-            url: BASE_URL + ":5000/upload_image", // route name
-            // baseURL: "http://localhost:5000/upload_image", //local url
+            // url: BASE_URL + ":5000/upload_image", // route name
+            baseURL: "http://localhost:5000/upload_image", //local url
             onUploadProgress: progress => {
                 console.log(`upload progress ${progress}`)
                 const { total, loaded } = progress;
@@ -172,7 +172,7 @@ export default function ImageDropZone(props) {
     return (
         <RootRef rootRef={ref}>
             <Paper {...rootProps} className={classes.container}>
-                <input {...getInputProps()} name={type} />
+                <input {...getInputProps()} name={type}></input>
                 <p><Trans>Drag 'n' drop some files here, or click to select files</Trans></p>
 
                 {/* <FileView fileName={"test"} /> */}

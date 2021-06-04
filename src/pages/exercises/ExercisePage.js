@@ -142,12 +142,14 @@ export default function ExercisePage(props) {
                         {
 
                             excercises.map((exercise) =>
-                                <ExerciseView exercise={exercise} onClick={() => {
-                                    console.log("clicked")
-                                    props.history.push('/app/editExercise', {
-                                        exercise: exercise
-                                    })
-                                }} />
+                                <ExerciseView exercise={exercise}
+                                    key={exercise.id}
+                                    onClick={() => {
+                                        console.log("clicked")
+                                        props.history.push('/app/editExercise', {
+                                            exercise: exercise
+                                        })
+                                    }} />
                             )
                         }
 

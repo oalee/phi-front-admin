@@ -239,6 +239,7 @@ query Query($patientId: ID!) {
       updatedAt
       createdAt
       date
+      questionareIds
       evaluation {
         id
         exerciseId
@@ -297,6 +298,7 @@ mutation AddTherapyScheduleMutation($patientId: ID!, $scheduleInput: TherapySche
       updatedAt
       createdAt
       date
+      questionareIds
       parameters {
         parameters {
       
@@ -334,7 +336,7 @@ mutation UpdateTherapyScheduleMutation($patientId: ID!, $updateInput: UpdateTher
       updatedAt
       createdAt
       date
-
+      questionareIds
       evaluation {
         id
         exerciseId
@@ -404,6 +406,7 @@ query Query {
           updatedAt
           createdAt
           date
+          questionareIds
 
           evaluation {
             id

@@ -181,7 +181,7 @@ export default function PatientsPage(props) {
                 {
                     (myPatients.length > 0) &&
 
-                    <Card className={classes.patientsContainer} >
+                    <Card className={classes.patientsContainer} key={"patients"} >
 
                         {
                             (myPatients.length === 0) &&
@@ -196,12 +196,16 @@ export default function PatientsPage(props) {
                             myPatients.map((patient) =>
 
                                 // <Typography> {patient.username} </Typography>
-                                <PatientCardView patient={patient} onClick={() => {
-                                    console.log("clicked")
-                                    props.history.push('/app/schedule', {
-                                        patient: patient
-                                    })
-                                }} />
+                                <PatientCardView patient={patient}
+                                    key={patient.patient.id}
+
+                                    onClick={() => {
+                                        console.log("clicked")
+                                        props.history.push('/app/schedule', {
+                                            patient: patient
+                                        })
+
+                                    }} />
                             )
                         }
 
