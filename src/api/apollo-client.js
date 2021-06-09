@@ -5,7 +5,7 @@ import Cookies from 'js-cookie'
 
 
 const httpLink = createHttpLink({
-  uri: "http://localhost:4000",
+  uri: `${BASE_URL}:4000`,
 });
 
 const authLink = setContext((_, { headers }) => {

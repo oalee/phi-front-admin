@@ -57,8 +57,8 @@ export default function ImageDropZone(props) {
             },
             method: "POST",
             data: formData,
-            // url: BASE_URL + ":5000/upload_image", // route name
-            baseURL: "http://localhost:5000/upload_image", //local url
+            url: BASE_URL + ":5000/upload_image", // route name
+            // baseURL: "http://localhost:5000/upload_image", //local url
             onUploadProgress: progress => {
                 console.log(`upload progress ${progress}`)
                 const { total, loaded } = progress;
