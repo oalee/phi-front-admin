@@ -13,6 +13,8 @@ import DraggableFileList from '../DraggableFileList/DraggableFileList';
 import FlipMove from 'react-flip-move';
 import { BASE_URL } from '../../../../api/utils';
 import { NumberCircularProgress } from './NumberCircularProgress';
+import Cookies from 'js-cookie'
+
 const axios = require('axios').default;
 
 
@@ -51,7 +53,7 @@ export default function ImageDropZone(props) {
         axios({
             headers: {
                 "Content-Type": "multipart/form-data",
-                "Authorization": `${localStorage.getItem('token')}`
+                "Authorization": `${Cookies.get('token')}`
             },
             method: "POST",
             data: formData,

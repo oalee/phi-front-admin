@@ -1,6 +1,7 @@
 import React from "react";
 import { ApolloProvider, useQuery, useLazyQuery } from "@apollo/client";
 import { LOGIN, GETME } from "../api/queries";
+import Cookies from 'js-cookie'
 
 
 var UserStateContext = React.createContext();
@@ -23,7 +24,8 @@ function userReducer(state, action) {
 function UserProvider({ children }) {
 
   const [doLogin, loginQuery] = useLazyQuery(LOGIN);
-  const token = localStorage.getItem('token');
+  const token = Cookies.get('token')
+  //localStorage.getItem('token');
 
   const { loading, error, data } = useQuery(GETME, {
     skip: loginQuery.data === undefined && token === undefined,
@@ -44,7 +46,7 @@ function UserProvider({ children }) {
 
 
   if (loginQuery.data) {
-    localStorage.setItem('token', loginQuery.data.tokenPayload.token)
+    Cookies.set('token', loginQuery.data.tokenPayload.token)
 
   }
 
