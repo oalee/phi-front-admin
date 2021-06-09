@@ -466,17 +466,7 @@ export default function SchedulePage(props) {
 
     // const moment = jMoment()
 
-    const getScheduleForDate = (date) => {
 
-        let formatedDate = date.format("jYYYY/jMM/jDD")
-        let day = state.therapyDays.find((item) => item.date === formatedDate)
-        if (day)
-            return day
-        return {
-            date: formatedDate,
-            parameters: state.selectedExercises.map(exercise => { return {} })
-        }
-    }
 
 
     const generateScheduleFromStartToEnd = (newSelectedExercises = state.selectedExercises, startDate = state.startDate, endDate = state.endDate) => {
@@ -541,9 +531,10 @@ export default function SchedulePage(props) {
 
         const isSelectedDay = date.isSame(state.selectedDate, "day")
         // const isSelectedDay = date.isSameDate(selectedDate)
-        const isPastGoneDays = date.isBetween(state.startDate, today, "day") //|| (isSameAsStartDate && !today.isSame(date, "day"))
+        const isPastGoneDays = date.isBetween(state.startDate, today, "day") || date.isSame(state.startDate, "day")
 
-        const dayIsBetween = date.isBetween(state.startDate, state.endDate, "day") || isSelectedDay || isStartSameAsToday || isSameAsStartDate || date.isSame(state.endDate, "day")
+        const dayIsBetween = date.isBetween(state.startDate, state.endDate, "day") || isSelectedDay || isStartSameAsToday || isSameAsStartDate || date.isSame(state.endDate, "day") || date.isSame(state.startDate, "day")
+
 
         if (dayIsBetween) {
             let formatedDate = date.format("jYYYY/jMM/jDD")

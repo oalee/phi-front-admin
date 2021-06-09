@@ -36,10 +36,14 @@ import PatientCardView from "./components/PatientCardView";
 export default function PatientsPage(props) {
     var classes = useStyles();
     var theme = useTheme();
-    var userInput = { type: "Patient", patient: {} }
+    const [userInput, setUserInput] = React.useState({ type: "Patient", patient: {} })
     const [value, setValue] = React.useState(1);
 
-    const [createUser, createUserRes] = useMutation(CreatePatient)
+    const [createUser, createUserRes] = useMutation(CreatePatient, {
+        onError: (err) => {
+
+        }
+    });
 
     // const myPatientsRes = useQuery(GetMyPatients)
 
@@ -274,6 +278,11 @@ export default function PatientsPage(props) {
                         createUserRes.loading &&
 
                         <LinearProgress style={{ marginTop: 20 }} />
+                    }
+
+                    {
+                        createUserRes.error &&
+                        <Typography>Error - try another Username</Typography>
                     }
                 </DialogContent>
                 <DialogActions>

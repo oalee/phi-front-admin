@@ -48,12 +48,15 @@ import { Calendar, DatePicker, MuiPickersUtilsProvider } from "@material-ui/pick
 
 import jMoment from "moment-jalaali";
 import JalaliUtils from "@date-io/jalaali";
+import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 
 
 import clsx from "clsx";
 import { PageState } from "../addEditExcercise/Constants";
 import { genStateFromAPIRes } from "./utils";
 import ExerciseEvaluation from "./components/ExerciseEvaluation";
+import { getDoneAssessmentsCount } from "../schedulePage/utils";
+import StyledButton from "../addEditExcercise/components/StyledButton/StyledButton";
 
 
 
@@ -129,133 +132,7 @@ export default function EvaluationPage(props) {
 
     console.log("selected date ", evaluationsForSelectedDay, hasEvaluationForSelectedDay)
 
-    // const stateToSecondButtonProps = () => {
-    //     var props = {
-    //         className: classes.button,
-    //         icon: <RestoreIcon />,
-    //         label: t`Restore`,
-    //         disabled: false,
-    //         onClick: (e) => {
-    //             setState({ ...copyState(prevState), selectedDate: state.selectedDate, state: PageState.SENT })
-    //         }
-    //     }
-
-    //     if (state.state === PageState.SENT)
-    //         props = {
-    //             ...props, icon: <ArrowBackIcon />, label: t`Back`,
-    //             onClick: (e) => {
-
-    //                 history.replace('/app/patients')
-    //             }
-    //         }
-
-    //     return props
-    // }
-
-
-    // const stateToButtonProps = () => {
-
-    //     var props = {
-    //         className: classes.buttonSuccess,
-    //         icon: <SendIcon />,
-    //         label: (state.state === PageState.COMPLETED_NOT_SENT) ? t`Submit` : t`Sumbit Edit`,
-    //         disabled: false,
-    //         onClick: () => {
-    //             console.log("clicked, send update")
-
-    //         }
-    //     }
-    //     switch (state.state) {
-    //         case PageState.NOT_COMPLETED:
-    //             props = {
-    //                 ...props,
-    //                 disabled: true,
-    //                 label: t`Form is incomplete`
-    //             }
-    //             break
-
-    //         case PageState.COMPLETED_NOT_SENT:
-    //             props = {
-    //                 ...props,
-    //                 onClick: (e) => {
-    //                     const dates = Object.keys(state.schedule)
-
-    //                     console.log("doAddScheduless", {
-    //                         startDate: state.startDate.format("jYYYY/jMM/jDD"),
-    //                         endDate: state.endDate.format("jYYYY/jMM/jDD"),
-    //                         exercises: state.selectedExercises.map(exercise => exercise.id),
-    //                         days: dates.map(date => {
-    //                             console.log("date is", date, state.schedule[date])
-    //                             // let val = state.schedule[date]
-    //                             return {
-    //                                 date: date,
-    //                                 parameters: state.schedule[date]
-    //                             }
-    //                         })
-    //                     })
-
-
-    //                     addSchedule({
-    //                         variables: stateToCreateScheduleInput(state, patient)
-    //                     })
-    //                     // doAddExcercise({
-    //                     //     variables: {
-    //                     //         addExerciseInput: state
-    //                     //     }
-    //                     // })
-    //                     // setState({ ...state, state: PageState.SENDING })
-    //                 }
-
-    //             }
-    //             break
-
-    //         case PageState.EDITED:
-    //             props = {
-    //                 ...props,
-    //                 onClick: () => {
-    //                     updateSchedule({
-    //                         variables: {
-    //                             patientId: patient.id,
-
-    //                             updateInput: getUpdateInput(state, prevState)
-    //                         }
-    //                     })
-    //                     setState({ ...state, state: PageState.SENDING })
-
-    //                 }
-    //             }
-    //             break
-
-    //         case PageState.SENDING:
-    //             props = {
-    //                 ...props,
-    //                 icon: <SaveIcon />,
-    //                 label: t`Sending`,
-    //                 disabled: true,
-    //                 loading: true
-    //             }
-    //             break
-
-    //         case PageState.SENT:
-    //             props = {
-    //                 ...props,
-    //                 className: classes.buttonSuccess,
-    //                 icon: <CheckCircleOutlineIcon />,
-    //                 label: t`Sent`,
-    //                 disabled: false,
-    //                 onClick: () => { history.goBack() }
-    //             }
-
-    //             break
-    //         default:
-    //             break;
-    //     }
-
-    //     return props
-
-    // }
-
-
+    const statistics = getDoneAssessmentsCount(patient.schedule)
 
 
     const selectStyle = {
@@ -292,7 +169,8 @@ export default function EvaluationPage(props) {
         // const isSelectedDay = date.isSameDate(selectedDate)
         const isPastGoneDays = date.isBetween(state.startDate, today, "day") //|| (isSameAsStartDate && !today.isSame(date, "day"))
 
-        const dayIsBetween = date.isBetween(state.startDate, state.endDate, "day") || isSelectedDay || isStartSameAsToday || isSameAsStartDate || date.isSame(state.endDate, "day")
+        const dayIsBetween = date.isBetween(state.startDate, state.endDate, "day") || isSelectedDay || isStartSameAsToday || isSameAsStartDate || date.isSame(state.endDate, "day") || date.isSame(state.startDate, "day")
+
 
         if (dayIsBetween) {
             let formatedDate = date.format("jYYYY/jMM/jDD")
@@ -339,6 +217,14 @@ export default function EvaluationPage(props) {
     };
 
 
+
+    let bottonProps = {
+        className: classes.button,
+        icon: <ArrowBackIcon />, label: t`Back`,
+        disabled: false,
+        onClick: () => { history.goBack() }
+    }
+
     return (
         <>
             <div style={{
@@ -350,8 +236,8 @@ export default function EvaluationPage(props) {
 
                 <div style={{ position: "absolute", display: "flex", justifyContent: "flex-end", width: "90%", flexDirection: "column", alignItems: "end" }}>
 
-                    {/* <StyledButton props={stateToButtonProps(state.state)} />
-                    {(state.state === PageState.EDITED || state.state === PageState.SENT) && <StyledButton props={stateToSecondButtonProps(state.state)} />} */}
+                    <StyledButton props={bottonProps} />
+                    {/* {(state.state === PageState.EDITED || state.state === PageState.SENT) && <StyledButton props={stateToSecondButtonProps(state.state)} />} */}
 
                 </div>
 
@@ -388,23 +274,22 @@ export default function EvaluationPage(props) {
                             </Paper>
                             <Paper style={{ width: 300, margin: 20, padding: 20 }}>
                                 <Typography style={{ marginTop: 25 }} variant="h5" >
-                                    <Trans>Done Assesments</Trans> : 22
+                                    <Trans>Done Assesments</Trans> : {statistics.doneAssessments}
                                 </Typography>
 
 
 
                                 <Typography style={{ marginTop: 25 }} variant="h5" >
-                                    <Trans>Unread Assesments</Trans> : 5
+                                    <Trans>Unread Assesments</Trans> : 0
                                 </Typography>
 
                                 <Typography style={{ marginTop: 25 }} variant="h5" >
-                                    <Trans>Sessions Done</Trans> : 5
+                                    <Trans>Sessions Done</Trans> : {statistics.doneDays}
                                 </Typography>
 
                                 <Typography style={{ marginTop: 25 }} variant="h5" >
-                                    <Trans>Sessions</Trans> : 5
+                                    <Trans>Sessions</Trans> : {statistics.totalDays}
                                 </Typography>
-
                                 <Button size="large" color="primary" style={{ marginTop: 15 }}>
                                     <Trans>Read Assesments</Trans>
                                 </Button>

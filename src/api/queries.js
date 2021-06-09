@@ -299,6 +299,28 @@ mutation AddTherapyScheduleMutation($patientId: ID!, $scheduleInput: TherapySche
       createdAt
       date
       questionareIds
+      questionares {
+        title
+        id
+        answered
+        questions {
+          order
+          id
+          answerType
+          question
+          options {
+            order
+            id
+            value
+          }
+        }
+        answers {
+          id
+          questionId
+          answeredOptionId
+          answerStr
+        }
+      }  
       parameters {
         parameters {
       
@@ -337,6 +359,28 @@ mutation UpdateTherapyScheduleMutation($patientId: ID!, $updateInput: UpdateTher
       createdAt
       date
       questionareIds
+      questionares {
+        title
+        id
+        answered
+        questions {
+          order
+          id
+          answerType
+          question
+          options {
+            order
+            id
+            value
+          }
+        }
+        answers {
+          id
+          questionId
+          answeredOptionId
+          answerStr
+        }
+      }  
       evaluation {
         id
         exerciseId
@@ -407,7 +451,28 @@ query Query {
           createdAt
           date
           questionareIds
-
+          questionares {
+            title
+            id
+            answered
+            questions {
+              order
+              id
+              answerType
+              question
+              options {
+                order
+                id
+                value
+              }
+            }
+            answers {
+              id
+              questionId
+              answeredOptionId
+              answerStr
+            }
+          }  
           evaluation {
             id
             exerciseId

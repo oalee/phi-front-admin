@@ -289,7 +289,7 @@ function isStateEdited(state, prevState) {
 function getDoneAssessmentsCount(schedule) {
 
     console.log(schedule)
-    if (schedule === undefined) {
+    if (schedule === undefined || schedule == null) {
 
         return {
             totalDays: 0,
@@ -299,10 +299,14 @@ function getDoneAssessmentsCount(schedule) {
     }
 
     const filtered = schedule.days.filter(item => item.evaluation.length !== 0)
-    const totalDays = schedule.days.length
+    const totalDays = schedule.days.filter(item => item.parameters && item.parameters.filter(it => it.enabled === true).length > 0).length
     const doneDays = filtered.length
-    const doneAssessments = filtered.reduce((acc, cur) =>
-        acc + cur.evalutaion.length
+    const doneAssessments = filtered.reduce((acc, cur) => {
+
+        if (cur.evalutaion === undefined)
+            return acc
+        return acc + cur.evalutaion.length
+    }
         , 0)
     return {
         totalDays,
