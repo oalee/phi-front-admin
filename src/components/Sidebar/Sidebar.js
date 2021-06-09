@@ -104,7 +104,7 @@ function Sidebar({ location }) {
       <List className={classes.sidebarList}>
         <div>
           <div className={classes.avatarContainer}>
-            <img alt="avatar" src={avatarPlaceholder} className={classNames(classes.avatar, {
+            <img alt="avatar" src={"/avatar_placeholder.svg"} className={classNames(classes.avatar, {
               [classes.avatar]: isSidebarOpened,
               [classes.avatarCollapsed]: !isSidebarOpened,
             })} />

@@ -59,7 +59,7 @@ export default function PatientCardView(props) {
                 >
                     <CardMedia
                         className={classes.media}
-                        image={avatarPlaceholder}
+                        image={"/avatar_placeholder.svg"}
                         title={name}
 
 
